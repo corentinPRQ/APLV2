@@ -76,16 +76,16 @@ public class VoeuHelper
                 org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[6];
 
                 _members[0] = new org.omg.CORBA.StructMember();
-                _members[0].name = "idV";
+                _members[0].name = "noE";
                 _members[0].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
                 _members[1] = new org.omg.CORBA.StructMember();
-                _members[1].name = "noE";
-                _members[1].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
+                _members[1].name = "acreditation";
+                _members[1].type = pRectorat.AccredHelper.type();
                 _members[2] = new org.omg.CORBA.StructMember();
-                _members[2].name = "acreditation";
-                _members[2].type = pRectorat.AccredHelper.type();
+                _members[2].name = "idRSource";
+                _members[2].type = pRectorat.RectoratHelper.type();
                 _members[3] = new org.omg.CORBA.StructMember();
-                _members[3].name = "idR";
+                _members[3].name = "idRDest";
                 _members[3].type = pRectorat.RectoratHelper.type();
                 _members[4] = new org.omg.CORBA.StructMember();
                 _members[4].name = "decEtudiant";
@@ -120,10 +120,10 @@ public class VoeuHelper
     {
         pRectorat.Voeu new_one = new pRectorat.Voeu();
 
-        new_one.idV = istream.read_string();
         new_one.noE = istream.read_string();
         new_one.acreditation = pRectorat.AccredHelper.read(istream);
-        new_one.idR = pRectorat.RectoratHelper.read(istream);
+        new_one.idRSource = pRectorat.RectoratHelper.read(istream);
+        new_one.idRDest = pRectorat.RectoratHelper.read(istream);
         new_one.decEtudiant = pRectorat.DecisionEtudiantHelper.read(istream);
         new_one.etatVoeu = pRectorat.EtatHelper.read(istream);
 
@@ -137,10 +137,10 @@ public class VoeuHelper
      */
     public static void write(org.omg.CORBA.portable.OutputStream ostream, pRectorat.Voeu value)
     {
-        ostream.write_string(value.idV);
         ostream.write_string(value.noE);
         pRectorat.AccredHelper.write(ostream,value.acreditation);
-        pRectorat.RectoratHelper.write(ostream,value.idR);
+        pRectorat.RectoratHelper.write(ostream,value.idRSource);
+        pRectorat.RectoratHelper.write(ostream,value.idRDest);
         pRectorat.DecisionEtudiantHelper.write(ostream,value.decEtudiant);
         pRectorat.EtatHelper.write(ostream,value.etatVoeu);
     }

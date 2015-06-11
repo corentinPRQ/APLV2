@@ -37,7 +37,7 @@ public class ApplicationGestionVoeux {
 			System.out.println(args[0]);
 			String nomObj = args[0]+"_GestionVoeux";
 
-			ServeurGestionVoeux serv = new ServeurGestionVoeux(orb, nameRoot, nomObj);
+			ServeurGestionVoeux serv = new ServeurGestionVoeux(orb, nameRoot, nomObj,args[0]);
 
 			Thread tserv = new Thread(serv);
 			tserv.start();

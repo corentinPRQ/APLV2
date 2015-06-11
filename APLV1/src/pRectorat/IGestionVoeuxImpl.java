@@ -27,24 +27,28 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static String nomObj;
 
 	private Hashtable<String, Voeu[]> listeVoeux;
-	private static Accred[] lesAccred;
+	private static Accred[] lesAccredIntern;
+	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
+	private static String idRectorat="";
 
 
 	
 
 	
 	//constructeur par défaut
-	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj){
+	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		this.idRectorat=pidRectorat;
 
 
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
+		//TODO Charger les accred externes
 		initialiserEtudiants("src/usersEtu.csv");
 		initialiserAccred("src/Accreditation.csv");
 	}
@@ -62,8 +66,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			// mettre un code GUI pour notifier de l'erreur d'identification
 			throw new EtudiantNonTrouve();
 		} else {
-			System.out.println(listeEtudiant.get(login).getMdp());
-			if (!listeEtudiant.get(login).getMdp().equals(mdp)) {
+			System.out.println(listeEtudiant.get(login).mdp);
+			if (!listeEtudiant.get(login).mdp.equals(mdp)) {
 				return false;
 			}
 		}
@@ -72,7 +76,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Accred[] getListeAccreditations() {
-		return lesAccred;
+		return lesAccredIntern;
 	}
 
 	/**
@@ -104,7 +108,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println(tabV.length);
 			return tabV;
 		} else {
-			Voeu v = new Voeu("listeVide", "0", new Accred(), new Rectorat(), null,
+			Voeu v = new Voeu("0", new Accred(), new Rectorat(),new Rectorat(),null,
 					null);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -180,6 +184,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
+	
 	public static void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
 		Properties p;
@@ -226,7 +231,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
 		System.out.println("consulterListeVoeu");
 		if (listeVoeux.get(etu.noEtu)==null){
-			Voeu v = new Voeu("listeVide", "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
+			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 					Etat.cree);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -244,7 +249,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
-		Rectorat r = new Rectorat();
+		/*Rectorat r = new Rectorat();
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
 		if (v.idR == r) {
@@ -252,7 +257,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		} else {
 			// TODO trouver le gestVoeu
 			// lebongestVoeu.faireVoeu(v);
-		}
+		}*/
+		
 
 	}
 
@@ -378,9 +384,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				lesUniv[i]=list.get(i);*/
 			
 			//} this.listeAccreditation.put(Diplome, lesUniv);
-			this.lesAccred=new Accred[listAccred.size()];
+			this.lesAccredIntern=new Accred[listAccred.size()];
 			for(int i=0;i<listAccred.size();i++){
-				lesAccred[i]=listAccred.get(i);
+				lesAccredIntern[i]=listAccred.get(i);
 			}		
 			NoAccred="";
 			listAccred = new ArrayList<Accred>();
@@ -395,8 +401,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	
 	public void afficherAccred(){
-		for(int i = 0;i<lesAccred.length;i++){
-			System.out.println(lesAccred[i].toString());
+		for(int i = 0;i<lesAccredIntern.length;i++){
+			System.out.println(lesAccredIntern[i].toString());
 		}
 	}
 	
@@ -419,14 +425,14 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 	 public static void main (String [] args) throws EtudiantNonTrouve{
 	 System.out.println("Debut du test");
-	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj);
+	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
 	 igV.afficherLesEtu();
 	 System.out.println(igV.identifier("21001324", "hugo"));
 	 
-	 System.out.println(igV.getUtilisateur("21001324").getNom());
+	 System.out.println(igV.getUtilisateur("21001324").nom);
 	 
-	 for(int i=0;i<lesAccred.length;i++){
-		 System.out.println(lesAccred[i].toString());
+	 for(int i=0;i<lesAccredIntern.length;i++){
+		 System.out.println(lesAccredIntern[i].toString());
 	 }
 	 
 	 
@@ -441,6 +447,34 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//
 	// }
 }
+
+	@Override
+	public String getIdRectorat() {
+		return this.idRectorat;
+	}
+
+	
+	@Override
+	public String getPeriodeEnCours() {
+		Properties p;
+		p = null;
+		try {
+			p = utils.load("parametres.properties");
+		} catch (FileNotFoundException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		}
+		if (p != null) {
+			return p.getProperty("periode");
+		}else{
+			return "Erreur lors de la récupération de la période.";
+		}
+	}
+
+
 
 	
 }

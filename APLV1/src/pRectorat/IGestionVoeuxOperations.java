@@ -59,4 +59,14 @@ public interface IGestionVoeuxOperations
     public pRectorat.Etudiant getUtilisateur(String numeroEtudiant)
         throws pRectorat.EtudiantNonTrouve;
 
+    /**
+     * Operation getIdRectorat
+     */
+    public String getIdRectorat();
+
+    /**
+     * Operation getPeriodeEnCours
+     */
+    public String getPeriodeEnCours();
+
 }

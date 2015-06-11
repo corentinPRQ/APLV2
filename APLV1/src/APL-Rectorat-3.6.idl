@@ -23,7 +23,8 @@ module pRectorat {
 		oui, //Acceptation du voeu et annulation de tous les autres
 		non, // Refus du voeu et annulation de tous les autres
 		oui_mais, // voeu reserve jusqu'a la seconde periode previlegiant eventuellement un autre voeu prefere
-		non_mais // Refus d'un voeu mais maintient les voeux en liste d'attente
+		non_mais,  // Refus d'un voeu mais maintient les voeux en liste d'attente
+		cree //Le voeu vient d'etre crée l'étudiant ne peux encore répondre etat transitaire
 	};
 	
 	enum NiveauEtude{
@@ -63,10 +64,10 @@ module pRectorat {
 	};
 	
 	struct Voeu{
-		string idV;
 		string noE;
 		Accred acreditation;
-		Rectorat idR;
+		Rectorat idRSource;
+		Rectorat idRDest;
 		DecisionEtudiant decEtudiant;
 		Etat etatVoeu;
 	};
@@ -119,6 +120,12 @@ module pRectorat {
 
 		//Opération permettant de récuperer les utilisateur d'un étudiant
 		Etudiant getUtilisateur(in string numeroEtudiant)raises(EtudiantNonTrouve);
+
+		//Opération permettant de récuperer lidentifiant du recorat
+		string getIdRectorat();
+		
+		//Opération permettant de connaître la période en cours
+		string getPeriodeEnCours();
 	};
 };
 

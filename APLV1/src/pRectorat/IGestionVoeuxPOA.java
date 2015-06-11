@@ -41,6 +41,10 @@ public abstract class IGestionVoeuxPOA extends org.omg.PortableServer.Servant
                     new Operation_consulterListeVoeu());
             operationMap.put("faireVoeu",
                     new Operation_faireVoeu());
+            operationMap.put("getIdRectorat",
+                    new Operation_getIdRectorat());
+            operationMap.put("getPeriodeEnCours",
+                    new Operation_getPeriodeEnCours());
             operationMap.put("getUtilisateur",
                     new Operation_getUtilisateur());
             operationMap.put("identifier",
@@ -217,6 +221,32 @@ public abstract class IGestionVoeuxPOA extends org.omg.PortableServer.Servant
         return _output;
     }
 
+    private org.omg.CORBA.portable.OutputStream _invoke_getIdRectorat(
+            final org.omg.CORBA.portable.InputStream _is,
+            final org.omg.CORBA.portable.ResponseHandler handler) {
+        org.omg.CORBA.portable.OutputStream _output;
+
+        String _arg_result = getIdRectorat();
+
+        _output = handler.createReply();
+        _output.write_string(_arg_result);
+
+        return _output;
+    }
+
+    private org.omg.CORBA.portable.OutputStream _invoke_getPeriodeEnCours(
+            final org.omg.CORBA.portable.InputStream _is,
+            final org.omg.CORBA.portable.ResponseHandler handler) {
+        org.omg.CORBA.portable.OutputStream _output;
+
+        String _arg_result = getPeriodeEnCours();
+
+        _output = handler.createReply();
+        _output.write_string(_arg_result);
+
+        return _output;
+    }
+
     // operation classes
     private abstract static class AbstractOperation {
         protected abstract org.omg.CORBA.portable.OutputStream invoke(
@@ -312,6 +342,26 @@ public abstract class IGestionVoeuxPOA extends org.omg.PortableServer.Servant
                 final org.omg.CORBA.portable.InputStream _is,
                 final org.omg.CORBA.portable.ResponseHandler handler) {
             return target._invoke_getUtilisateur(_is, handler);
+        }
+    }
+
+    private static final class Operation_getIdRectorat extends AbstractOperation
+    {
+        protected org.omg.CORBA.portable.OutputStream invoke(
+                final IGestionVoeuxPOA target,
+                final org.omg.CORBA.portable.InputStream _is,
+                final org.omg.CORBA.portable.ResponseHandler handler) {
+            return target._invoke_getIdRectorat(_is, handler);
+        }
+    }
+
+    private static final class Operation_getPeriodeEnCours extends AbstractOperation
+    {
+        protected org.omg.CORBA.portable.OutputStream invoke(
+                final IGestionVoeuxPOA target,
+                final org.omg.CORBA.portable.InputStream _is,
+                final org.omg.CORBA.portable.ResponseHandler handler) {
+            return target._invoke_getPeriodeEnCours(_is, handler);
         }
     }
 

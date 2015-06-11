@@ -23,13 +23,15 @@ public class ServeurGestionVoeux implements Runnable {
 	private org.omg.CORBA.ORB orb;
 	private NamingContext nameRoot;
 	private String nomObj;
+	private String idRectorat;
 
 
-	public ServeurGestionVoeux(ORB orb, NamingContext nameRoot, String nomObj) {
+	public ServeurGestionVoeux(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat) {
 		super();
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		this.idRectorat=pidRectorat;
 	}
 	
 	public void travailler (){
@@ -41,7 +43,7 @@ public class ServeurGestionVoeux implements Runnable {
 
 			// Creation du servant
 			//*********************
-			IGestionVoeuxImpl monGV = new IGestionVoeuxImpl(orb, nameRoot, nomObj);
+			IGestionVoeuxImpl monGV = new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
 
 			// Activer le servant au sein du POA et recuperer son ID
 			byte[] monUnivId = rootPOA.activate_object(monGV);
