@@ -95,7 +95,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		listeCandidatures = lesVoeux;
 
 		// si P4
-		if(p4()){
+		if(p3()){
 			// Permet de mettre à jour la liste en fonction des décisions des étudiants
 			this.majListes();
 		}
@@ -103,7 +103,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return lesVoeux; //renvoyer que les voeux qui ont de l'intérêt. A définir les états des voeux aux différentes étapes
 	}
 
-	private boolean p4(){
+	private boolean p3(){
 		boolean P4=false;
 		Properties p;
 		p = null;
