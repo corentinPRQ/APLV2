@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import pRectorat.Etudiant;
 import pRectorat.Voeu;
 import Applications.ApplicationGestionEtudiant;
+import Applications.PeriodeApplication;
 import ClientsServeurs.ClientEtudiantGV;
 
 /**
@@ -116,6 +117,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
         lb_nomEtud.setText("Nom de l'étudiant");
 
         bt_ajouterVoeux.setText("Ajouter un voeu");
+        
         bt_ajouterVoeux.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_ajouterVoeuxActionPerformed(evt);
@@ -123,6 +125,9 @@ public class IHM_Etudiant extends javax.swing.JFrame {
         });
 
         bt_repondreVoeu.setText("Répondre à un voeu");
+        if(!clientEtuGV.getPeriodeEnCours().equals(PeriodeApplication.PERIODE_3.toString())){
+        	bt_repondreVoeu.setEnabled(false);
+        }
         bt_repondreVoeu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_repondreVoeuActionPerformed(evt);
@@ -220,8 +225,9 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_ajouterVoeuxActionPerformed
 
     private void bt_repondreVoeuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_repondreVoeuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bt_repondreVoeuActionPerformed
+        IHM_RepondreVoeu IHM_Rep = new IHM_RepondreVoeu(clientEtuGV, listeVoeux);
+        IHM_Rep.setVisible(true);
+    }
     
     @SuppressWarnings("unused") void remplirTableVoeu(final Voeu[] pVoeu){
     	for(int i=0;i<pVoeu.length;i++){

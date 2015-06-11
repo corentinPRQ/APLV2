@@ -182,24 +182,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	public static String getPeriode(){
-		Properties p;
-		p = null;
-		try {
-			p = utils.load("parametres.properties");
-		} catch (FileNotFoundException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		}
-		if (p != null) {
-			return p.getProperty("periode");
-		}else{
-			return "Erreur lors de la récupération de la période.";
-		}
-	}
+
+	
 	public static void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
 		Properties p;
@@ -470,9 +454,25 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public String getPeriodeEnCours() {
-		// TODO Auto-generated method stub
-		return null;
+		Properties p;
+		p = null;
+		try {
+			p = utils.load("parametres.properties");
+		} catch (FileNotFoundException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		}
+		if (p != null) {
+			return p.getProperty("periode");
+		}else{
+			return "Erreur lors de la récupération de la période.";
+		}
 	}
+
+
 
 	
 }
