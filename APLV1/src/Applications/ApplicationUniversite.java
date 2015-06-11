@@ -1,26 +1,28 @@
 package Applications;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import pRectorat.Rectorat;
 import pRectorat.Universite;
-import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ClientUniversiteGV;
 import ClientsServeurs.ServeurUniversite;
 import GUI.IHM_Universitaire;
 
 public class ApplicationUniversite {
-	public static int noUniv = 0;
-	private static int idUniv;
+	private static Universite identiteUniversite;
+
+	public static Universite getIdentiteUniversite() {
+		return identiteUniversite;
+	}
 
 	public static void main(String[] args) {
 		try {
-			noUniv++;
-			idUniv = noUniv; 
+			 
+			ApplicationUniversite.identiteUniversite = new Universite(args[0], new Rectorat(args[1]), args[2]);
 			// TODO Auto-generated method stub
 			// Intialisation de l'ORB
 			//************************
@@ -63,16 +65,5 @@ public class ApplicationUniversite {
 			e.printStackTrace();
 		}
 
-	}
-	
-	public void setIdUniv(int i){
-		idUniv = i;
-	}
-
-	/**
-	 * @return the idUniv
-	 */
-	public static int getIdUniv() {
-		return idUniv;
 	}
 }

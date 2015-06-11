@@ -54,7 +54,7 @@ public class ClientUniversiteGV implements Runnable{
 //			nameToRegister[0] = new org.omg.CosNaming.NameComponent(this.nomObj,"");
 			
 			// Récupération du nom de l'objet distant
-			this.monGestionVoeu = IGestionVoeuxHelper.narrow(distantObj);
+			ClientUniversiteGV.monGestionVoeu = IGestionVoeuxHelper.narrow(distantObj);
 			
 		}
 		catch (Exception e) {
@@ -64,7 +64,7 @@ public class ClientUniversiteGV implements Runnable{
 	}
 	
 	public ArrayList<Voeu> getVoeux(){
-		Voeu[] lesVoeux = this.monGestionVoeu.getVoeux();
+		Voeu[] lesVoeux = ClientUniversiteGV.monGestionVoeu.getVoeux();
 		//On stock les voeux (Voeu[]) dans une arraylist (plus simple à utiliser)
 		for (int i =0; i<lesVoeux.length; i++){
 			listeDeVoeux.add(lesVoeux[i]);
