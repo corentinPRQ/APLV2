@@ -390,6 +390,40 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}		
 	}
 
+	
+		
+	private void elaborerScoreEtudiant (Etudiant etu){
+		Note[] lesNotes = listeNotesEtudiants.get(etu);
+		int somme = 0;
+		for (int i =0; i< lesNotes.length; i++){
+			//1234=4321 pour les classement
+			//1S = 3; 2S=2; R=1
+			switch(lesNotes[i].position){
+			case 1: somme += 4;
+				break;
+			case 2: somme += 3;
+				break;
+			case 3: somme += 2;
+				break;
+			case 4 : somme += 1;
+				break;
+			}
+			
+			if (lesNotes[i].validation.equals("1S")){
+				somme+=3;
+			}else{
+				if (lesNotes[i].validation.equals("2S")){
+					somme+=3;
+				}
+				else {
+					somme+=1;
+				}
+			}
+		}
+		
+		etu.score = somme;
+	}
+	
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));

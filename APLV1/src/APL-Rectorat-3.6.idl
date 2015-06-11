@@ -126,6 +126,12 @@ module pRectorat {
 		
 		//Opération permettant de connaître la période en cours
 		string getPeriodeEnCours();
+		
+		//Opération permettant d'enregistrer une université chez le rectorat	
+		void enregistrerUniversite(in Universite univ);
+		
+		//Opération permettant de mettre à disposition les accréditations aux autres rectorats
+		TabAccred getLesAccred();
 	};
 };
 
