@@ -6,6 +6,11 @@
 
 package GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import pRectorat.Accred;
 import ClientsServeurs.ClientEtudiantGV;
 
@@ -15,27 +20,49 @@ import ClientsServeurs.ClientEtudiantGV;
  */
 public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
-    private static ClientEtudiantGV clientEtuGV;
+	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
-    /**
-     * Creates new form IHM_FaireUnVoeu
-     */
-    public IHM_FaireUnVoeu(IHM_Etudiant pParent,ClientEtudiantGV pClientEtuGV) {
-    	parent=pParent;
-		clientEtuGV=pClientEtuGV;
-		lesAccred=ConnexionEtudiant.clientEtuGV.getListeAccreditation();
-		this.chargerLesDiplomes();
-        initComponents();
-    }
 
-    private void chargerLesDiplomes() {
+	/**
+	 * Creates new form IHM_FaireUnVoeu
+	 */
+	public IHM_FaireUnVoeu(IHM_Etudiant pParent, ClientEtudiantGV pClientEtuGV) {
+		parent = pParent;
+		clientEtuGV = pClientEtuGV;
+		lesAccred = ConnexionEtudiant.clientEtuGV.getListeAccreditation();
+		initComponents();
+		this.chargerLesDiplomes();
+		
+	}
+
+	private void chargerLesDiplomes() {
 		// TODO Auto-generated method stub
-    	
-    	
-		for(int i=1;i<=lesAccred.length;i++){
-			
+		int itemCount = cb_diplome.getItemCount();
+
+	    for(int i=0;i<itemCount;i++){
+	        cb_diplome.removeItemAt(0);
+	     }
+		cb_diplome.addItem(lesAccred[0].getLibelleD());
+		for (int i = 1; i < lesAccred.length-1; i++) {
+			if(!lesAccred[i-1].getLibelleD().equals(lesAccred[1].getLibelleD())){
+				cb_diplome.addItem(lesAccred[i].getLibelleD());
+			}
 		}
+	}
+	
+	private void chargerUniversité() {
+		int itemCount = cb_universite.getItemCount();
+
+	    for(int i=0;i<itemCount;i++){
+	        cb_universite.removeItemAt(0);
+	     }
+		for(int i=0;i< lesAccred.length;i++){
+			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].getLibelleD())){
+				cb_universite.addItem(lesAccred[i].getLibelleU());
+			}
+		}
+		
 	}
 
     /**
@@ -61,7 +88,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
         lb_diplome.setText("Diplome");
 
-        cb_diplome.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_diplome.setModel(new javax.swing.DefaultComboBoxModel());
         cb_diplome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_diplomeActionPerformed(evt);
@@ -84,12 +111,15 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
         lb_Univ.setText("Université");
 
-        cb_universite.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_universite.setModel(new javax.swing.DefaultComboBoxModel());
         cb_universite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_universiteActionPerformed(evt);
             }
         });
+        
+        
+        
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,8 +182,11 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }                                             
 
     private void cb_diplomeActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
+        this.chargerUniversité();
+    }  
+    
+  
+    
 
     /**
      * @param args the command line arguments
@@ -193,7 +226,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton bt_Annuler;
     private javax.swing.JButton bt_Valider;
-    private javax.swing.JComboBox cb_diplome;
+    private javax.swing.JComboBox<String> cb_diplome;
     private javax.swing.JComboBox cb_universite;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lb_Univ;

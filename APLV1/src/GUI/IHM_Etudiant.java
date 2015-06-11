@@ -213,8 +213,9 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 
     private void bt_ajouterVoeuxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ajouterVoeuxActionPerformed
         // TODO add your handling code here:
-    	if(this.tab_VoeuxEtudiant.getRowCount()<5){
+    	if(this.tab_VoeuxEtudiant.getRowCount()==5){
     		IHM_FaireUnVoeu ihm_fv = new IHM_FaireUnVoeu(this,clientEtuGV);
+    		ihm_fv.setVisible(true);
     	}
     }//GEN-LAST:event_bt_ajouterVoeuxActionPerformed
 

@@ -27,7 +27,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static String nomObj;
 
 	private Hashtable<String, Voeu[]> listeVoeux;
-	private Accred[] lesAccred;
+	private static Accred[] lesAccred;
 	private Hashtable<String,Etudiant> listeEtudiant;
 
 
@@ -72,7 +72,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Accred[] getListeAccreditations() {
-		return null;
+		return lesAccred;
 	}
 
 	/**
@@ -421,6 +421,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 System.out.println(igV.identifier("21001324", "hugo"));
 	 
 	 System.out.println(igV.getUtilisateur("21001324").getNom());
+	 
+	 for(int i=0;i<lesAccred.length;i++){
+		 System.out.println(lesAccred[i].toString());
+	 }
+	 
+	 
 	// try {
 	// igV.validerVoeu(new Voeu("v1", "e1", new Accred("a1", "dip1", "lib1"),
 	// new Rectorat("midi-pyrenees"), DecisionEtudiant.oui,
