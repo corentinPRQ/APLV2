@@ -43,12 +43,11 @@ public class DecisionEtudiantHelper
     {
         if (_tc == null) {
             org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init();
-            String []_members = new String[5];
+            String []_members = new String[4];
             _members[0] = "oui";
             _members[1] = "non";
             _members[2] = "oui_mais";
             _members[3] = "non_mais";
-            _members[4] = "cree";
             _tc = orb.create_enum_tc(id(),"DecisionEtudiant",_members);
         }
         return _tc;

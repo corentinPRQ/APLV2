@@ -27,7 +27,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static String nomObj;
 
 	private Hashtable<String, Voeu[]> listeVoeux;
-	private static Accred[] lesAccred;
+	private static Accred[] lesAccredIntern;
+	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
 
@@ -47,6 +48,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
+		//TODO Charger les accred externes
 		initialiserEtudiants("src/usersEtu.csv");
 		initialiserAccred("src/Accreditation.csv");
 	}
@@ -74,7 +76,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Accred[] getListeAccreditations() {
-		return lesAccred;
+		return lesAccredIntern;
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println(tabV.length);
 			return tabV;
 		} else {
-			Voeu v = new Voeu("0", new Accred(), new Rectorat(), null,
+			Voeu v = new Voeu("0", new Accred(), new Rectorat(),new Rectorat(),null,
 					null);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -229,7 +231,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
 		System.out.println("consulterListeVoeu");
 		if (listeVoeux.get(etu.noEtu)==null){
-			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
+			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 					Etat.cree);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
