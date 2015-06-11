@@ -270,6 +270,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			// TODO trouver le bon rectorat
 			// lebongestVoeu.faireVoeu(v);
 		}
+		
+		//
+		System.out.println("Test de faire voeu");
+		System.out.println("Le voeu :"+v.toString());
+		
 
 	}
 
@@ -305,7 +310,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";", 3);
+				lineSplit = lineRead.split(";", 4);
 				// System.out.println("line split users : "+ lineSplit[0] +
 				// " - " + lineSplit[1] + " - " + lineSplit[2] + " - "
 				// +lineSplit[3]);
@@ -322,7 +327,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 						break;
 					case 3 : 
 						score = Integer.parseInt(lineSplit[3]);
-
 					default:
 						break;
 					}

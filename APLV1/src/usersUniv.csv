@@ -1,8 +1,8 @@
-login;mdp;nom
-21001324;hugo;melet
-21000000;paul;chif
-21000001;jeremy;ross
-21000002;olivier;gime
-21000003;thomas;brunel
-21000004;cyril;mettes
-21000005;jean;mel
+login;mdp;nom;score
+21001324;hugo;melet;0
+21000000;paul;chif;0
+21000001;jeremy;ross;0
+21000002;olivier;gime;0
+21000003;thomas;brunel;0
+21000004;cyril;mettes;0
+21000005;jean;mel;0

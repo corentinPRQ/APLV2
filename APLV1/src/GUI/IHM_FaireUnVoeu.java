@@ -72,7 +72,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 			i++;
 		}
 		return "problème Accreditation non trouvée";
-		//jjejfiejfijeifdje
+		
 	}
 	
 	private void chargerUniversité() {
@@ -195,8 +195,8 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
     	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
-    	//Voeu voeu = new Voeu(parent.utilisateur,accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
-    	//clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);
+    	Voeu voeu = new Voeu(parent.utilisateur.getNoEtu(),accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
+    	clientEtuGV.faireVoeux(voeu);
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
