@@ -66,8 +66,7 @@ module pRectorat {
 	struct Voeu{
 		string noE;
 		Accred acreditation;
-		RectoratSource idRS;
-		RectoratDestination idRD
+		Rectorat idR;
 		DecisionEtudiant decEtudiant;
 		Etat etatVoeu;
 	};

@@ -266,13 +266,9 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      * Donne le "meilleur" voeu pour l'étudiant
      */
     private void setMeilleurVoeu(){
-    	//Boolean pour signaler si un "meilleur" voeu a déjà été défini durant le parcours.
-    	Boolean meilleurVoeuOK = false;
     	if(listeVoeux!=null){
     		for (Voeu voeu : listeVoeux) {
-    			
-				if(voeu.getEtatVoeu().equals(Etat.liste_principale) && !meilleurVoeuOK){
-					meilleurVoeuOK = true;
+				if(voeu.getEtatVoeu().equals(Etat.liste_principale)){
 					voeuAffiche = voeu;
 				}
     		}
