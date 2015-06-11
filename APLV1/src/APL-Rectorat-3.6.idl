@@ -119,6 +119,12 @@ module pRectorat {
 
 		//Opération permettant de récuperer les utilisateur d'un étudiant
 		Etudiant getUtilisateur(in string numeroEtudiant)raises(EtudiantNonTrouve);
+
+		//Opération permettant de récuperer lidentifiant du recorat
+		string getIdRectorat();
+		
+		//Opération permettant de connaître la période en cours
+		string getPeriodeEnCours();
 	};
 };
 

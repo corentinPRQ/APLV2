@@ -29,17 +29,19 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private Hashtable<String, Voeu[]> listeVoeux;
 	private static Accred[] lesAccred;
 	private Hashtable<String,Etudiant> listeEtudiant;
+	private static String idRectorat="";
 
 
 	
 
 	
 	//constructeur par défaut
-	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj){
+	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		this.idRectorat=pidRectorat;
 
 
 		listeVoeux = new Hashtable<String, Voeu[]>();
@@ -419,7 +421,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 	 public static void main (String [] args) throws EtudiantNonTrouve{
 	 System.out.println("Debut du test");
-	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj);
+	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
 	 igV.afficherLesEtu();
 	 System.out.println(igV.identifier("21001324", "hugo"));
 	 
@@ -441,6 +443,18 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//
 	// }
 }
+
+	@Override
+	public String getIdRectorat() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPeriodeEnCours() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 }

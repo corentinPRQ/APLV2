@@ -478,4 +478,102 @@ public class _IGestionVoeuxStub extends org.omg.CORBA.portable.ObjectImpl
         }
     }
 
+    /**
+     * Operation getIdRectorat
+     */
+    public String getIdRectorat()
+    {
+        while(true)
+        {
+            if (!this._is_local())
+            {
+                org.omg.CORBA.portable.InputStream _input = null;
+                try
+                {
+                    org.omg.CORBA.portable.OutputStream _output = this._request("getIdRectorat",true);
+                    _input = this._invoke(_output);
+                    String _arg_ret = _input.read_string();
+                    return _arg_ret;
+                }
+                catch(org.omg.CORBA.portable.RemarshalException _exception)
+                {
+                    continue;
+                }
+                catch(org.omg.CORBA.portable.ApplicationException _exception)
+                {
+                    String _exception_id = _exception.getId();
+                    throw new org.omg.CORBA.UNKNOWN("Unexpected User Exception: "+ _exception_id);
+                }
+                finally
+                {
+                    this._releaseReply(_input);
+                }
+            }
+            else
+            {
+                org.omg.CORBA.portable.ServantObject _so = _servant_preinvoke("getIdRectorat",_opsClass);
+                if (_so == null)
+                   continue;
+                pRectorat.IGestionVoeuxOperations _self = (pRectorat.IGestionVoeuxOperations) _so.servant;
+                try
+                {
+                    return _self.getIdRectorat();
+                }
+                finally
+                {
+                    _servant_postinvoke(_so);
+                }
+            }
+        }
+    }
+
+    /**
+     * Operation getPeriodeEnCours
+     */
+    public String getPeriodeEnCours()
+    {
+        while(true)
+        {
+            if (!this._is_local())
+            {
+                org.omg.CORBA.portable.InputStream _input = null;
+                try
+                {
+                    org.omg.CORBA.portable.OutputStream _output = this._request("getPeriodeEnCours",true);
+                    _input = this._invoke(_output);
+                    String _arg_ret = _input.read_string();
+                    return _arg_ret;
+                }
+                catch(org.omg.CORBA.portable.RemarshalException _exception)
+                {
+                    continue;
+                }
+                catch(org.omg.CORBA.portable.ApplicationException _exception)
+                {
+                    String _exception_id = _exception.getId();
+                    throw new org.omg.CORBA.UNKNOWN("Unexpected User Exception: "+ _exception_id);
+                }
+                finally
+                {
+                    this._releaseReply(_input);
+                }
+            }
+            else
+            {
+                org.omg.CORBA.portable.ServantObject _so = _servant_preinvoke("getPeriodeEnCours",_opsClass);
+                if (_so == null)
+                   continue;
+                pRectorat.IGestionVoeuxOperations _self = (pRectorat.IGestionVoeuxOperations) _so.servant;
+                try
+                {
+                    return _self.getPeriodeEnCours();
+                }
+                finally
+                {
+                    _servant_postinvoke(_so);
+                }
+            }
+        }
+    }
+
 }

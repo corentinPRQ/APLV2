@@ -7,7 +7,45 @@ package pRectorat;
 */
 public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
 {
-    /**
+    public String getNoEtu() {
+		return noEtu;
+	}
+
+	public void setNoEtu(String noEtu) {
+		this.noEtu = noEtu;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getMdp() {
+		return mdp;
+	}
+
+	public void setMdp(String mdp) {
+		this.mdp = mdp;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
+	}
+
+	@Override
+	public String toString() {
+		return "Etudiant [noEtu=" + noEtu + ", nom=" + nom + ", mdp=" + mdp
+				+ ", score=" + score + "]";
+	}
+
+	/**
      * Struct member noEtu
      */
     public String noEtu;
@@ -47,63 +85,5 @@ public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
         this.mdp = mdp;
         this.score = score;
     }
-
-	/**
-	 * @return the noEtu
-	 */
-	public String getNoEtu() {
-		return noEtu;
-	}
-
-	/**
-	 * @param noEtu the noEtu to set
-	 */
-	public void setNoEtu(String noEtu) {
-		this.noEtu = noEtu;
-	}
-
-	/**
-	 * @return the nom
-	 */
-	public String getNom() {
-		return nom;
-	}
-
-	/**
-	 * @param nom the nom to set
-	 */
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	/**
-	 * @return the mdp
-	 */
-	public String getMdp() {
-		return mdp;
-	}
-
-	/**
-	 * @param mdp the mdp to set
-	 */
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
-	}
-
-	/**
-	 * @return the score
-	 */
-	public float getScore() {
-		return score;
-	}
-
-	/**
-	 * @param score the score to set
-	 */
-	public void setScore(float score) {
-		this.score = score;
-	}
-    
-    
 
 }

@@ -51,6 +51,24 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		}
 	}
 	
+	private String getNoAccred(){
+		boolean trouve =false;
+		String noAccred="";
+		int i=0;
+		
+		while(i<lesAccred.length||trouve!=false){
+			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].getLibelleD())
+					&&cb_universite.getSelectedItem().toString().equals(lesAccred[i].getLibelleU())){
+				trouve=true;
+				noAccred=lesAccred[i].getNoAccred();
+				return noAccred;
+			}
+			i++;
+		}
+		return "problème Accreditation non trouvée";
+		
+	}
+	
 	private void chargerUniversité() {
 		int itemCount = cb_universite.getItemCount();
 
@@ -169,12 +187,15 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+    private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
+    	/*Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+    	Voeu voeu = new Voeu()
+    	clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);*/
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+    	this.setVisible(false);
     }                                          
 
     private void cb_universiteActionPerformed(java.awt.event.ActionEvent evt) {                                              

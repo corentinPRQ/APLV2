@@ -138,4 +138,20 @@ public class IGestionVoeuxPOATie extends IGestionVoeuxPOA
         return _tie.getUtilisateur( numeroEtudiant);
     }
 
+    /**
+     * Operation getIdRectorat
+     */
+    public String getIdRectorat()
+    {
+        return _tie.getIdRectorat();
+    }
+
+    /**
+     * Operation getPeriodeEnCours
+     */
+    public String getPeriodeEnCours()
+    {
+        return _tie.getPeriodeEnCours();
+    }
+
 }
