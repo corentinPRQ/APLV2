@@ -7,39 +7,7 @@ package pRectorat;
 */
 public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
 {
-    public String getNoEtu() {
-		return noEtu;
-	}
-
-	public void setNoEtu(String noEtu) {
-		this.noEtu = noEtu;
-	}
-
-	public String getNom() {
-		return nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getMdp() {
-		return mdp;
-	}
-
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
-	}
-
-	public float getScore() {
-		return score;
-	}
-
-	public void setScore(float score) {
-		this.score = score;
-	}
-
-	/**
+    /**
      * Struct member noEtu
      */
     public String noEtu;
