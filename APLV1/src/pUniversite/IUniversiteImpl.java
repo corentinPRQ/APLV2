@@ -12,6 +12,7 @@ import java.util.Properties;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
+import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
 import pRectorat.Diplome;
 import pRectorat.Etat;
@@ -40,10 +41,18 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
 	private static String nomObj;
+	
+	// pour les pré-requisV2
+	private static Accred[] listeAccred;
+	//key : libelle diplome, voeux demandant un diplome
+	private Hashtable<String,ArrayList<Voeu>> listeVoeuxDiplome;
+	
+	//key idEtudiant, son score
+	private Hashtable<String,Integer> scoreEtu;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
-
+		
 		//initialisation des listes 
 		this.listeCandidatures = new ArrayList<Voeu>();
 		this.listePrincipale = new ArrayList<Voeu>();
@@ -83,7 +92,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Si on est en P3, on met à jour automatiquement la liste en fonction des décisions de l'étudiant
 	 * @return les voeux à jour
 	 */
-	public ArrayList<Voeu> getCandidatures() { 
+	/*public ArrayList<Voeu> getCandidatures() { 
 
 		// méthode appelée par l'universitaire pour consulter les voeux
 		String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
@@ -101,10 +110,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 
 		return lesVoeux; //renvoyer que les voeux qui ont de l'intérêt. A définir les états des voeux aux différentes étapes
-	}
+	}*/
 
-	private boolean p3(){
-		boolean P4=false;
+	/*private boolean p3(){
+		boolean P3=false;
 		Properties p;
 		p = null;
 		try {
@@ -121,7 +130,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			try {
 				fos = new FileOutputStream("parametres.properties");
 				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
-					P4=true;
+					P3=true;
 				}
 			} catch (FileNotFoundException e1) {
 				System.out.println("Echec écriture properties");
@@ -131,8 +140,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 				e.printStackTrace();
 			}
 		}
-		return P4;
-	}
+		return P3;
+	}*/
 
 	/**
 	 * Permet d'enregistrer la décision de l'universitaire concernant un Voeu
@@ -140,7 +149,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @param e
 	 * @throws voeuNonTrouve
 	 */
-	public void enregistrerEtatCandidature(Voeu v, Etat e) throws voeuNonTrouve {  
+	/*public void enregistrerEtatCandidature(Voeu v, Etat e) throws voeuNonTrouve {  
 		IGestionVoeuxImpl IGVI = new IGestionVoeuxImpl(orb, nameRoot, nomObj);
 		IGVI.setEtatVoeu(v, e);
 
@@ -152,7 +161,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			this.ajouterListeRejet(v);
 		}
 		//appel à relayer voeu dans la conception. WTF ?
-	}
+	}*/
 
 	public void ajouterListePrincipale(Voeu v) throws voeuNonTrouve { 
 		if (!listeCandidatures.contains(v)){ 
@@ -438,12 +447,48 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 
+	/**
+	 * méthode appelée automatiquement par gestionVoeu (rectorat) en début de P3 pour faire la vérif des prérequis
+	 * les prérequis se basent en fonction d'un score calculé grâce à la position de l'étudiant et sa session de réussite
+	 */
 	@Override
 	public void verifCandidature(Voeu[] tabVoeux) {
-		// TODO Auto-generated method stub
-
+		this.trierVoeuxDip(tabVoeux);
+		this.ordonnerVoeuxDip();
+		
+	}
+	
+	private void trierVoeuxDip(Voeu[] tabVoeux){
+		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
+		//on charge les voeux dans le tableau des candidatures
+		for (int i=0;i<tabVoeux.length; i++){
+			listeCandidatures.add(tabVoeux[i]);
+		}
+		// pour charque accreditation, on construit une hashtable avec un tableau des voeux demandant chaque formation
+		for (int i=0; i<listeAccred.length; i++){
+			// on parcours les voeux pour ajouter les voeux par diplome
+			for(int j=0; j<listeCandidatures.size(); j++){
+				if(listeCandidatures.get(j).acreditation.equals(listeAccred[i])){
+					tabVoeuxDip.add(listeCandidatures.get(j));
+				}
+			}
+			listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
+			tabVoeuxDip.clear();
+		}
+	}
+	
+	private void ordonnerVoeuxDip(){
+		this.recupererScore();
+		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 	}
 
+	private void recupererScore(){
+		//récupérer l'université de l'étudiant
+		//Récupérer ses notes avec un appel distant de son université
+		//faire le calcul de son score
+		//alimenter la hashtable avec le score
+	
+	}
 
 
 }
