@@ -5,7 +5,11 @@ module pMinistere{
 	typedef sequence<::pRectorat::Diplome> Referenciel;
 
 	interface IMinistere{
-		readonly attribute Referenciel getReferenciel;
-		void enregistrerAnnuaire(in string ior);
+		
+		typedef sequence<string> TabRectorat;
+		
+		readonly attribute Referenciel getReferenciel;	
+		readonly attribute TabRectorat getRectorats;
+		
 	};
 };

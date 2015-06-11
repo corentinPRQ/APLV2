@@ -9,10 +9,13 @@ import pRectorat.NiveauEtude;
 
 public class IMinistereImpl extends IMinisterePOA {
 	private ArrayList<Diplome> referenciel;
+	private ArrayList<String> rectorats;
 
 	public IMinistereImpl() {
 		referenciel = new ArrayList<Diplome>();
+		rectorats = new ArrayList<String>();
 		initialiserReferenciel("src/formations.csv");
+		initialiserRectorats("src/rectorats.csv");
 	}
 
 	@Override
@@ -27,9 +30,15 @@ public class IMinistereImpl extends IMinisterePOA {
 		return ref;			
 	}
 	
-	public void enregistrerAnnuaire(String IOR)
-	{
 
+	@Override
+	public String[] getRectorats() {
+		String[] rect = new String[rectorats.size()];
+		for (int i=0; i<rectorats.size(); i++){
+			rect[i] = rectorats.get(i);
+			System.out.println(rect[i]);
+		}
+		return (rect);
 	}
 	
 	private void initialiserReferenciel(String path){
@@ -70,9 +79,30 @@ public class IMinistereImpl extends IMinisterePOA {
 		}
 	}
 	
+	
+	private void initialiserRectorats(String path){
+		String lineRead;
+		String[] lineSplit;
+		String idRectorat="";
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));	 
+			lineRead = br.readLine();
+
+			while ((lineRead = br.readLine()) != null) {
+				idRectorat = lineRead;
+				rectorats.add(idRectorat);
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public static void main(String[] args){
 		IMinistereImpl im = new IMinistereImpl();
-		System.out.println(im.getReferenciel().length);
+		System.out.println(im.getRectorats().length);
 	}
 	
 }
