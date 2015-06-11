@@ -73,14 +73,20 @@ public class NoteHelper
                     return org.omg.CORBA.ORB.init().create_recursive_tc(id());
                 _working = true;
                 org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init();
-                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[2];
+                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[4];
 
                 _members[0] = new org.omg.CORBA.StructMember();
-                _members[0].name = "matiere";
-                _members[0].type = pUniversite.MatiereHelper.type();
+                _members[0].name = "semestre";
+                _members[0].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
                 _members[1] = new org.omg.CORBA.StructMember();
                 _members[1].name = "moyenne";
                 _members[1].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_float);
+                _members[2] = new org.omg.CORBA.StructMember();
+                _members[2].name = "position";
+                _members[2].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_long);
+                _members[3] = new org.omg.CORBA.StructMember();
+                _members[3].name = "validation";
+                _members[3].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
                 _tc = orb.create_struct_tc(id(),"Note",_members);
                 _working = false;
             }
@@ -108,8 +114,10 @@ public class NoteHelper
     {
         pUniversite.Note new_one = new pUniversite.Note();
 
-        new_one.matiere = pUniversite.MatiereHelper.read(istream);
+        new_one.semestre = istream.read_string();
         new_one.moyenne = istream.read_float();
+        new_one.position = istream.read_long();
+        new_one.validation = istream.read_string();
 
         return new_one;
     }
@@ -121,8 +129,10 @@ public class NoteHelper
      */
     public static void write(org.omg.CORBA.portable.OutputStream ostream, pUniversite.Note value)
     {
-        pUniversite.MatiereHelper.write(ostream,value.matiere);
+        ostream.write_string(value.semestre);
         ostream.write_float(value.moyenne);
+        ostream.write_long(value.position);
+        ostream.write_string(value.validation);
     }
 
 }

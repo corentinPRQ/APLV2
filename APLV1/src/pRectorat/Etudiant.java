@@ -23,6 +23,11 @@ public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
     public String mdp;
 
     /**
+     * Struct member score
+     */
+    public float score;
+
+    /**
      * Default constructor
      */
     public Etudiant()
@@ -33,42 +38,72 @@ public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
      * @param noEtu noEtu struct member
      * @param nom nom struct member
      * @param mdp mdp struct member
+     * @param score score struct member
      */
-    public Etudiant(String noEtu, String nom, String mdp)
+    public Etudiant(String noEtu, String nom, String mdp, float score)
     {
         this.noEtu = noEtu;
         this.nom = nom;
         this.mdp = mdp;
+        this.score = score;
     }
 
+	/**
+	 * @return the noEtu
+	 */
 	public String getNoEtu() {
 		return noEtu;
 	}
 
+	/**
+	 * @param noEtu the noEtu to set
+	 */
 	public void setNoEtu(String noEtu) {
 		this.noEtu = noEtu;
 	}
 
+	/**
+	 * @return the nom
+	 */
 	public String getNom() {
 		return nom;
 	}
 
+	/**
+	 * @param nom the nom to set
+	 */
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
+	/**
+	 * @return the mdp
+	 */
 	public String getMdp() {
 		return mdp;
 	}
 
+	/**
+	 * @param mdp the mdp to set
+	 */
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
 
-	@Override
-	public String toString() {
-		return "Etudiant [noEtu=" + noEtu + ", nom=" + nom + ", mdp=" + mdp
-				+ "]";
+	/**
+	 * @return the score
+	 */
+	public float getScore() {
+		return score;
 	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(float score) {
+		this.score = score;
+	}
+    
+    
 
 }

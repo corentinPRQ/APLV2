@@ -33,7 +33,11 @@ public abstract class IUniversitePOA extends org.omg.PortableServer.Servant
             final org.omg.CORBA.portable.ResponseHandler handler)
     {
 
-        if (opName.equals("getListePrerequis")) {
+        if (opName.equals("_get_getCandidatures")) {
+                return _invoke__get_getCandidatures(_is, handler);
+        } else if (opName.equals("enregistrerEtatCandidature")) {
+                return _invoke_enregistrerEtatCandidature(_is, handler);
+        } else if (opName.equals("getListePrerequis")) {
                 return _invoke_getListePrerequis(_is, handler);
         } else if (opName.equals("getNotes")) {
                 return _invoke_getNotes(_is, handler);
@@ -43,6 +47,16 @@ public abstract class IUniversitePOA extends org.omg.PortableServer.Servant
     }
 
     // helper methods
+    private org.omg.CORBA.portable.OutputStream _invoke__get_getCandidatures(
+            final org.omg.CORBA.portable.InputStream _is,
+            final org.omg.CORBA.portable.ResponseHandler handler) {
+        org.omg.CORBA.portable.OutputStream _output;
+        pRectorat.Voeu arg = getCandidatures();
+        _output = handler.createReply();
+        pRectorat.VoeuHelper.write(_output,arg);
+        return _output;
+    }
+
     private org.omg.CORBA.portable.OutputStream _invoke_getListePrerequis(
             final org.omg.CORBA.portable.InputStream _is,
             final org.omg.CORBA.portable.ResponseHandler handler) {
@@ -54,6 +68,28 @@ public abstract class IUniversitePOA extends org.omg.PortableServer.Servant
         _output = handler.createReply();
         pUniversite.listePrerequisHelper.write(_output,_arg_result);
 
+        return _output;
+    }
+
+    private org.omg.CORBA.portable.OutputStream _invoke_enregistrerEtatCandidature(
+            final org.omg.CORBA.portable.InputStream _is,
+            final org.omg.CORBA.portable.ResponseHandler handler) {
+        org.omg.CORBA.portable.OutputStream _output;
+        pRectorat.Voeu arg0_in = pRectorat.VoeuHelper.read(_is);
+        pRectorat.Etat arg1_in = pRectorat.EtatHelper.read(_is);
+
+        try
+        {
+            enregistrerEtatCandidature(arg0_in, arg1_in);
+
+            _output = handler.createReply();
+
+        }
+        catch (pUniversite.voeuNonTrouve _exception)
+        {
+            _output = handler.createExceptionReply();
+            pUniversite.voeuNonTrouveHelper.write(_output,_exception);
+        }
         return _output;
     }
 

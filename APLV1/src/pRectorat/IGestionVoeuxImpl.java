@@ -278,6 +278,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String mdp = "";
 		String prenom="";
 		String nom="";
+		int score=0;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			lineRead = br.readLine();
@@ -298,13 +299,15 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					case 2:
 						nom=lineSplit[2];
 						break;
+					case 3 : 
+						score = Integer.parseInt(lineSplit[3]);
 
 					default:
 						break;
 					}
 				}
 				// System.out.println("Login : "+login + " - mdp : "+mdp);
-				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp));
+				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp,score));
 			
 			}
 

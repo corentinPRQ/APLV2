@@ -8,14 +8,24 @@ package pUniversite;
 public final class Note implements org.omg.CORBA.portable.IDLEntity
 {
     /**
-     * Struct member matiere
+     * Struct member semestre
      */
-    public pUniversite.Matiere matiere;
+    public String semestre;
 
     /**
      * Struct member moyenne
      */
     public float moyenne;
+
+    /**
+     * Struct member position
+     */
+    public int position;
+
+    /**
+     * Struct member validation
+     */
+    public String validation;
 
     /**
      * Default constructor
@@ -25,13 +35,17 @@ public final class Note implements org.omg.CORBA.portable.IDLEntity
 
     /**
      * Constructor with fields initialization
-     * @param matiere matiere struct member
+     * @param semestre semestre struct member
      * @param moyenne moyenne struct member
+     * @param position position struct member
+     * @param validation validation struct member
      */
-    public Note(pUniversite.Matiere matiere, float moyenne)
+    public Note(String semestre, float moyenne, int position, String validation)
     {
-        this.matiere = matiere;
+        this.semestre = semestre;
         this.moyenne = moyenne;
+        this.position = position;
+        this.validation = validation;
     }
 
 }
