@@ -7,32 +7,28 @@ package pRectorat;
 */
 public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 {
+
     /**
      * Struct member noE
      */
     public String noE;
 
     /**
+=======
+    @Override
+	public String toString() {
+		return "Voeu [noE=" + noE + ", acreditation=" + acreditation + ", idR="
+				+ idR + ", decEtudiant=" + decEtudiant + ", etatVoeu="
+				+ etatVoeu + "]";
+	}
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
+
+    /**
      * Struct member acreditation
      */
     public pRectorat.Accred acreditation;
 
-    public String getNoE() {
-		return noE;
-	}
-
-	public void setNoE(String noE) {
-		this.noE = noE;
-	}
-
-	public pRectorat.Accred getAcreditation() {
-		return acreditation;
-	}
-
-	public void setAcreditation(pRectorat.Accred acreditation) {
-		this.acreditation = acreditation;
-	}
-
+    
 	public pRectorat.Rectorat getIdRSource() {
 		return idRSource;
 	}
@@ -49,24 +45,15 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 		this.idRDest = idRDest;
 	}
 
-	public pRectorat.DecisionEtudiant getDecEtudiant() {
-		return decEtudiant;
-	}
-
-	public void setDecEtudiant(pRectorat.DecisionEtudiant decEtudiant) {
-		this.decEtudiant = decEtudiant;
-	}
-
-	public pRectorat.Etat getEtatVoeu() {
-		return etatVoeu;
-	}
-
-	public void setEtatVoeu(pRectorat.Etat etatVoeu) {
-		this.etatVoeu = etatVoeu;
-	}
+	
 
 	/**
+<<<<<<< HEAD
      * Struct member idRSource
+=======
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2.git
+     * Struct member noE
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
      */
     public pRectorat.Rectorat idRSource;
 
@@ -109,5 +96,65 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
         this.decEtudiant = decEtudiant;
         this.etatVoeu = etatVoeu;
     }
+
+	/**
+	 * @return the noE
+	 */
+	public String getNoE() {
+		return noE;
+	}
+
+	/**
+	 * @param noE the noE to set
+	 */
+	public void setNoE(String noE) {
+		this.noE = noE;
+	}
+
+	/**
+	 * @return the acreditation
+	 */
+	public pRectorat.Accred getAcreditation() {
+		return acreditation;
+	}
+
+	/**
+	 * @param acreditation the acreditation to set
+	 */
+	public void setAcreditation(pRectorat.Accred acreditation) {
+		this.acreditation = acreditation;
+	}
+
+	
+
+	/**
+	 * @return the decEtudiant
+	 */
+	public pRectorat.DecisionEtudiant getDecEtudiant() {
+		return decEtudiant;
+	}
+
+	/**
+	 * @param decEtudiant the decEtudiant to set
+	 */
+	public void setDecEtudiant(pRectorat.DecisionEtudiant decEtudiant) {
+		this.decEtudiant = decEtudiant;
+	}
+
+	/**
+	 * @return the etatVoeu
+	 */
+	public pRectorat.Etat getEtatVoeu() {
+		return etatVoeu;
+	}
+
+	/**
+	 * @param etatVoeu the etatVoeu to set
+	 */
+	public void setEtatVoeu(pRectorat.Etat etatVoeu) {
+		this.etatVoeu = etatVoeu;
+	}
+    
+    
 
 }

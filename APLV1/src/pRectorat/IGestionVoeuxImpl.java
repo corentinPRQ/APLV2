@@ -249,7 +249,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
-		/*Rectorat r = new Rectorat();
+		Rectorat r = new Rectorat();
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
 		if (v.idR == r) {
@@ -257,12 +257,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		} else {
 			// TODO trouver le gestVoeu
 			// lebongestVoeu.faireVoeu(v);
-		}*/
-		
-		//
-		System.out.println("Test de faire voeu");
-		System.out.println("Le voeu :"+v.toString());
-		
+		}
 
 	}
 
@@ -294,7 +289,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";", 4);
+				lineSplit = lineRead.split(";", 3);
 				// System.out.println("line split users : "+ lineSplit[0] +
 				// " - " + lineSplit[1] + " - " + lineSplit[2] + " - "
 				// +lineSplit[3]);
@@ -311,6 +306,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 						break;
 					case 3 : 
 						score = Integer.parseInt(lineSplit[3]);
+
 					default:
 						break;
 					}

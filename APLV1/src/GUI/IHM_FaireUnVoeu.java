@@ -27,14 +27,8 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
-	public static ClientEtudiantGV getClientEtuGV() {
-		return clientEtuGV;
-	}
-
-	public static void setClientEtuGV(ClientEtudiantGV clientEtuGV) {
-		IHM_FaireUnVoeu.clientEtuGV = clientEtuGV;
-	}
-
+	private String idRectorat;
+	
 
 
 	
@@ -85,7 +79,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 			i++;
 		}
 		return "problème Accreditation non trouvée";
-		
+		//jjejfiejfijeifdje
 	}
 	
 	private void chargerUniversité() {

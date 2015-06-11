@@ -65,8 +65,12 @@ module pRectorat {
 	struct Voeu{
 		string noE;
 		Accred acreditation;
+<<<<<<< HEAD
 		Rectorat idRSource;
 		Rectorat idRDest;
+=======
+		Rectorat idR;
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 		DecisionEtudiant decEtudiant;
 		Etat etatVoeu;
 	};
