@@ -94,6 +94,14 @@ public class ClientEtudiantGV implements Runnable{
 		return (ClientEtudiantGV.monGestionVoeu.consulterListeVoeu(etu));
 	}
 	
+	/**
+	 * Renvoie la période en cours pour l'application
+	 * @return période
+	 */
+	public String getPeriodeEnCours(){
+		return ClientEtudiantGV.monGestionVoeu.getPeriodeEnCours();
+	}
+	
 	public Accred[] getListeAccreditation(){
 		return ClientEtudiantGV.monGestionVoeu.getListeAccreditations();
 	}
@@ -147,6 +155,7 @@ public class ClientEtudiantGV implements Runnable{
 	public void run() {
 		travailler();
 	}
+
 	
 	
 
