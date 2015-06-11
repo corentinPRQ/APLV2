@@ -1,16 +1,29 @@
 package pUniversite;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Properties;
 
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContext;
+
+import pRectorat.DecisionEtudiant;
 import pRectorat.Diplome;
 import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
+import pRectorat.IGestionVoeuxImpl;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
+import utilitaires.utils;
+import Applications.ApplicationUniversite;
+import Applications.PeriodeApplication;
+import ClientsServeurs.ClientUniversiteGV;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
@@ -24,8 +37,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private ArrayList<Voeu> listeRefuse;
 	private ArrayList<Voeu> listeCandidatures;
 
+	private static org.omg.CORBA.ORB orb;
+	private static NamingContext nameRoot;
+	private static String nomObj;
 
-	public IUniversiteImpl(Hashtable<String, String> listeU) {
+	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
 
 		//initialisation des listes 
@@ -33,15 +49,19 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listePrincipale = new ArrayList<Voeu>();
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
-		
+
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
 		initialiserPrerequis("src/PS_prerequis.csv");
-		
+
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
 
 		this.listeUniversitaires = listeU;
+
+		this.orb = orb;
+		this.nameRoot = nameRoot;
+		this.nomObj = nomObj;
 	}
 
 
@@ -58,58 +78,148 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return true;
 	}
 
-	public Voeu getCandidatures() { //changer le type de retour -> tab VOeu
-		// méthode appelée par l'universitaire pour consulter les listes de voeux après décisions des étudiants
-		// appel à la méthode getVoeux de gestionVoeux
-		// Appel à la méthode majListe pour mettre à jour les listes en fonction des décisions des étudiants
-		// Retourne les listes mises à jour
-		return null;
+	/**
+	 * Permet de renvoyer les voeux à l'universitaire
+	 * Si on est en P3, on met à jour automatiquement la liste en fonction des décisions de l'étudiant
+	 * @return les voeux à jour
+	 */
+	public ArrayList<Voeu> getCandidatures() { 
+
+		// méthode appelée par l'universitaire pour consulter les voeux
+		String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
+		ClientUniversiteGV cugv = new ClientUniversiteGV(orb,
+				nameRoot, nomObj, idObj);
+
+		ArrayList<Voeu> lesVoeux = cugv.getVoeux();
+
+		listeCandidatures = lesVoeux;
+
+		// si P4
+		if(p4()){
+			// Permet de mettre à jour la liste en fonction des décisions des étudiants
+			this.majListes();
+		}
+
+		return lesVoeux; //renvoyer que les voeux qui ont de l'intérêt. A définir les états des voeux aux différentes étapes
 	}
 
-	public void enregistrerEtatCandidature(Voeu c, Etat e) throws voeuNonTrouve {  //interne vu que appelée par l'universitaire
-		// Méthode appelée par l'universitaire quand il a mis à jour le voeu
-		// fait appel à setEtatVoeu de gestionVoeux
-		// appel à ajouter liste principale ou secondaire
+	private boolean p4(){
+		boolean P4=false;
+		Properties p;
+		p = null;
+		try {
+			p = utils.load("parametres.properties");
+		} catch (FileNotFoundException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		}
+		if (p != null) {
+			FileOutputStream fos;
+			try {
+				fos = new FileOutputStream("parametres.properties");
+				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
+					P4=true;
+				}
+			} catch (FileNotFoundException e1) {
+				System.out.println("Echec écriture properties");
+				e1.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return P4;
 	}
 
-	public void ajouterListePrincipale(Voeu c) throws voeuNonTrouve { // méthode appelée en interne donc à sortir de l'IDL
-		if (!listeCandidatures.contains(c)){
+	/**
+	 * Permet d'enregistrer la décision de l'universitaire concernant un Voeu
+	 * @param v
+	 * @param e
+	 * @throws voeuNonTrouve
+	 */
+	public void enregistrerEtatCandidature(Voeu v, Etat e) throws voeuNonTrouve {  
+		IGestionVoeuxImpl IGVI = new IGestionVoeuxImpl(orb, nameRoot, nomObj);
+		IGVI.setEtatVoeu(v, e);
+
+		if(e.equals(Etat.liste_principale)){
+			this.ajouterListePrincipale(v);
+		}else if (e.equals(Etat.liste_secondaire)){
+			this.ajouterListeComplementaire(v);
+		}else if (e.equals(Etat.refus)){
+			this.ajouterListeRejet(v);
+		}
+		//appel à relayer voeu dans la conception. WTF ?
+	}
+
+	public void ajouterListePrincipale(Voeu v) throws voeuNonTrouve { 
+		if (!listeCandidatures.contains(v)){ 
 			throw new voeuNonTrouve();
 		}
 		else{
-			this.listePrincipale.add(c);
+			this.listePrincipale.add(v);
 		}
 	}
 
-	public void ajouterListeComplementaire(Voeu c) throws voeuNonTrouve { // méthode appelée en interne donc à sortir de l'IDL
-		if (!listeCandidatures.contains(c)){
+	public void ajouterListeComplementaire(Voeu v) throws voeuNonTrouve { 
+		if (!listeCandidatures.contains(v)){
 			throw new voeuNonTrouve();
 		}
 		else{
-			this.listeComplementaire.add(c);
+			this.listeComplementaire.add(v);
 		}
 	}
 
-	public void majListes() { //TODO à sortir de l'IDL
-		//changement de période. P3 me semble
+	public void majListes() { 
+		//changement de période. P4
 		//on recharge les voeux et on regarde les décisions de l'étudiant
-		//si il y a un OUI, on vire les autres candidatures
-		// OUI, mais : 
-		// NON, mais : 
-		//NON : on suppr sa candidature
+
+		for(int i=0; i<listeCandidatures.size(); i++){
+			Voeu vTmp = listeCandidatures.get(i);
+			if(vTmp.decEtudiant == DecisionEtudiant.oui){
+				//on suppr les autres candidatures de l'étudiant
+				i++;
+				Voeu vTmp2 = listeCandidatures.get(i);
+				while(vTmp2.noE.equals(vTmp.noE)){
+					if(listePrincipale.contains(vTmp2)){
+						listePrincipale.remove(vTmp2);
+					}else if(listeComplementaire.contains(vTmp2)){
+						listeComplementaire.remove(vTmp2);
+					}
+					i++;
+					vTmp2 = listeCandidatures.get(i);
+				}
+				//on sort quand le voeux est d'un autre étudiant
+				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
+				i--;
+
+			}else if(vTmp.decEtudiant == DecisionEtudiant.oui_mais){
+				//TODO
+			}else if(vTmp.decEtudiant == DecisionEtudiant.non_mais){
+				//TODO
+			}else if(vTmp.decEtudiant == DecisionEtudiant.non){
+				if(listePrincipale.contains(vTmp)){
+					listePrincipale.remove(vTmp);
+				}else if(listeComplementaire.contains(vTmp)){
+					listeComplementaire.remove(vTmp);
+				}
+			}
+		}
 	}
 
-	public void enregistrerAnnuaire(String ior) { // sortir IDL
-		// TODO Auto-generated method stub
+	/*public void enregistrerAnnuaire(String ior) { 
+	// TODO Auto-generated method stub
 
-	}
+	}*/
 
-	public void ajouterListeRejet(Voeu c) throws voeuNonTrouve { // intérêt d'avoir une liste refus ? pourquoi ne pas clore direct le voeu ? + interne
-		if (!listeCandidatures.contains(c)){
+	public void ajouterListeRejet(Voeu v) throws voeuNonTrouve {
+		if (!listeCandidatures.contains(v)){
 			throw new voeuNonTrouve();
 		}
 		else{
-			this.listeRefuse.add(c);
+			this.listeRefuse.add(v);
 		}
 	}
 
@@ -137,70 +247,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			return null;
 		}
 	}
-	
-	/**
-	 * Permet de charger les notes d'un étudiant
-	 * @param path
-	 */
-	private void initialiserNotesEtudiant(String path){
-		String lineRead;
-		String[] lineSplit;
-		String numE="";
-		String numEprecedent="";
-		String numMat="";
-		String nomMat="";
-		float moy=0f;
-		//variable comptant le nombre de lignes du fichier par étudiant
-		int cpteur = 0;
-		
-		Note[] notes = new Note[20];
-		
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));	 
-			lineRead = br.readLine();	
-			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",4);
-//				System.out.println("line split notes : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
-				
-				for (int i=0; i<lineSplit.length; i++){
-					switch(i){  
-					case 0: numE = lineSplit[0];
-					break;
-					case 1: numMat = lineSplit[1];
-					break;
-					case 2 : nomMat = lineSplit[2];
-					break;
-					case 3 : moy = Float.parseFloat(lineSplit[3]);
-						break;
-					default : 
-						break;
-					}
-//					System.out.println("Etu : "+numE + " - matiere : "+numMat +"-"+nomMat + " - note : " + moy);
-				}
-				
-				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
-//				System.out.println("NumE : " + numE + " - numEprecedent : " + numEprecedent);
-				if (!numE.equals(numEprecedent)){
-					listeNotesEtudiants.put(numEprecedent, notes);
-					notes = new Note[20];
-					cpteur = 0;
-				}
-				numEprecedent = numE;
-//				System.out.println("Etu : "+numE + " - matiere : "+numMat +"-"+nomMat + " - note : " + moy);
-				Note n = new Note();
-				notes[cpteur] = n;
-				cpteur++;
-			}
 
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-//		System.out.println("Affichage de la liste des notes : ");
-//		
-//		System.out.println(listeNotesEtudiants.values());
-		
-		
-	}
 	
 	/**
 	 * Permet de charger les formations pré-requis
@@ -210,7 +257,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		/*
 		 * Réfléchir à un moyen d'intégrer les notes pour les prérequis! 
 		 */
-		
+
 		String lineRead;
 		String[] lineSplit;
 		String numUniv="";
@@ -222,21 +269,21 @@ public class IUniversiteImpl extends IUniversitePOA{
 		float moyFR = 0f;
 		float moyMat = 0f;
 		float moyEn= 0f;
-		
+
 		//variable comptant le nombre de lignes du fichier par diplome
 		int cpteur = 0;
 		String numDipPrecedent = "";
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
-		
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
 				lineSplit = lineRead.split(";",9);
-//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
+				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){  
 					case 0 : numUniv = lineSplit[0];
@@ -263,7 +310,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					}					
 				}
 				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
-//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
+				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!numDip.equals(numDipPrecedent)){
 					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
@@ -272,7 +319,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				}
 				numDipPrecedent = numDip;
 				nomDipPrecedent = nomDip;
-//				System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
+				//				System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
 				if (nomDipPR.contains("L3")){
 					ne = NiveauEtude.licence;
 				}
@@ -282,7 +329,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;
 				cpteur++;
-				
+
 			}
 			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
@@ -292,11 +339,62 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 	}
 
-//	public static void main (String [] args){
-//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
-//		System.out.println(i.getListePrerequis("M1Miage"));
-//			
-//	}
+	/**
+	 * Permet de charger les notes d'un étudiant
+	 * @param path
+	 */
+	private void initialiserNotesEtudiant(String path){
+		String lineRead;
+		String[] lineSplit;
+		String nomUniv="";
+		String numE="";
+		float moyenne=0f;
+		String code="";
+		int position=0;
+
+		//variable comptant le nombre de lignes du fichier par étudiant
+		int cpt=0;
+		Note[] notes = new Note[6];	
+
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));	 
+			lineRead = br.readLine();	
+			while ((lineRead = br.readLine()) != null) {
+				lineSplit = lineRead.split(";",20);
+				//				System.out.println("line split notes : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
+				nomUniv = lineSplit[0];
+				numE = lineSplit[1];
+				notes = new Note[6];
+				cpt = 0;
+
+				for (int i=2; i<lineSplit.length; i++)	{
+					switch(i%3){  
+					case 0: code = lineSplit[i];
+					break;
+					case 1: position = Integer.parseInt(lineSplit[i]);
+					notes[cpt] = new Note("s"+cpt+1, moyenne, position, code);
+					//							System.out.println(cpt + " - Univ : "+ nomUniv + " - Etu : "+numE + " - Moyenne : " + moyenne + " -  Position : " + position + " - Etat de validation : " + code);
+					cpt++;
+					break;
+					case 2 : moyenne = Float.parseFloat(lineSplit[i]);
+					break;
+					default : 
+						break;
+					}					
+					listeNotesEtudiants.put(numE, notes);
+				}
+				//				System.out.println("Taille de la hashtable : "+ listeNotesEtudiants.size());
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}		
+	}
+
+	//	public static void main (String [] args){
+	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
+	//		System.out.println(i.getListePrerequis("M1Miage"));
+	//			
+	//	}
 
 	/**
 	 * @return the preRequis
@@ -305,6 +403,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return preRequis;
 	}
 
-	
-	
+
+	@Override
+	public void verifCandidature(Voeu[] tabVoeux) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+
 }
