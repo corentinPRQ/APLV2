@@ -36,7 +36,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
-		initialiserPrerequis("src/universite_prerequisV2.csv");
+		initialiserPrerequis("src/PS_prerequis.csv");
 		
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
