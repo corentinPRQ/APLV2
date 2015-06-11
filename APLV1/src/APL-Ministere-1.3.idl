@@ -1,0 +1,11 @@
+import ::pRectorat::Diplome;
+
+module pMinistere{
+
+	typedef sequence<::pRectorat::Diplome> Referenciel;
+
+	interface IMinistere{
+		readonly attribute Referenciel getReferenciel;
+		void enregistrerAnnuaire(in string ior);
+	};
+};

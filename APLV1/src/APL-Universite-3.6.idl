@@ -1,0 +1,79 @@
+import ::pRectorat::Voeu;
+import ::pRectorat::Etudiant;
+import ::pRectorat::Diplome;
+import ::pRectorat::EtudiantNonTrouve;
+
+// module pUniversite : systeme de l'universite proposant 1 interface
+module pUniversite{
+	
+	typedef sequence<::pRectorat::Voeu> listePrincipale;
+	typedef sequence<::pRectorat::Voeu> listeComplementaire;
+	typedef sequence<::pRectorat::Voeu> listeRejet;
+	typedef sequence<::pRectorat::Diplome> listePrerequis;
+	
+	struct Matiere{
+		string noMat;
+		string nomMatiere;
+	};
+	
+	struct Note{
+		Matiere matiere;
+		float moyenne;
+	};
+	
+	typedef sequence<Note> listeNotes;
+
+	//Definition des exception du module Universite
+	exception voeuNonTrouve{
+		string raison;
+	 	::pRectorat::Voeu v;
+	};
+	
+	exception universitaireNonTrouve {
+		string raison;
+		::pRectorat::Etudiant idE;
+	};
+	
+	exception LicenceNonTrouve{
+		string raison;
+	};
+	
+	exception MasterNonTrouve{
+		string raison;
+	};
+	
+	interface IUniversite{
+	
+		// Méthode pour récupérer les candidatures
+		readonly attribute ::pRectorat::Voeu getCandidatures; 
+		
+		// Opération qui permet de recupere les prerequis d'un diplome
+		listePrerequis getListePrerequis(in string dip);
+	
+		//Opération d'identification de l universitaire
+		boolean identifier(in string login, in string mdp) raises (universitaireNonTrouve);		
+		
+		// Permet d'envoyer le changement d'etat d'une candidature
+		void enregistrerEtatCandidature(in ::pRectorat::Voeu c, in ::pRectorat::Etat e) raises (voeuNonTrouve);  
+		
+		// Permet d'ajouter une candidature à la liste principale
+		void ajouterListePrincipale (in ::pRectorat::Voeu c)raises(voeuNonTrouve); 
+		
+		// Permet d'ajouter une candidature à la liste complémentaire
+		void ajouterListeComplementaire (in ::pRectorat::Voeu c)raises(voeuNonTrouve); 
+		
+		// Permet d'ajouter une candidature à la liste rejet
+		void ajouterListeRejet (in ::pRectorat::Voeu c)raises(voeuNonTrouve); 
+		
+		// Permet de mettre à jour les listes en fonction des décisions des étudiants
+		void majListes();
+		
+		// Permet de mettre à disposition les notes des étudiants inscrits dans l'université
+		listeNotes getNotes(in ::pRectorat::Etudiant idE) raises (::pRectorat::EtudiantNonTrouve);
+		
+		//Permet de s'enregistrer dans l'annuaire
+		void enregistrerAnnuaire(in string ior);
+		
+	};
+};
+
