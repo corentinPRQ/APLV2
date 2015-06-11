@@ -125,9 +125,18 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public void repondreVoeu(DecisionEtudiant pDecision, Voeu v)
 			throws VoeuNonTrouve {
-		v.decEtudiant = pDecision;
+		    v.decEtudiant = pDecision;
+		    //setEtatVoeu
+		    //If bon recotrat mise à jour dans la hashTable 
+		    //si pas bon rectorat : faire voeu avc un nouveau voeu
+		    //(dans la méthode faire voeu il faut voir ce que ça fait)
 	}
 
+	/**
+	 * Valider un voeu
+	 * @param v
+	 * @throws VoeuNonTrouve
+	 */
 	private void validerVoeu(Voeu v) throws VoeuNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
 		ClientGestionVoeuxUniversite cu = new ClientGestionVoeuxUniversite(orb,
@@ -247,18 +256,27 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+		//Regarder on se trouve dans le bon rectorat
+	
+		//On considère que tous nos rectorats sont lancés.
+		//l'idRec c'est son nom. Donc on va pouvoir aller chercher le rectorat en l'identifiant avec son nom.
+		//On va alors y foutre le voeu dedans.
 		Rectorat r = new Rectorat();
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
-		if (v.idR == r) {
+		if (v.idR == r) { //si bon rectorat ajout ou maj du voeu
 			this.enregistrerVoeu(v);
 		} else {
-			// TODO trouver le gestVoeu
+			// TODO trouver le bon rectorat
 			// lebongestVoeu.faireVoeu(v);
 		}
 
 	}
 
+	/**
+	 * Enregistre un voeu.
+	 * @param v
+	 */
 	private void enregistrerVoeu(Voeu v) {
 		Voeu[] tabV = new Voeu[5];
 		tabV = this.listeVoeux.get(v.noE);
