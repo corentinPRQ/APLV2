@@ -49,10 +49,10 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	    for(int i=0;i<itemCount;i++){
 	        cb_diplome.removeItemAt(0);
 	     }
-		cb_diplome.addItem(lesAccred[0].getLibelleD());
+		cb_diplome.addItem(lesAccred[0].libelleD);
 		for (int i = 1; i < lesAccred.length-1; i++) {
-			if(!lesAccred[i-1].getLibelleD().equals(lesAccred[1].getLibelleD())){
-				cb_diplome.addItem(lesAccred[i].getLibelleD());
+			if(!lesAccred[i-1].libelleD.equals(lesAccred[1].libelleD)){
+				cb_diplome.addItem(lesAccred[i].libelleD);
 			}
 		}
 	}
@@ -63,10 +63,10 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		int i=0;
 		
 		while(i<lesAccred.length||trouve!=false){
-			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].getLibelleD())
-					&&cb_universite.getSelectedItem().toString().equals(lesAccred[i].getLibelleU())){
+			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].libelleD)
+					&&cb_universite.getSelectedItem().toString().equals(lesAccred[i].libelleD)){
 				trouve=true;
-				noAccred=lesAccred[i].getNoAccred();
+				noAccred=lesAccred[i].noAccred;
 				return noAccred;
 			}
 			i++;
@@ -82,8 +82,8 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	        cb_universite.removeItemAt(0);
 	     }
 		for(int i=0;i< lesAccred.length;i++){
-			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].getLibelleD())){
-				cb_universite.addItem(lesAccred[i].getLibelleU());
+			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].libelleD)){
+				cb_universite.addItem(lesAccred[i].libelleU);
 			}
 		}
 		
@@ -195,13 +195,13 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
     	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
-<<<<<<< HEAD
-    	Voeu voeu = new Voeu(parent.utilisateur.getNoEtu(),accred,new Rectorat(idRectorat),new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
+
+    	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
     	//clientEtuGV.faireVoeux(voeu);
-=======
+
     	//Voeu voeu = new Voeu(parent.utilisateur,accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
     	//clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
+
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           

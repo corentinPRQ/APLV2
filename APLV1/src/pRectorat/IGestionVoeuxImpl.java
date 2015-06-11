@@ -66,8 +66,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			// mettre un code GUI pour notifier de l'erreur d'identification
 			throw new EtudiantNonTrouve();
 		} else {
-			System.out.println(listeEtudiant.get(login).getMdp());
-			if (!listeEtudiant.get(login).getMdp().equals(mdp)) {
+			System.out.println(listeEtudiant.get(login).mdp);
+			if (!listeEtudiant.get(login).mdp.equals(mdp)) {
 				return false;
 			}
 		}
@@ -429,7 +429,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 igV.afficherLesEtu();
 	 System.out.println(igV.identifier("21001324", "hugo"));
 	 
-	 System.out.println(igV.getUtilisateur("21001324").getNom());
+	 System.out.println(igV.getUtilisateur("21001324").nom);
 	 
 	 for(int i=0;i<lesAccredIntern.length;i++){
 		 System.out.println(lesAccredIntern[i].toString());
