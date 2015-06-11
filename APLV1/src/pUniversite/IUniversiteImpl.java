@@ -14,7 +14,8 @@ import pRectorat.Voeu;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
-	private Hashtable<String, Diplome[]> preRequis;
+	private static Hashtable<String, Diplome[]> preRequis;
+
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
 
@@ -205,7 +206,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Permet de charger les formations pré-requis
 	 * @param path
 	 */
-	private void initialiserPrerequis(String path) {
+	private static void initialiserPrerequis(String path) {
 		/*
 		 * Réfléchir à un moyen d'intégrer les notes pour les prérequis! 
 		 */
@@ -265,7 +266,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 //				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!numDip.equals(numDipPrecedent)){
 					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
-					this.preRequis.put(nomDipPrecedent, diplomes);
+					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
 				}
@@ -284,22 +285,25 @@ public class IUniversiteImpl extends IUniversitePOA{
 				
 			}
 			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
-			this.preRequis.put(nomDip, diplomes);
-			if (preRequis.containsKey("M1Miage")){
-				System.out.println("COUCOU");
-			}
+			preRequis.put(nomDip, diplomes);
 
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	public static void main (String [] args){
-		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
-		System.out.println(i.getListePrerequis("M1Miage"));
-			
-	}
+//	public static void main (String [] args){
+//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
+//		System.out.println(i.getListePrerequis("M1Miage"));
+//			
+//	}
 
+	/**
+	 * @return the preRequis
+	 */
+	public static Hashtable<String, Diplome[]> getPreRequis() {
+		return preRequis;
+	}
 
 	
 	
