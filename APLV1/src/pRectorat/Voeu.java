@@ -7,7 +7,58 @@ package pRectorat;
 */
 public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 {
+<<<<<<< HEAD
     /**
+=======
+    @Override
+	public String toString() {
+		return "Voeu [noE=" + noE + ", acreditation=" + acreditation + ", idR="
+				+ idR + ", decEtudiant=" + decEtudiant + ", etatVoeu="
+				+ etatVoeu + "]";
+	}
+
+	public String getNoE() {
+		return noE;
+	}
+
+	public void setNoE(String noE) {
+		this.noE = noE;
+	}
+
+	public pRectorat.Accred getAcreditation() {
+		return acreditation;
+	}
+
+	public void setAcreditation(pRectorat.Accred acreditation) {
+		this.acreditation = acreditation;
+	}
+
+	public pRectorat.Rectorat getIdR() {
+		return idR;
+	}
+
+	public void setIdR(pRectorat.Rectorat idR) {
+		this.idR = idR;
+	}
+
+	public pRectorat.DecisionEtudiant getDecEtudiant() {
+		return decEtudiant;
+	}
+
+	public void setDecEtudiant(pRectorat.DecisionEtudiant decEtudiant) {
+		this.decEtudiant = decEtudiant;
+	}
+
+	public pRectorat.Etat getEtatVoeu() {
+		return etatVoeu;
+	}
+
+	public void setEtatVoeu(pRectorat.Etat etatVoeu) {
+		this.etatVoeu = etatVoeu;
+	}
+
+	/**
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2.git
      * Struct member noE
      */
     public String noE;
