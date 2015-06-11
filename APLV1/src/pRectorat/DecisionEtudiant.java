@@ -48,16 +48,6 @@ public final class DecisionEtudiant implements org.omg.CORBA.portable.IDLEntity
     public static final DecisionEtudiant non_mais = new DecisionEtudiant(_non_mais);
 
     /**
-     * Enum member cree value 
-     */
-    public static final int _cree = 4;
-
-    /**
-     * Enum member cree
-     */
-    public static final DecisionEtudiant cree = new DecisionEtudiant(_cree);
-
-    /**
      * Internal member value 
      */
     private final int _DecisionEtudiant_value;
@@ -106,8 +96,6 @@ public final class DecisionEtudiant implements org.omg.CORBA.portable.IDLEntity
             return oui_mais;
         case 3 :
             return non_mais;
-        case 4 :
-            return cree;
         }
         throw new org.omg.CORBA.BAD_OPERATION();
     }
@@ -128,8 +116,6 @@ public final class DecisionEtudiant implements org.omg.CORBA.portable.IDLEntity
             return "oui_mais";
         case 3 :
             return "non_mais";
-        case 4 :
-            return "cree";
         }
         throw new org.omg.CORBA.BAD_OPERATION();
     }

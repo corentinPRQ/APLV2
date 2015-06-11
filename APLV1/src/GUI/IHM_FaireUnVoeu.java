@@ -27,6 +27,19 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
+	public static ClientEtudiantGV getClientEtuGV() {
+		return clientEtuGV;
+	}
+
+	public static void setClientEtuGV(ClientEtudiantGV clientEtuGV) {
+		IHM_FaireUnVoeu.clientEtuGV = clientEtuGV;
+	}
+
+
+
+	
+	
+
 	private String idRectorat;
 
 	/**
@@ -194,9 +207,9 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
-    	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
-    	Voeu voeu = new Voeu(parent.utilisateur.getNoEtu(),accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
-    	clientEtuGV.faireVoeux(voeu);
+    	/*Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+    	//Voeu voeu = new Voeu(parent.utilisateur.getNoEtu(),accred,new Rectorat(idRectorat),,DecisionEtudiant.cree,Etat.cree);
+    	clientEtuGV.faireVoeux(voeu);*/
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           

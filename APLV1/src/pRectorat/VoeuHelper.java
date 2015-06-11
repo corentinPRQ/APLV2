@@ -73,7 +73,7 @@ public class VoeuHelper
                     return org.omg.CORBA.ORB.init().create_recursive_tc(id());
                 _working = true;
                 org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init();
-                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[5];
+                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[6];
 
                 _members[0] = new org.omg.CORBA.StructMember();
                 _members[0].name = "noE";
@@ -82,14 +82,17 @@ public class VoeuHelper
                 _members[1].name = "acreditation";
                 _members[1].type = pRectorat.AccredHelper.type();
                 _members[2] = new org.omg.CORBA.StructMember();
-                _members[2].name = "idR";
+                _members[2].name = "idRSource";
                 _members[2].type = pRectorat.RectoratHelper.type();
                 _members[3] = new org.omg.CORBA.StructMember();
-                _members[3].name = "decEtudiant";
-                _members[3].type = pRectorat.DecisionEtudiantHelper.type();
+                _members[3].name = "idRDest";
+                _members[3].type = pRectorat.RectoratHelper.type();
                 _members[4] = new org.omg.CORBA.StructMember();
-                _members[4].name = "etatVoeu";
-                _members[4].type = pRectorat.EtatHelper.type();
+                _members[4].name = "decEtudiant";
+                _members[4].type = pRectorat.DecisionEtudiantHelper.type();
+                _members[5] = new org.omg.CORBA.StructMember();
+                _members[5].name = "etatVoeu";
+                _members[5].type = pRectorat.EtatHelper.type();
                 _tc = orb.create_struct_tc(id(),"Voeu",_members);
                 _working = false;
             }
@@ -119,7 +122,8 @@ public class VoeuHelper
 
         new_one.noE = istream.read_string();
         new_one.acreditation = pRectorat.AccredHelper.read(istream);
-        new_one.idR = pRectorat.RectoratHelper.read(istream);
+        new_one.idRSource = pRectorat.RectoratHelper.read(istream);
+        new_one.idRDest = pRectorat.RectoratHelper.read(istream);
         new_one.decEtudiant = pRectorat.DecisionEtudiantHelper.read(istream);
         new_one.etatVoeu = pRectorat.EtatHelper.read(istream);
 
@@ -135,7 +139,8 @@ public class VoeuHelper
     {
         ostream.write_string(value.noE);
         pRectorat.AccredHelper.write(ostream,value.acreditation);
-        pRectorat.RectoratHelper.write(ostream,value.idR);
+        pRectorat.RectoratHelper.write(ostream,value.idRSource);
+        pRectorat.RectoratHelper.write(ostream,value.idRDest);
         pRectorat.DecisionEtudiantHelper.write(ostream,value.decEtudiant);
         pRectorat.EtatHelper.write(ostream,value.etatVoeu);
     }
