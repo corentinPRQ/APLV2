@@ -478,17 +478,59 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 	
 	private void ordonnerVoeuxDip(){
-		this.recupererScore();
+		this.etablirScore();
 		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 	}
 
-	private void recupererScore(){
-		//récupérer l'université de l'étudiant
-		//Récupérer ses notes avec un appel distant de son université
-		//faire le calcul de son score
-		//alimenter la hashtable avec le score
+	private void etablirScore(){
+		//TODO récupérer l'université de l'étudiant
+		//TODO Récupérer ses notes avec un appel distant de son université
+		while(listeNotesEtudiants.keys().hasMoreElements()){
+			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
+			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
+			Integer score = new Integer(0);
+			int moyPos = 0;
+			int moyValid = 0;
+			for(int i=0; i<noteEtuTmp.length; i++){
+				int pos = this.testPos(noteEtuTmp[i]);
+				int valid = this.testValid(noteEtuTmp[i]);
+				moyPos += pos;
+				moyValid +=valid;
+			}
+			score = (moyPos+moyValid)/6;
+			scoreEtu.put(numEtuTmp, score);
+		}
 	
 	}
-
+	
+	private int testPos(Note n){
+		int pos = n.position;
+		int score = 0;
+		if (pos == 1){
+			score = 4;
+		}else if (pos == 2){
+			score = 3;
+		}else if (pos == 3){
+			score = 2;
+		}else if (pos == 4){
+			score = 1;
+		}
+		
+		return score;
+	}
+	
+	private int testValid(Note n){
+		int score = 0;
+		String valid = n.validation;
+		if(valid.equals("s1")){
+			score = 3;
+		}else if(valid.equals("s2")){
+			score = 2;
+		}else if(valid.equals("R")){
+			score = 1;
+		}
+		return score;
+	}
+	
 
 }
