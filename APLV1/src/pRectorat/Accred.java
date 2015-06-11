@@ -7,7 +7,31 @@ package pRectorat;
 */
 public final class Accred implements org.omg.CORBA.portable.IDLEntity
 {
-    /**
+    public String getNoAccred() {
+		return noAccred;
+	}
+
+	public void setNoAccred(String noAccred) {
+		this.noAccred = noAccred;
+	}
+
+	public String getLibelleD() {
+		return libelleD;
+	}
+
+	public void setLibelleD(String libelleD) {
+		this.libelleD = libelleD;
+	}
+
+	public String getLibelleU() {
+		return libelleU;
+	}
+
+	public void setLibelleU(String libelleU) {
+		this.libelleU = libelleU;
+	}
+
+	/**
      * Struct member noAccred
      */
     public String noAccred;
@@ -40,29 +64,5 @@ public final class Accred implements org.omg.CORBA.portable.IDLEntity
         this.libelleD = libelleD;
         this.libelleU = libelleU;
     }
-
-	public String getNoAccred() {
-		return noAccred;
-	}
-
-	public void setNoAccred(String noAccred) {
-		this.noAccred = noAccred;
-	}
-
-	public String getLibelleD() {
-		return libelleD;
-	}
-
-	public void setLibelleD(String libelleD) {
-		this.libelleD = libelleD;
-	}
-
-	public String getLibelleU() {
-		return libelleU;
-	}
-
-	public void setLibelleU(String libelleU) {
-		this.libelleU = libelleU;
-	}
 
 }
