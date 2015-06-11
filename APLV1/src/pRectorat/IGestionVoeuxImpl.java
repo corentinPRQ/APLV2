@@ -249,7 +249,18 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+<<<<<<< HEAD
 		/*Rectorat r = new Rectorat();
+=======
+<<<<<<< HEAD
+		//Regarder on se trouve dans le bon rectorat
+		//On considère que tous nos rectorats sont lancés.
+		//l'idRec c'est son nom. Donc on va pouvoir aller chercher le rectorat en l'identifiant avec son nom.
+		//On va alors y foutre le voeu dedans.
+=======
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
+		Rectorat r = new Rectorat();
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
 		if (v.idR == r) {
