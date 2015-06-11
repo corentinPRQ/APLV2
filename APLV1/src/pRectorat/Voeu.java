@@ -7,15 +7,59 @@ package pRectorat;
 */
 public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 {
+
+
     /**
      * Struct member noE
      */
     public String noE;
 
+
+    @Override
+	public String toString() {
+		return "Voeu [noE=" + noE + ", acreditation=" + acreditation + ", idR="
+				+ idR + ", decEtudiant=" + decEtudiant + ", etatVoeu="
+				+ etatVoeu + "]";
+	}
+
+     * Struct member noE
+     */
+    public String noE;
+
+
     /**
      * Struct member acreditation
      */
     public pRectorat.Accred acreditation;
+
+    
+	public pRectorat.Rectorat getIdRSource() {
+		return idRSource;
+	}
+
+	public void setIdRSource(pRectorat.Rectorat idRSource) {
+		this.idRSource = idRSource;
+	}
+
+	public pRectorat.Rectorat getIdRDest() {
+		return idRDest;
+	}
+
+	public void setIdRDest(pRectorat.Rectorat idRDest) {
+		this.idRDest = idRDest;
+	}
+
+	
+
+	/**
+<<<<<<< HEAD
+     * Struct member idRSource
+=======
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2.git
+     * Struct member noE
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
+     */
+    public pRectorat.Rectorat idRSource;
 
     /**
      * Struct member idR
@@ -46,11 +90,12 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
      * @param decEtudiant decEtudiant struct member
      * @param etatVoeu etatVoeu struct member
      */
-    public Voeu(String noE, pRectorat.Accred acreditation, pRectorat.Rectorat idR, pRectorat.DecisionEtudiant decEtudiant, pRectorat.Etat etatVoeu)
+    public Voeu(String noE, pRectorat.Accred acreditation, pRectorat.Rectorat idRSource, pRectorat.Rectorat idRDest, pRectorat.DecisionEtudiant decEtudiant, pRectorat.Etat etatVoeu)
     {
         this.noE = noE;
         this.acreditation = acreditation;
-        this.idR = idR;
+        this.idRSource = idRSource;
+        this.idRDest = idRDest;
         this.decEtudiant = decEtudiant;
         this.etatVoeu = etatVoeu;
     }
