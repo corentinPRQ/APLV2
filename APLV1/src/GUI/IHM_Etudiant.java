@@ -51,7 +51,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     	initComponents();
     }
 
-   /* public IHM_Etudiant(ArrayList<Voeu> lesVoeux, Hashtable<String, String> lesEtus) {
+  /* public IHM_Etudiant(ArrayList<Voeu> lesVoeux, Hashtable<String, String> lesEtus) {
 
         initComponents();
 

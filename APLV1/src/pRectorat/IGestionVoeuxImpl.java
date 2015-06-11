@@ -266,6 +266,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			// lebongestVoeu.faireVoeu(v);
 		}*/
 		
+		System.out.println(v.toString());
+		
 
 	}
 
