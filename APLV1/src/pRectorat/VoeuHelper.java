@@ -73,26 +73,23 @@ public class VoeuHelper
                     return org.omg.CORBA.ORB.init().create_recursive_tc(id());
                 _working = true;
                 org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init();
-                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[6];
+                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[5];
 
                 _members[0] = new org.omg.CORBA.StructMember();
-                _members[0].name = "idV";
+                _members[0].name = "noE";
                 _members[0].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
                 _members[1] = new org.omg.CORBA.StructMember();
-                _members[1].name = "noE";
-                _members[1].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
+                _members[1].name = "acreditation";
+                _members[1].type = pRectorat.AccredHelper.type();
                 _members[2] = new org.omg.CORBA.StructMember();
-                _members[2].name = "acreditation";
-                _members[2].type = pRectorat.AccredHelper.type();
+                _members[2].name = "idR";
+                _members[2].type = pRectorat.RectoratHelper.type();
                 _members[3] = new org.omg.CORBA.StructMember();
-                _members[3].name = "idR";
-                _members[3].type = pRectorat.RectoratHelper.type();
+                _members[3].name = "decEtudiant";
+                _members[3].type = pRectorat.DecisionEtudiantHelper.type();
                 _members[4] = new org.omg.CORBA.StructMember();
-                _members[4].name = "decEtudiant";
-                _members[4].type = pRectorat.DecisionEtudiantHelper.type();
-                _members[5] = new org.omg.CORBA.StructMember();
-                _members[5].name = "etatVoeu";
-                _members[5].type = pRectorat.EtatHelper.type();
+                _members[4].name = "etatVoeu";
+                _members[4].type = pRectorat.EtatHelper.type();
                 _tc = orb.create_struct_tc(id(),"Voeu",_members);
                 _working = false;
             }
@@ -120,7 +117,6 @@ public class VoeuHelper
     {
         pRectorat.Voeu new_one = new pRectorat.Voeu();
 
-        new_one.idV = istream.read_string();
         new_one.noE = istream.read_string();
         new_one.acreditation = pRectorat.AccredHelper.read(istream);
         new_one.idR = pRectorat.RectoratHelper.read(istream);
@@ -137,7 +133,6 @@ public class VoeuHelper
      */
     public static void write(org.omg.CORBA.portable.OutputStream ostream, pRectorat.Voeu value)
     {
-        ostream.write_string(value.idV);
         ostream.write_string(value.noE);
         pRectorat.AccredHelper.write(ostream,value.acreditation);
         pRectorat.RectoratHelper.write(ostream,value.idR);

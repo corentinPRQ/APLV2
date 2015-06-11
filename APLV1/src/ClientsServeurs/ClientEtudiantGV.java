@@ -105,6 +105,10 @@ public class ClientEtudiantGV implements Runnable{
 		
 	}
 	
+	public String getIdRectorat(){
+		return ClientEtudiantGV.monGestionVoeu.getIdRectorat();
+	}
+	
 	public Voeu[] getVoeux(){
 		System.out.println("getVoeux du clientEtudiantGV");
 		return (ClientEtudiantGV.monGestionVoeu.getVoeux());

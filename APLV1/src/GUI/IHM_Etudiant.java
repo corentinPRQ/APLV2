@@ -225,7 +225,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     
     @SuppressWarnings("unused") void remplirTableVoeu(final Voeu[] pVoeu){
     	for(int i=0;i<pVoeu.length;i++){
-    		tab_VoeuxEtudiant.setValueAt(pVoeu[i].getIdV(),i, 0);
+    		tab_VoeuxEtudiant.setValueAt(pVoeu[i].acreditation.libelleD,i, 0);
     		tab_VoeuxEtudiant.setValueAt(pVoeu[i].getEtatVoeu().toString(),i, 1);
     		tab_VoeuxEtudiant.setValueAt("nexiste pas dans le voeu",i, 2);
     		tab_VoeuxEtudiant.setValueAt(pVoeu[i].getDecEtudiant(),i, 3);

@@ -106,7 +106,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println(tabV.length);
 			return tabV;
 		} else {
-			Voeu v = new Voeu("listeVide", "0", new Accred(), new Rectorat(), null,
+			Voeu v = new Voeu("0", new Accred(), new Rectorat(), null,
 					null);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -182,7 +182,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	public static String getPeriode(){
+	public String getPeriodeEnCours(){
 		Properties p;
 		p = null;
 		try {
@@ -246,7 +246,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
 		System.out.println("consulterListeVoeu");
 		if (listeVoeux.get(etu.noEtu)==null){
-			Voeu v = new Voeu("listeVide", "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
+			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 					Etat.cree);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -464,15 +464,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public String getIdRectorat() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.idRectorat;
 	}
 
-	@Override
-	public String getPeriodeEnCours() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	
 }

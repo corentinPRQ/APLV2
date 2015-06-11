@@ -7,22 +7,7 @@ package pRectorat;
 */
 public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 {
-    @Override
-	public String toString() {
-		return "Voeu [idV=" + idV + ", noE=" + noE + ", acreditation="
-				+ acreditation + ", idR=" + idR + ", decEtudiant="
-				+ decEtudiant + ", etatVoeu=" + etatVoeu + "]";
-	}
-
-	public String getIdV() {
-		return idV;
-	}
-
-	public void setIdV(String idV) {
-		this.idV = idV;
-	}
-
-	public String getNoE() {
+    public String getNoE() {
 		return noE;
 	}
 
@@ -63,11 +48,6 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 	}
 
 	/**
-     * Struct member idV
-     */
-    public String idV;
-
-    /**
      * Struct member noE
      */
     public String noE;
@@ -100,16 +80,14 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 
     /**
      * Constructor with fields initialization
-     * @param idV idV struct member
      * @param noE noE struct member
      * @param acreditation acreditation struct member
      * @param idR idR struct member
      * @param decEtudiant decEtudiant struct member
      * @param etatVoeu etatVoeu struct member
      */
-    public Voeu(String idV, String noE, pRectorat.Accred acreditation, pRectorat.Rectorat idR, pRectorat.DecisionEtudiant decEtudiant, pRectorat.Etat etatVoeu)
+    public Voeu(String noE, pRectorat.Accred acreditation, pRectorat.Rectorat idR, pRectorat.DecisionEtudiant decEtudiant, pRectorat.Etat etatVoeu)
     {
-        this.idV = idV;
         this.noE = noE;
         this.acreditation = acreditation;
         this.idR = idR;

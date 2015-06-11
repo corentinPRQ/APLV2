@@ -12,37 +12,7 @@ public final class Accred implements org.omg.CORBA.portable.IDLEntity
      */
     public String noAccred;
 
-    @Override
-	public String toString() {
-		return "Accred [noAccred=" + noAccred + ", libelleD=" + libelleD
-				+ ", libelleU=" + libelleU + "]";
-	}
-
-	public String getNoAccred() {
-		return noAccred;
-	}
-
-	public void setNoAccred(String noAccred) {
-		this.noAccred = noAccred;
-	}
-
-	public String getLibelleD() {
-		return libelleD;
-	}
-
-	public void setLibelleD(String libelleD) {
-		this.libelleD = libelleD;
-	}
-
-	public String getLibelleU() {
-		return libelleU;
-	}
-
-	public void setLibelleU(String libelleU) {
-		this.libelleU = libelleU;
-	}
-
-	/**
+    /**
      * Struct member libelleD
      */
     public String libelleD;
@@ -70,5 +40,29 @@ public final class Accred implements org.omg.CORBA.portable.IDLEntity
         this.libelleD = libelleD;
         this.libelleU = libelleU;
     }
+
+	public String getNoAccred() {
+		return noAccred;
+	}
+
+	public void setNoAccred(String noAccred) {
+		this.noAccred = noAccred;
+	}
+
+	public String getLibelleD() {
+		return libelleD;
+	}
+
+	public void setLibelleD(String libelleD) {
+		this.libelleD = libelleD;
+	}
+
+	public String getLibelleU() {
+		return libelleU;
+	}
+
+	public void setLibelleU(String libelleU) {
+		this.libelleU = libelleU;
+	}
 
 }

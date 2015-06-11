@@ -12,6 +12,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import pRectorat.Accred;
+import pRectorat.DecisionEtudiant;
+import pRectorat.Etat;
+import pRectorat.Rectorat;
+import pRectorat.Voeu;
 import ClientsServeurs.ClientEtudiantGV;
 
 /**
@@ -23,6 +27,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
+	private String idRectorat;
 
 	/**
 	 * Creates new form IHM_FaireUnVoeu
@@ -31,6 +36,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		parent = pParent;
 		clientEtuGV = pClientEtuGV;
 		lesAccred = ConnexionEtudiant.clientEtuGV.getListeAccreditation();
+		idRectorat=ConnexionEtudiant.clientEtuGV.getIdRectorat();
 		initComponents();
 		this.chargerLesDiplomes();
 		
@@ -188,9 +194,9 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
-    	/*Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
-    	Voeu voeu = new Voeu()
-    	clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);*/
+    	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+    	//Voeu voeu = new Voeu(parent.utilisateur,accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
+    	//clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           

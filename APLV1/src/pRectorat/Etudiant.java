@@ -39,12 +39,6 @@ public final class Etudiant implements org.omg.CORBA.portable.IDLEntity
 		this.score = score;
 	}
 
-	@Override
-	public String toString() {
-		return "Etudiant [noEtu=" + noEtu + ", nom=" + nom + ", mdp=" + mdp
-				+ ", score=" + score + "]";
-	}
-
 	/**
      * Struct member noEtu
      */
