@@ -34,7 +34,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 		
-		// initialisation des fichiers
+		/******* initialisation des fichiers ***********/
 		this.preRequis = new Hashtable<String, Diplome[]>();
 		initialiserPrerequis("src/PS_prerequis.csv");
 		
@@ -145,61 +145,48 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private void initialiserNotesEtudiant(String path){
 		String lineRead;
 		String[] lineSplit;
+		String nomUniv="";
 		String numE="";
-		String numEprecedent="";
-		String numMat="";
-		String nomMat="";
-		float moy=0f;
-		//variable comptant le nombre de lignes du fichier par étudiant
-		int cpteur = 0;
+		float moyenne=0f;
+		String code="";
+		int position=0;
 		
-		Note[] notes = new Note[20];
+		//variable comptant le nombre de lignes du fichier par étudiant
+		int cpt=0;
+		Note[] notes = new Note[6];	
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();	
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",4);
+				lineSplit = lineRead.split(";",20);
 //				System.out.println("line split notes : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
-				
-				for (int i=0; i<lineSplit.length; i++){
-					switch(i){  
-					case 0: numE = lineSplit[0];
-					break;
-					case 1: numMat = lineSplit[1];
-					break;
-					case 2 : nomMat = lineSplit[2];
-					break;
-					case 3 : moy = Float.parseFloat(lineSplit[3]);
+				nomUniv = lineSplit[0];
+				numE = lineSplit[1];
+				notes = new Note[6];
+				cpt = 0;
+					
+				for (int i=2; i<lineSplit.length; i++)	{
+					switch(i%3){  
+						case 0: code = lineSplit[i];
 						break;
-					default : 
+						case 1: position = Integer.parseInt(lineSplit[i]);
+							notes[cpt] = new Note("s"+cpt+1, moyenne, position, code);
+//							System.out.println(cpt + " - Univ : "+ nomUniv + " - Etu : "+numE + " - Moyenne : " + moyenne + " -  Position : " + position + " - Etat de validation : " + code);
+							cpt++;
 						break;
-					}
-//					System.out.println("Etu : "+numE + " - matiere : "+numMat +"-"+nomMat + " - note : " + moy);
+						case 2 : moyenne = Float.parseFloat(lineSplit[i]);
+						break;
+						default : 
+						break;
+					}					
+					listeNotesEtudiants.put(numE, notes);
 				}
-				
-				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
-//				System.out.println("NumE : " + numE + " - numEprecedent : " + numEprecedent);
-				if (!numE.equals(numEprecedent)){
-					listeNotesEtudiants.put(numEprecedent, notes);
-					notes = new Note[20];
-					cpteur = 0;
-				}
-				numEprecedent = numE;
-//				System.out.println("Etu : "+numE + " - matiere : "+numMat +"-"+nomMat + " - note : " + moy);
-				Note n = new Note();
-				notes[cpteur] = n;
-				cpteur++;
+//				System.out.println("Taille de la hashtable : "+ listeNotesEtudiants.size());
 			}
-
 		}catch (Exception e){
 			e.printStackTrace();
-		}
-//		System.out.println("Affichage de la liste des notes : ");
-//		
-//		System.out.println(listeNotesEtudiants.values());
-		
-		
+		}		
 	}
 	
 	/**
@@ -262,10 +249,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					}					
 				}
-				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
 //				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!numDip.equals(numDipPrecedent)){
-					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
+//					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
@@ -284,17 +270,49 @@ public class IUniversiteImpl extends IUniversitePOA{
 				cpteur++;
 				
 			}
-			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
+//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
 
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 	}
-
+	
+	private void elaborerScoreEtudiant (Etudiant etu){
+		Note[] lesNotes = listeNotesEtudiants.get(etu);
+		int somme = 0;
+		for (int i =0; i< lesNotes.length; i++){
+			//1234=4321 pour les classement
+			//1S = 3; 2S=2; R=1
+			switch(lesNotes[i].position){
+			case 1: somme += 4;
+				break;
+			case 2: somme += 3;
+				break;
+			case 3: somme += 2;
+				break;
+			case 4 : somme += 1;
+				break;
+			}
+			
+			if (lesNotes[i].validation.equals("1S")){
+				somme+=3;
+			}else{
+				if (lesNotes[i].validation.equals("2S")){
+					somme+=3;
+				}
+				else {
+					somme+=1;
+				}
+			}
+		}
+		
+		etu.score = somme;
+	}
+//
 //	public static void main (String [] args){
 //		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
-//		System.out.println(i.getListePrerequis("M1Miage"));
+//		System.out.println("Taille du tableau du notes : " + i.getNotesEtudiants().size());
 //			
 //	}
 
@@ -303,8 +321,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	public static Hashtable<String, Diplome[]> getPreRequis() {
 		return preRequis;
-	}
-
+	}	
 	
-	
+//	/**
+//	 * 
+//	 * @return the note arrayList
+//	 */
+//	public Hashtable<String, Note[]> getNotesEtudiants() {
+//		return listeNotesEtudiants;
+//	}
 }
