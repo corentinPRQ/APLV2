@@ -187,7 +187,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				}
 				numEprecedent = numE;
 //				System.out.println("Etu : "+numE + " - matiere : "+numMat +"-"+nomMat + " - note : " + moy);
-				Note n = new Note(new Matiere(numMat, nomMat), moy);
+				Note n = new Note();
 				notes[cpteur] = n;
 				cpteur++;
 			}

@@ -63,11 +63,28 @@ public class IUniversitePOATie extends IUniversitePOA
     }
 
     /**
+     * Read accessor for getCandidatures attribute
+     */
+    public pRectorat.Voeu getCandidatures()
+    {
+        return _tie.getCandidatures();
+    }
+
+    /**
      * Operation getListePrerequis
      */
     public pRectorat.Diplome[] getListePrerequis(String dip)
     {
         return _tie.getListePrerequis( dip);
+    }
+
+    /**
+     * Operation enregistrerEtatCandidature
+     */
+    public void enregistrerEtatCandidature(pRectorat.Voeu c, pRectorat.Etat e)
+        throws pUniversite.voeuNonTrouve
+    {
+        _tie.enregistrerEtatCandidature( c,  e);
     }
 
     /**

@@ -36,11 +36,12 @@ module pRectorat {
 		string nomAcademie;
 	};
 	
-	//Identifiant d un etudiant
+	//Identifiant d un Etudiant
 	struct Etudiant{
 		string noEtu;
 		string nom;
 		string mdp;
+		float score;
 	};
 	
 	struct Universite{

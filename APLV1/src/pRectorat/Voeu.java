@@ -37,55 +37,7 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
      */
     public pRectorat.Etat etatVoeu;
 
-    public String getIdV() {
-		return idV;
-	}
-
-	public void setIdV(String idV) {
-		this.idV = idV;
-	}
-
-	public String getNoE() {
-		return noE;
-	}
-
-	public void setNoE(String noE) {
-		this.noE = noE;
-	}
-
-	public pRectorat.Accred getAcreditation() {
-		return acreditation;
-	}
-
-	public void setAcreditation(pRectorat.Accred acreditation) {
-		this.acreditation = acreditation;
-	}
-
-	public pRectorat.Rectorat getIdR() {
-		return idR;
-	}
-
-	public void setIdR(pRectorat.Rectorat idR) {
-		this.idR = idR;
-	}
-
-	public pRectorat.DecisionEtudiant getDecEtudiant() {
-		return decEtudiant;
-	}
-
-	public void setDecEtudiant(pRectorat.DecisionEtudiant decEtudiant) {
-		this.decEtudiant = decEtudiant;
-	}
-
-	public pRectorat.Etat getEtatVoeu() {
-		return etatVoeu;
-	}
-
-	public void setEtatVoeu(pRectorat.Etat etatVoeu) {
-		this.etatVoeu = etatVoeu;
-	}
-
-	/**
+    /**
      * Default constructor
      */
     public Voeu()
@@ -110,4 +62,89 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
         this.etatVoeu = etatVoeu;
     }
 
+	/**
+	 * @return the idV
+	 */
+	public String getIdV() {
+		return idV;
+	}
+
+	/**
+	 * @param idV the idV to set
+	 */
+	public void setIdV(String idV) {
+		this.idV = idV;
+	}
+
+	/**
+	 * @return the noE
+	 */
+	public String getNoE() {
+		return noE;
+	}
+
+	/**
+	 * @param noE the noE to set
+	 */
+	public void setNoE(String noE) {
+		this.noE = noE;
+	}
+
+	/**
+	 * @return the acreditation
+	 */
+	public pRectorat.Accred getAcreditation() {
+		return acreditation;
+	}
+
+	/**
+	 * @param acreditation the acreditation to set
+	 */
+	public void setAcreditation(pRectorat.Accred acreditation) {
+		this.acreditation = acreditation;
+	}
+
+	/**
+	 * @return the idR
+	 */
+	public pRectorat.Rectorat getIdR() {
+		return idR;
+	}
+
+	/**
+	 * @param idR the idR to set
+	 */
+	public void setIdR(pRectorat.Rectorat idR) {
+		this.idR = idR;
+	}
+
+	/**
+	 * @return the decEtudiant
+	 */
+	public pRectorat.DecisionEtudiant getDecEtudiant() {
+		return decEtudiant;
+	}
+
+	/**
+	 * @param decEtudiant the decEtudiant to set
+	 */
+	public void setDecEtudiant(pRectorat.DecisionEtudiant decEtudiant) {
+		this.decEtudiant = decEtudiant;
+	}
+
+	/**
+	 * @return the etatVoeu
+	 */
+	public pRectorat.Etat getEtatVoeu() {
+		return etatVoeu;
+	}
+
+	/**
+	 * @param etatVoeu the etatVoeu to set
+	 */
+	public void setEtatVoeu(pRectorat.Etat etatVoeu) {
+		this.etatVoeu = etatVoeu;
+	}
+
+    
 }

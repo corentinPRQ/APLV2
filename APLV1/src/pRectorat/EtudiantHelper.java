@@ -73,7 +73,7 @@ public class EtudiantHelper
                     return org.omg.CORBA.ORB.init().create_recursive_tc(id());
                 _working = true;
                 org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init();
-                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[3];
+                org.omg.CORBA.StructMember []_members = new org.omg.CORBA.StructMember[4];
 
                 _members[0] = new org.omg.CORBA.StructMember();
                 _members[0].name = "noEtu";
@@ -84,6 +84,9 @@ public class EtudiantHelper
                 _members[2] = new org.omg.CORBA.StructMember();
                 _members[2].name = "mdp";
                 _members[2].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_string);
+                _members[3] = new org.omg.CORBA.StructMember();
+                _members[3].name = "score";
+                _members[3].type = orb.get_primitive_tc(org.omg.CORBA.TCKind.tk_float);
                 _tc = orb.create_struct_tc(id(),"Etudiant",_members);
                 _working = false;
             }
@@ -114,6 +117,7 @@ public class EtudiantHelper
         new_one.noEtu = istream.read_string();
         new_one.nom = istream.read_string();
         new_one.mdp = istream.read_string();
+        new_one.score = istream.read_float();
 
         return new_one;
     }
@@ -128,6 +132,7 @@ public class EtudiantHelper
         ostream.write_string(value.noEtu);
         ostream.write_string(value.nom);
         ostream.write_string(value.mdp);
+        ostream.write_float(value.score);
     }
 
 }
