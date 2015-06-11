@@ -28,13 +28,6 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
 	private String idRectorat;
-	
-
-
-	
-	
-
-	private String idRectorat;
 
 	/**
 	 * Creates new form IHM_FaireUnVoeu

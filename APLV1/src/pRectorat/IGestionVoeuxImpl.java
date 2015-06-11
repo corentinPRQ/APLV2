@@ -249,7 +249,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
-		Rectorat r = new Rectorat();
+		/*Rectorat r = new Rectorat();
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
 		if (v.idR == r) {
@@ -257,7 +257,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		} else {
 			// TODO trouver le gestVoeu
 			// lebongestVoeu.faireVoeu(v);
-		}
+		}*/
 
 	}
 

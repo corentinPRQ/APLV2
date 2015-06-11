@@ -125,7 +125,7 @@ public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 		this.acreditation = acreditation;
 	}
 
-	
+
 
 	/**
 	 * @return the decEtudiant
