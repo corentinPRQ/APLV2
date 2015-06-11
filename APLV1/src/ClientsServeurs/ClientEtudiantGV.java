@@ -66,7 +66,7 @@ public class ClientEtudiantGV implements Runnable{
 		
 	}
 	
-	public void faireVoeux(String idEtudiant, Accred pAccreditation, Voeu v){
+	public void faireVoeux(Voeu v){
 		try {
 			ClientEtudiantGV.monGestionVoeu.faireVoeu(v);
 		} catch (VoeuNonTrouve e) {
@@ -76,6 +76,8 @@ public class ClientEtudiantGV implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 
