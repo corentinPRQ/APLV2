@@ -7,26 +7,17 @@ package pRectorat;
 */
 public final class Voeu implements org.omg.CORBA.portable.IDLEntity
 {
-<<<<<<< HEAD
+
 
     /**
-     * Struct member noE
-     */
-    public String noE;
 
-=======
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
-    /**
-<<<<<<< HEAD
-=======
     @Override
 	public String toString() {
 		return "Voeu [noE=" + noE + ", acreditation=" + acreditation + ", idR="
 				+ idR + ", decEtudiant=" + decEtudiant + ", etatVoeu="
 				+ etatVoeu + "]";
 	}
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
-=======
+
      * Struct member noE
      */
     public String noE;
