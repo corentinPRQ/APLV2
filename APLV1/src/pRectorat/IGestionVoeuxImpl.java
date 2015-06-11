@@ -31,6 +31,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
+
+
+	
+
 	
 	//constructeur par défaut
 	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
@@ -245,20 +249,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
-
-
-		Rectorat r = new Rectorat();
-
-		//Regarder on se trouve dans le bon rectorat
-		
-		//On considère que tous nos rectorats sont lancés.
-		//l'idRec c'est son nom. Donc on va pouvoir aller chercher le rectorat en l'identifiant avec son nom.
-
-		//On va alors y foutre le voeu dedans.
-
-
-		//On va alors y foutre le voeu dedans.
-		Rectorat r = new Rectorat();
+		/*Rectorat r = new Rectorat();
 		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
 		// comment le récupérer
 		if (v.idR == r) {
@@ -266,14 +257,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		} else {
 			// TODO trouver le gestVoeu
 			// lebongestVoeu.faireVoeu(v);
-<<<<<<< HEAD
 		}*/
 		
-		System.out.println(v.toString());
-		
-=======
-		}
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 	}
 
@@ -399,9 +384,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				lesUniv[i]=list.get(i);*/
 			
 			//} this.listeAccreditation.put(Diplome, lesUniv);
-			this.lesAccred=new Accred[listAccred.size()];
+			this.lesAccredIntern=new Accred[listAccred.size()];
 			for(int i=0;i<listAccred.size();i++){
-				lesAccred[i]=listAccred.get(i);
+				lesAccredIntern[i]=listAccred.get(i);
 			}		
 			NoAccred="";
 			listAccred = new ArrayList<Accred>();
@@ -416,8 +401,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	
 	public void afficherAccred(){
-		for(int i = 0;i<lesAccred.length;i++){
-			System.out.println(lesAccred[i].toString());
+		for(int i = 0;i<lesAccredIntern.length;i++){
+			System.out.println(lesAccredIntern[i].toString());
 		}
 	}
 	
@@ -446,8 +431,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 
 	 System.out.println(igV.getUtilisateur("21001324").getNom());
 	 
-	 for(int i=0;i<lesAccred.length;i++){
-		 System.out.println(lesAccred[i].toString());
+	 for(int i=0;i<lesAccredIntern.length;i++){
+		 System.out.println(lesAccredIntern[i].toString());
 	 }
 	 
 	 
