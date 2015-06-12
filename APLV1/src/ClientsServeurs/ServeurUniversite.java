@@ -46,7 +46,7 @@ public class ServeurUniversite implements Runnable {
 
 			// Creation du servant
 			//*********************
-			IUniversiteImpl monUniv = new IUniversiteImpl(listeUniversitaires);
+			IUniversiteImpl monUniv = new IUniversiteImpl(listeUniversitaires, orb, nameRoot, nomObj);
 
 			// Activer le servant au sein du POA et recuperer son ID
 			byte[] monUnivId = rootPOA.activate_object(monUniv);
