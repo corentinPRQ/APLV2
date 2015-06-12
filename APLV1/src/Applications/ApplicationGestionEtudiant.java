@@ -1,12 +1,17 @@
 package Applications;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import pRectorat.Etudiant;
 import pRectorat.Voeu;
+import pUniversite.Matiere;
+import pUniversite.Note;
 import ClientsServeurs.ClientEtudiantGV;
 import GUI.IHM_Etudiant;
 
@@ -51,12 +56,26 @@ public class ApplicationGestionEtudiant {
 			String nomObj = "ClientEtudiantGV";
 
 			System.out.println("lancement du client Etudiant");
-			
 			ClientEtudiantGV ce = new ClientEtudiantGV(orb, nameRoot, nomObj, idObj);
+			
+			/*Voeu[] lesVoeux = ce.consulterListeVoeux(new Etudiant("1", "Melet"));
+
+			for (int i = 0; i<lesVoeux.length; i++){
+				if (Integer.parseInt(lesVoeux[i].noE) == idEtdu){
+					listeVoeux.add(lesVoeux[i]);
+				}
+			}*/
+
+			
+			
+			/*initialiserEtudiant("src/usersEtu.csv");
+			IHM_Etudiant ihmE = new IHM_Etudiant(listeVoeux, listeEtudiants);*/
+
+			
         	Thread tcli = new Thread(ce);
 			
 			IHM_Etudiant ihmEtu = new IHM_Etudiant(ce);
-			ihmEtu.setVisible(true);
+			
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

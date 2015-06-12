@@ -33,7 +33,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	/**
 	 * Nom de l'université (pour récupération des bons fichiers).
 	 */
-	private String nomUniversité;
+	private String nomUniversite;
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
 
@@ -68,7 +68,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
-		initialiserPrerequis("src/PS_prerequis.csv");
+		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
+		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -78,6 +79,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		
+		
 	}
 
 
@@ -290,8 +293,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
-		//Hasthable pour les quotas des masters
-		Hashtable<String, Integer> lesQuotas = new Hashtable<String, Integer>();
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
@@ -439,7 +441,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
-		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
