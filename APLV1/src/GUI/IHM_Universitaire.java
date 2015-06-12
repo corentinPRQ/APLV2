@@ -6,9 +6,7 @@
 
 package GUI;
 
-import Applications.ApplicationUniversite;
 import ClientsServeurs.ClientUniversiteGV;
-import ClientsServeurs.ServeurUniversite;
 
 /**
  *
@@ -26,7 +24,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         cu.setVisible(true);
         this.setVisible(false);
         IHM_Universitaire.clientUnivGV = client;
-        IHM_Universitaire.clientUnivGV.enregistrerUniversite(ApplicationUniversite.getIdentiteUniversite().nomUniv, ServeurUniversite.getIOR());   
+        
     }
 
     /**
