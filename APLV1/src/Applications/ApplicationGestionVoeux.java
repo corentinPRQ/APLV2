@@ -1,22 +1,18 @@
 package Applications;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ServeurGestionVoeux;
 
-public class ApplicationGestionVoeux {
-	public static int noGV= 0;
-	private static int idGV;
+public class ApplicationGestionVoeux {	
 	
 	public static void main(String[] args) {
 		try {
-			noGV++;
-			idGV=noGV;
 			// TODO Auto-generated method stub
 			// Intialisation de l'ORB
 			//************************
@@ -41,20 +37,6 @@ public class ApplicationGestionVoeux {
 
 			Thread tserv = new Thread(serv);
 			tserv.start();
-			
-			// Saisie du nom de l'objet (si utilisation du service de nommage)
-			System.out.println("Quel objet Corba voulez-vous contacter ?");
-			String idObj = "PS_Gestion";
-
-			// Construction du nom a enregistrer
-//			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba Client ?");
-			String nomOb = args[0]+"_GVC";
-
-//			ClientGestionVoeuxUniversite cge = new ClientGestionVoeuxUniversite(orb, nameRoot, nomOb, idObj);
-//			ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomOb, idObj);
-
-//			Thread tcli = new Thread(cge);
-//			tcli.start();
 
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block

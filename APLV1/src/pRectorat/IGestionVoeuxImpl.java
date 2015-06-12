@@ -19,23 +19,23 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
 import Applications.PeriodeApplication;
+import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ClientGestionVoeuxUniversite;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
 	private static String nomObj;
-
+	
+	private static ArrayList<String> mesRectorats;
+	private static ArrayList<Universite> mesUniversites;
+	
 	private Hashtable<String, Voeu[]> listeVoeux;
 	private static Accred[] lesAccredIntern;
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
 
-
-	
-
-	
 	//constructeur par défaut
 	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
@@ -47,9 +47,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
+		mesRectorats = getLesRectorats();
 		
 		//TODO Charger les accred externes
-		initialiserEtudiants("src/usersEtu.csv");
+		initialiserEtudiants("src/usersEtuMP.csv");
 		initialiserAccred("src/Accreditation.csv");
 	}
 
@@ -282,15 +283,16 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String[] lineSplit;
 		String login = "";
 		String mdp = "";
-		String prenom="";
 		String nom="";
-		int score=0;
+		String univ="";
+		String diplome="";
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";", 3);
+				lineSplit = lineRead.split(";", 5);
 				// System.out.println("line split users : "+ lineSplit[0] +
 				// " - " + lineSplit[1] + " - " + lineSplit[2] + " - "
 				// +lineSplit[3]);
@@ -306,16 +308,20 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 						nom=lineSplit[2];
 						break;
 					case 3 : 
-						score = Integer.parseInt(lineSplit[3]);
-
+						diplome = lineSplit[3];
+						break;
+					case 4 : 
+						univ = lineSplit[4];
+						break;
 					default:
 						break;
 					}
 				}
 				// System.out.println("Login : "+login + " - mdp : "+mdp);
-				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp,score));
+				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp,new Accred("1", diplome, univ)));
 			
 			}
+			br.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -379,6 +385,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				*/
 				
 			}
+			br.close();
 			/*lesUniv = new String[list.size()];
 			for(int i=0;i<list.size();i++){
 				lesUniv[i]=list.get(i);*/
@@ -474,6 +481,27 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
+	@Override
+	/**
+	 * Permet à une université de s'enregistrer auprès du rectorat
+	 */
+	public void enregistrerUniversite(Universite univ) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
+	@Override
+	public Accred[] getLesAccred() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	public ArrayList<String> getLesRectorats(){
+		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
+		return (cgm.recupererRectorat());
+	}
 
 
 	
