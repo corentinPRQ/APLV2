@@ -515,6 +515,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	}
 
+	/**
+	 * Donne un nombre de point pour établir le score en fonction de la position de l'étudiant par rappor à sa promo
+	 * @param n
+	 * @return
+	 */
 	private static int testPos(Note n){
 		int pos = n.position;
 		int score = 0;
@@ -531,6 +536,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return score;
 	}
 
+	/**
+	 * Donne un nombre de points en fonction de la période de validation du semestre (session1, 2 ou redoublement)
+	 * @param n
+	 * @return
+	 */
 	private static int testValid(Note n){
 		int score = 0;
 		String valid = n.validation;
@@ -544,6 +554,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return score;
 	}
 
+	/**
+	 * effectue un tri des voeux par diplome en fonction du score
+	 * @param tabV
+	 * @return
+	 */
 	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV){
 		int longueur=tabV.size();
 		boolean permut;
@@ -573,24 +588,25 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	/**
 	 * Permet d'établir les premières listes en fonction des quotas et score
+	 * @throws voeuNonTrouve 
 	 */
-	private void etablirListe(){
+	private void etablirListe() throws voeuNonTrouve{
+		//On parcourt la hashtable univ/voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
-			//pour le premier diplome
 			String dipTmp = listeVoeuxDiplome.keys().nextElement();
+			//On récupère les voeux sur ce diplome
 			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
+			//On récupère le quota défini par l'universitaire
 			int quota = quotaDiplome.get(dipTmp);
+			//Tant qu'il y a de la place pour la promo, on rempli la liste principale
+			//sachant que le voeux sont déjà triés par ordre de pertinance
 			for (int i=0; i <quota && i<listeVoeuxTmp.size(); i++){
-				try {
-					ajouterListePrincipale(listeVoeuxTmp.get(i));
-				} catch (voeuNonTrouve e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ajouterListePrincipale(listeVoeuxTmp.get(i));
 			}
+			//S'il y a plus de voeux de que places dispo, on met en liste secondaire
 			if(listeVoeuxTmp.size()>=quota){
 				for (int j=quota; j<listeVoeuxTmp.size(); j++){
-					
+					ajouterListeComplementaire(listeVoeuxTmp.get(j));
 				}
 			}
 
