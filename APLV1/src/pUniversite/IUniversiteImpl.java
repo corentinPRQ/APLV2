@@ -71,7 +71,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		seuilScoreDiplome = new Hashtable<String, Integer>();
 		
 		// initialisation des fichiers
-		this.preRequis = new Hashtable<String, Diplome[]>();
+		preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
 		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
 
@@ -326,6 +326,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					case 6 : quota = Integer.parseInt(lineSplit[6]);
 					break;
 					case 7 : seuilScore = Integer.parseInt(lineSplit[7]);
+					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
@@ -349,11 +350,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 					ne=NiveauEtude.master;
 				}
 				//Gestion des quotas
-				if(!quotaDiplome.containsKey(numDip)){
-					quotaDiplome.put(numDip, quota);
+				if(!quotaDiplome.containsKey(nomDip)){
+					quotaDiplome.put(nomDip, quota);
 				}
-				if (!seuilScoreDiplome.containsKey(numDip)){
-					seuilScoreDiplome.put(numDip, seuilScore);
+				if (!seuilScoreDiplome.containsKey(nomDip)){
+					seuilScoreDiplome.put(nomDip, seuilScore);
 				}
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;
@@ -445,7 +446,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 	public void verifCandidature(Voeu[] tabVoeux) {
 		this.remplirVoeuxDip(tabVoeux);
 		this.ordonnerVoeuxDip();
-		this.etablirListe();
+		try {
+			this.etablirListe();
+		} catch (voeuNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
