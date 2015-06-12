@@ -34,12 +34,15 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Nom de l'université (pour récupération des bons fichiers).
 	 */
 	private String nomUniversite;
+	//pour un diplome, les diplomes acceptés pour postuler. Etabli par l'universitaire
 	private static Hashtable<String, Diplome[]> preRequis;
+	//nombre de places disponibles pour une formation dans l'université
 	private static Hashtable<String, Integer> quotaDiplome;
+	//le score minimum pour être potentiellement accepté. Etabli par l'universitaire
 	private static Hashtable<String, Integer> seuilScoreDiplome;
-
+	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires;
+	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -50,9 +53,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static NamingContext nameRoot;
 	private static String nomObj;
 
-	// pour les pré-requisV2
+	// accréditations de l'université
 	private static Accred[] listeAccred;
-	//key : libelle diplome, voeux demandant un diplome
+	//key : libelle diplome, voeux demandant le diplome
 	private Hashtable<String,ArrayList<Voeu>> listeVoeuxDiplome;
 
 	//key idEtudiant, son score
@@ -67,8 +70,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
-		quotaDiplome = new Hashtable<String, Integer>();
-		seuilScoreDiplome = new Hashtable<String, Integer>();
+		this.quotaDiplome = new Hashtable<String, Integer>();
+		this.seuilScoreDiplome = new Hashtable<String, Integer>();
+		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
+		this.scoreEtu=new Hashtable<String, Integer>();
 		
 		// initialisation des fichiers
 		preRequis = new Hashtable<String, Diplome[]>();
@@ -455,6 +460,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	}
 
+	/**
+	 * permet de remplir la hashtable diplome/liste voeux pour ce diplome
+	 * @param tabVoeux
+	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
@@ -479,7 +488,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	private void ordonnerVoeuxDip(){
 		this.etablirScore();
-		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
@@ -597,12 +605,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @throws voeuNonTrouve 
 	 */
 	private void etablirListe() throws voeuNonTrouve{
-		//On parcourt la hashtable univ/voeux
+		//On parcourt la hashtable diplome/voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
 			String dipTmp = listeVoeuxDiplome.keys().nextElement();
 			//On récupère les voeux sur ce diplome
 			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
-			//On récupère le quota défini par l'universitaire
+			//On récupère le quota défini par l'universitaire concernant le diplome
 			int quota = quotaDiplome.get(dipTmp);
 			//Tant qu'il y a de la place pour la promo, on rempli la liste principale
 			//sachant que le voeux sont déjà triés par ordre de pertinance

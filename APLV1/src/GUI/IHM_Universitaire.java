@@ -186,7 +186,8 @@ public class IHM_Universitaire extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_etablirPreRequisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_etablirPreRequisActionPerformed
-        // TODO add your handling code here:
+        IHM_FairePrerequis ihmFPR = new IHM_FairePrerequis();
+        ihmFPR.setVisible(true);
     }//GEN-LAST:event_bt_etablirPreRequisActionPerformed
 
     private void bt_ExaminerCandidatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ExaminerCandidatureActionPerformed
