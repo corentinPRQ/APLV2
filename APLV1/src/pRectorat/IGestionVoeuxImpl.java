@@ -40,13 +40,19 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
-	
-		/**
+	/**
 	 * Constante nombre de voeux max pour gestion tableaux.
 	 */
 	 
 	private final static int NB_VOEUX_MAX = 5;
-	//constructeur par défaut
+	
+	/**
+	 * constructeur par défaut.
+	 * @param orb
+	 * @param nameRoot
+	 * @param nomObj
+	 * @param pidRectorat
+	 */
 	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
 		this.orb = orb;
@@ -54,6 +60,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.nomObj = nomObj;
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
+
+
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
@@ -324,7 +332,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		
 	}
-		
+	/**
+	 * Enregistrement du voeu à proprement dit : dans la liste contenu dans le rectorat.
+	 * @param v
+	 */	
 	private void enregistrerVoeu(Voeu v) {
 		System.out.println(">Enregistrement dun voeu.");
 		//Si l'étudiant a déjà des voeux, on les récupère.
@@ -592,6 +603,29 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
 		return (cgm.recupererRectorat());
 	}
+
+	/**
+	 * @return the mesRectorats
+	 */
+	public static ArrayList<String> getMesRectorats() {
+		return mesRectorats;
+	}
+
+	/**
+	 * @param mesRectorats the mesRectorats to set
+	 */
+	public static void setMesRectorats(ArrayList<String> mesRectorats) {
+		IGestionVoeuxImpl.mesRectorats = mesRectorats;
+	}
+
+	@Override
+	public void enregistrerUniversite(String ior, String nom) {
+		System.out.println("Enregistrement de l'universités" + nom);
+		mesUniversites.put(nom, ior);
+		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
+		
+	}
+
 
 
 	

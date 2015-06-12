@@ -1,14 +1,22 @@
 package ClientsServeurs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.JFrame;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import pRectorat.Accred;
+import pRectorat.DecisionEtudiant;
+import pRectorat.Etudiant;
+import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
 import pRectorat.Voeu;
+import pRectorat.VoeuNonTrouve;
 
 public class ClientUniversiteGV implements Runnable{
 	
@@ -28,7 +36,6 @@ public class ClientUniversiteGV implements Runnable{
 		this.nomObj = nomObj;
 		this.idObj = idObj;
 		this.listeDeVoeux = new ArrayList<Voeu>();
-//		travailler();
 	}
 	
 	public void travailler(){
@@ -65,10 +72,6 @@ public class ClientUniversiteGV implements Runnable{
 		return listeDeVoeux;
 	}
 	
-	public void enregistrerUniversite (String nom, String ior){
-		ClientUniversiteGV.monGestionVoeu.enregistrerUniversite(ior, nom);
-	}
-	
 	public static void main(String args[]) {
 		try {
 			// Intialisation de l'orb
@@ -83,7 +86,7 @@ public class ClientUniversiteGV implements Runnable{
 
 			// Construction du nom a enregistrer
 			String nomObj = "Midi-Pyrenees_GVC";
-			ClientUniversiteGV cu = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
+			ClientGestionVoeuxMinistere cu = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, idObj);
 			cu.travailler();
 			
 		} catch (InvalidName e) {
