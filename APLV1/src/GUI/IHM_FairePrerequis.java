@@ -8,6 +8,7 @@ package GUI;
 
 import java.util.Hashtable;
 
+import Applications.ApplicationUniversite;
 import pRectorat.Diplome;
 import pUniversite.IUniversiteImpl;
 
@@ -18,6 +19,8 @@ import pUniversite.IUniversiteImpl;
 public class IHM_FairePrerequis extends javax.swing.JFrame {
 
 	private Hashtable<String, Diplome[]> preRequis;
+	private Hashtable<String, Integer> quota;
+	private Hashtable<String, Integer> score;
 
 	/**
 	 * Creates new form IHM_FairePrerequis
@@ -25,6 +28,8 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	public IHM_FairePrerequis() {
 		initComponents();
 		preRequis=IUniversiteImpl.getPreRequis();
+		quota = IUniversiteImpl.getQuotaDiplome();
+		score = IUniversiteImpl.getSeuilScoreDiplome();
 	}
 
 	/**
@@ -277,23 +282,25 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		});
 	}
 
-	private void chargerPrerequisTable(){
-		for (int i=0; i<preRequis.size();i++){
-			jt_Prerequis.setValueAt(preRequis.get(i)[0], i, 0);
-			jt_Prerequis.setValueAt(arg0, i, 1);
-			jt_Prerequis.setValueAt(arg0, i, 2);
-			jt_Prerequis.setValueAt(arg0, i, 3);
-			jt_Prerequis.setValueAt(arg0, i, 4);
-			jt_Prerequis.setValueAt(arg0, i, 5);
-			jt_Prerequis.setValueAt(arg0, i, 6);
-			jt_Prerequis.setValueAt(arg0, i, 7);
-			jt_Prerequis.setValueAt(arg0, i, 8);
-			
-		}
-		
-		
-		
-	}
+//	private void chargerPrerequisTable(){
+//		for (int i=0; i<preRequis.size();i++){
+//			for (int j=0; j<preRequis.get(i).length; j++){
+//				jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, i, 0);
+//				jt_Prerequis.setValueAt(preRequis.get(i)[j].libelle, i, 1);
+//				jt_Prerequis.setValueAt(preRequis.get(i)[j]., i, 2);
+//				jt_Prerequis.setValueAt(arg0, i, 3);
+//				jt_Prerequis.setValueAt(arg0, i, 4);
+//				jt_Prerequis.setValueAt(arg0, i, 5);
+//				jt_Prerequis.setValueAt(arg0, i, 6);
+//				jt_Prerequis.setValueAt(arg0, i, 7);
+//				jt_Prerequis.setValueAt(arg0, i, 8);
+//			}
+//			
+//		}
+//		
+//		
+//		
+//	}
 
 	// Variables declaration - do not modify                     
 	private javax.swing.JButton btn_Annuler;
