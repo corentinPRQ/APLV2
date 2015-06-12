@@ -47,13 +47,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.nomObj = nomObj;
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
-		
-
-
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
-		mesRectorats = getLesRectorats();
-		
+		mesRectorats = getLesRectorats();		
+		//mesRectorats = getLesRectorats();
 		//TODO Charger les accred externes
 		initialiserEtudiants("src/usersEtuMP.csv");
 		initialiserAccred("src/Accreditation.csv");
@@ -189,7 +186,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 	@Override
-	// Change l'état d'un voeu
+	/**
+	 * Changer l'état d'un voeu
+	 * @param v : le voeu
+	 * @param e : nouvel état
+	 */
 	public void setEtatVoeu(Voeu v, Etat e) {
 
 		switch (v.etatVoeu.value()) {
@@ -262,6 +263,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
+	/**
+	 * Renvoie la liste des voeux pour alimentation des IHM
+	 * @param etu
+	 * @return
+	 */
 	@Override
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
 		System.out.println("consulterListeVoeu "+etu.noEtu);
@@ -286,27 +292,18 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Tester si on est dans le bon rectorat ou pas
-		System.out.println("on rentre dans faire voeux");
-		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
 		if(v.idRDest.nomAcademie.equals(idRectorat)){
 			//Création d'un voeu dans ce rectorat
-			System.out.println("on est dans le if");
-			if(listeVoeux.containsKey(v.noE)){
-				System.out.println("tentative d'enregistrement d'un voeu");
 				enregistrerVoeu(v);
-			}else{
-				System.out.println("Premier voeu d'un etudiant! On enregistre aussi");
-				
-				enregistrerVoeu(v);
-			}
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
-			System.out.println("je suis dans le else");
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idRectorat);
 			cgv.faireVoeu(v);
 		}
 		
 	}
+		
+	
 
 	private void enregistrerVoeu(Voeu v) {
 		System.out.println("Enregistrement dun voeu");
