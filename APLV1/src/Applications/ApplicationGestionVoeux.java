@@ -40,7 +40,6 @@ public class ApplicationGestionVoeux {
 			tserv.start();
 			
 			ClientGestionVoeuxMinistere cvm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
-			
 			Thread tclgv = new Thread(cvm);
 			IHM_Rectorat ihmR = new IHM_Rectorat(cvm);
 			ihmR.setVisible(true);
@@ -49,7 +48,5 @@ public class ApplicationGestionVoeux {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
 }

@@ -26,6 +26,8 @@ public class ServeurUniversite implements Runnable {
 	private NamingContext nameRoot;
 	private String nomObj;
 	private Hashtable<String, String> listeUniversitaires;
+	
+	private static String ior;
 
 
 	public ServeurUniversite(ORB orb, NamingContext nameRoot, String nomObj) {
@@ -63,8 +65,11 @@ public class ServeurUniversite implements Runnable {
 			nameRoot.rebind(nameToRegister,rootPOA.servant_to_reference(monUniv));
 
 			System.out.println("==> Nom '"+ nomObj + "' est enregistre dans le service de noms.");
-
+			
 			String IORServant = orb.object_to_string(rootPOA.servant_to_reference(monUniv));
+			ior = IORServant;
+			System.out.println("IOR : "+ ior);
+			
 			System.out.println("L'objet possede la reference suivante :");
 			System.out.println(IORServant);
 
@@ -99,6 +104,10 @@ public class ServeurUniversite implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getIOR(){
+		return(ior);
 	}
 
 	public static void main(String[] args) {
