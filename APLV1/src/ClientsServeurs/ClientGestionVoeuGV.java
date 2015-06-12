@@ -1,10 +1,18 @@
 package ClientsServeurs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import pRectorat.Accred;
+import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
+import pRectorat.Voeu;
+import pRectorat.VoeuNonTrouve;
 
 public class ClientGestionVoeuGV implements Runnable{
 
@@ -16,6 +24,19 @@ public class ClientGestionVoeuGV implements Runnable{
 	private NamingContext nameRoot;
 	private String nomObj;
 	private String idObj;
+	
+	private HashMap<String, ArrayList<Voeu>> listeDeVoeux;
+	
+	public ClientGestionVoeuGV(ORB orb, NamingContext nameRoot, String nomObj,
+			String idObj) {
+		super();
+		this.orb = orb;
+		this.nameRoot = nameRoot;
+		this.nomObj = nomObj;
+		this.idObj = idObj;
+		this.listeDeVoeux = new HashMap<String, ArrayList<Voeu>>();
+		travailler();
+	}
 	
 	public void travailler(){
 		try{
@@ -40,6 +61,18 @@ public class ClientGestionVoeuGV implements Runnable{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+		try {
+			ClientGestionVoeuGV.monGV.faireVoeu(v);
+		} catch (VoeuNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EtudiantNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String args[]) {

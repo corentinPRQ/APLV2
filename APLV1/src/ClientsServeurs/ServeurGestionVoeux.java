@@ -31,6 +31,7 @@ public class ServeurGestionVoeux implements Runnable {
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
 	}
 	
