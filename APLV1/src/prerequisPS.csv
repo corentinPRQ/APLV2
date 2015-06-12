@@ -1,33 +1,19 @@
-NoUniversite;NomUniversite;NoDiplome;Formation;NoDiplomePR;FormationsPR;moyFRPR;moyMathPR;moyENPR
-1;Paul Sabatier;1;M1Miage;15;L3 Miage;10;12;10
-1;Paul Sabatier;1;M1Miage;16;L3 Informatique;10;12;10
-1;Paul Sabatier;1;M1Miage;17;L3 Informatique Statistiques;10;12;10
-2;Capitole;1;M1Miage;16;L3 Informatique;10;12;10
-2;Capitole;1;M1Miage;17;L3 Informatique Statistiques;10;12;10
-2;Capitole;1;M1Miage;15;L3 Miage;10;12;10
-1;Paul Sabatier;2;M1 Informatique;16;L3 Informatique;10;12;10
-1;Paul Sabatier;2;M1 Informatique;17;L3 Informatique Statistiques;10;12;10
-1;Paul Sabatier;2;M1 Informatique;15;L3 Miage;10;12;10
-1;Paul Sabatier;3;M1 Informatique Statistiques;16;L3 Informatique;10;14;10
-1;Paul Sabatier;3;M1 Informatique Statistiques;17;L3 Informatique Statistiques;10;14;10
-1;Paul Sabatier;3;M1 Informatique Statistiques;15;L3 Miage;10;14;10
-1;Paul Sabatier;4;M1 Informatique Santé;16;L3 Informatique;10;10;10
-1;Paul Sabatier;4;M1 Informatique Santé;17;L3 Informatique Statistiques;10;10;10
-1;Paul Sabatier;4;M1 Informatique Santé;15;L3 Miage;10;10;10
-2;Capitole;5;M1 SIAD;16;L3 Informatique;10;10;10
-2;Capitole;5;M1 SIAD;17;L3 Informatique Statistiques;10;10;10
-2;Capitole;5;M1 SIAD;15;L3 Miage;10;10;10
-2;Capitole;6;M1 Psycologie;22;L3 Psycologie;13;8;11
-2;Capitole;7;M1 Lettres;23;L3 Lettres;15;8;13
-2;Capitole;7;M1 Lettres;22;L3 Psycologie;15;8;13
-1;Paul Sabatier;9;M1 STAPS;18;L3 STAPS;8;6;6
-1;Paul Sabatier;10;M1 Physique;20;L3 Chimie;10;14;10
-1;Paul Sabatier;10;M1 Physique;19;L3 Phisique;10;14;10
-1;Paul Sabatier;11;M1 Chimie;20;L3 Chimie;10;14;10
-1;Paul Sabatier;11;M1 Chimie;19;L3 Phisique;10;14;10
-1;Paul Sabatier;12;M1 Statistiques;21;L3 Statistiques;10;15;10
-2;Capitole;13;M1 Langues Etrangeres;24;L3 Langues Etrangeres;13;8;16
-2;Capitole;13;M1 Langues Etrangeres;23;L3 Lettres;13;8;16
-2;Capitole;14;M1 Relations internationnale;24;L3 Langues Etrangeres;12;8;14
-2;Capitole;14;M1 Relations internationnale;23;L3 Lettres;12;8;14
-2;Capitole;14;M1 Relations internationnale;22;L3 Psycologie;12;8;14
+NoUniversite;NomUniversite;NoDiplome;Formation;NoDiplomePR;FormationsPR;Quota
+1;Paul Sabatier;1;M1Miage;15;L3 Miage;20
+1;Paul Sabatier;1;M1Miage;16;L3 Informatique;20
+1;Paul Sabatier;1;M1Miage;17;L3 Informatique Statistiques;20
+1;Paul Sabatier;2;M1 Informatique;16;L3 Informatique;20
+1;Paul Sabatier;2;M1 Informatique;17;L3 Informatique Statistiques;20
+1;Paul Sabatier;2;M1 Informatique;15;L3 Miage;20
+1;Paul Sabatier;3;M1 Informatique Statistiques;16;L3 Informatique;20
+1;Paul Sabatier;3;M1 Informatique Statistiques;17;L3 Informatique Statistiques;20
+1;Paul Sabatier;3;M1 Informatique Statistiques;15;L3 Miage;20
+1;Paul Sabatier;4;M1 Informatique Santé;16;L3 Informatique;20
+1;Paul Sabatier;4;M1 Informatique Santé;17;L3 Informatique Statistiques;20
+1;Paul Sabatier;4;M1 Informatique Santé;15;L3 Miage;20
+1;Paul Sabatier;9;M1 STAPS;18;L3 STAPS;20
+1;Paul Sabatier;10;M1 Physique;20;L3 Chimie;20
+1;Paul Sabatier;10;M1 Physique;19;L3 Phisique;20
+1;Paul Sabatier;11;M1 Chimie;20;L3 Chimie;20
+1;Paul Sabatier;11;M1 Chimie;19;L3 Phisique;20
+1;Paul Sabatier;12;M1 Statistiques;21;L3 Statistiques;20
