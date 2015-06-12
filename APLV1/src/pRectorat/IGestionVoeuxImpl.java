@@ -64,13 +64,26 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.nomObj = nomObj;
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
+<<<<<<< HEAD
+=======
+
+		mesRectorats = new ArrayList<String>();
+		mesUniversites = new Hashtable<String, String>();
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
+<<<<<<< HEAD
 		mesRectorats = getLesRectorats();
 		//lesAccredExtern=getLesAccredExterne();
 		initialiserEtudiants("src/usersEtu"+pidRectorat+".csv");
 		initialiserAccred("src/Accreditation"+pidRectorat+".csv");
+=======
+		//mesRectorats = getLesRectorats();
+		//TODO Charger les accred externes
+		initialiserEtudiants("src/usersEtuMP.csv");
+		initialiserAccred("src/Accreditation.csv");
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 	}
 
 	@Override
@@ -324,22 +337,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Tester si on est dans le bon rectorat ou pas
-		System.out.println("on rentre dans faire voeux");
-		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
 		if(v.idRDest.nomAcademie.equals(idRectorat)){
 			//Création d'un voeu dans ce rectorat
-			System.out.println("on est dans le if");
-			if(listeVoeux.containsKey(v.noE)){
-				System.out.println("tentative d'enregistrement d'un voeu");
 				enregistrerVoeu(v);
-			}else{
-				System.out.println("Premier voeu d'un etudiant! On enregistre aussi");
-				
-				enregistrerVoeu(v);
-			}
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
-			System.out.println("je suis dans le else");
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idRectorat);
 			cgv.faireVoeu(v);
 		}
@@ -348,7 +350,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	/**
 	 * Enregistrement du voeu à proprement dit : dans la liste contenu dans le rectorat.
 	 * @param v
-	 */
+	 */	
 	private void enregistrerVoeu(Voeu v) {
 		System.out.println(">Enregistrement dun voeu.");
 		//Si l'étudiant a déjà des voeux, on les récupère.
@@ -535,7 +537,39 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		return(listeEtudiant.get(numeroEtudiant));
 	}
 	
+<<<<<<< HEAD
 	
+=======
+	/**
+	 * Main pour test.
+	 * @param args
+	 * @throws EtudiantNonTrouve
+	 */
+	 public static void main (String [] args) throws EtudiantNonTrouve{
+	 System.out.println("Debut du test");
+	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
+	 igV.afficherLesEtu();
+	 System.out.println(igV.identifier("21001324", "hugo"));
+	 
+	 System.out.println(igV.getUtilisateur("21001324").nom);
+	 
+	 for(int i=0;i<lesAccredIntern.length;i++){
+		 System.out.println(lesAccredIntern[i].toString());
+	 }
+	 
+	 
+	// try {
+	// igV.validerVoeu(new Voeu("v1", "e1", new Accred("a1", "dip1", "lib1"),
+	// new Rectorat("midi-pyrenees"), DecisionEtudiant.oui,
+	// Etat.liste_principale));
+	// } catch (VoeuNonTrouve e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// }
+}
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 	@Override
 	public String getIdRectorat() {
@@ -568,7 +602,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-
+	
 	@Override
 	public Accred[] getLesAccred() {
 		return lesAccredIntern;
@@ -596,12 +630,13 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public void enregistrerUniversite(String ior, String nom) {
-		System.out.println("Enregistrement de l'universités" + nom);
-		mesUniversites.put(nom, ior);
+		System.out.println("Enregistrement de l'universités - " + nom + " - IOR : " + ior);
+		IGestionVoeuxImpl.mesUniversites.put(nom, ior);
 		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
 		
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Main pour test.
 	 * @param args
@@ -655,4 +690,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 
 
 	
+=======
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 }
