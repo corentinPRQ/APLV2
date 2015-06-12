@@ -15,8 +15,6 @@ public class ApplicationGestionVoeux {
 	
 	public static void main(String[] args) {
 		try {
-			noGV++;
-			idGV=noGV;
 			// TODO Auto-generated method stub
 			// Intialisation de l'ORB
 			//************************

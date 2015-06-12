@@ -135,6 +135,7 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
     		this.parent.utilisateur=etu;
     		this.parent.setLb_nomEtud(this.parent.utilisateur.nom);
     		Voeu[] lesvoeux=ConnexionEtudiant.clientEtuGV.consulterListeVoeux(etu);
+    		this.parent.setEtu(etu);
     		this.parent.remplirTableVoeu(lesvoeux);
     	
     		

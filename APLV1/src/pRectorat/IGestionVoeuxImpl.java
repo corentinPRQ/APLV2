@@ -19,6 +19,7 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
 import Applications.PeriodeApplication;
+import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxUniversite;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
@@ -26,7 +27,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static NamingContext nameRoot;
 	private static String nomObj;
 
-	private Hashtable<String, Voeu[]> listeVoeux;
+	//Voeux en fonction du numéro d'étudiant
+	private static Hashtable<String, Voeu[]> listeVoeux;
 	private static Accred[] lesAccredIntern;
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
@@ -42,6 +44,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
 
 
@@ -49,7 +52,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
 		//TODO Charger les accred externes
-		initialiserEtudiants("src/usersEtu.csv");
+		initialiserEtudiants("src/usersEtuMP.csv");
 		initialiserAccred("src/Accreditation.csv");
 	}
 
@@ -229,8 +232,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
-		System.out.println("consulterListeVoeu");
-		if (listeVoeux.get(etu.noEtu)==null){
+		System.out.println("consulterListeVoeu "+etu.noEtu);
+		if (!listeVoeux.containsKey(etu.noEtu)){
+			//Bouchon pour ne pas renvoyer NULL et satisfaire CORBA.
 			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 					Etat.cree);
 			Voeu[] lesV = new Voeu[1];
@@ -249,32 +253,60 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
-		/*Rectorat r = new Rectorat();
-		// TODO lancer l'application gestVoeu avec un id de rectorat et voir
-		// comment le récupérer
-		if (v.idR == r) {
-			this.enregistrerVoeu(v);
-		} else {
-			// TODO trouver le gestVoeu
-			// lebongestVoeu.faireVoeu(v);
-		}*/
+		//Tester si on est dans le bon rectorat ou pas
+		System.out.println("on rentre dans faire voeux");
+		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
+		if(v.idRDest.nomAcademie.equals(idRectorat)){
+			//Création d'un voeu dans ce rectorat
+			System.out.println("on est dans le if");
+			if(listeVoeux.containsKey(v.noE)){
+				System.out.println("tentative d'enregistrement d'un voeu");
+				enregistrerVoeu(v);
+			}else{
+				System.out.println("Premier voeu d'un etudiant! On enregistre aussi");
+				
+				enregistrerVoeu(v);
+			}
+		}else{
+			//trouver le bon rectorat pour y créer le voeu
+			System.out.println("je suis dans le else");
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idRectorat);
+			cgv.faireVoeu(v);
+		}
 		
-
 	}
 
 	private void enregistrerVoeu(Voeu v) {
-		Voeu[] tabV = new Voeu[5];
-		tabV = this.listeVoeux.get(v.noE);
-		int i = 0;
-		while (tabV[i] != null && i < tabV.length) {
-			i++;
+		System.out.println("Enregistrement dun voeu");
+		if(listeVoeux.containsKey(v.noE)){
+			System.out.println(">Un tableau existe pour l'étudiant.");
+			Voeu[] tabV = new Voeu[5];
+			tabV = this.listeVoeux.get(v.noE);
+			if(tabV!=null){
+				System.out.println(">>Ce tableau n'est pas null");
+			}
+			
+			int i = 0;
+			while (tabV[i] != null && i < tabV.length) {
+				System.out.println(tabV[i].acreditation.libelleD);
+				i++;
+			}
+			if (i < tabV.length) {
+				System.out.println("on put le voeu dans la liste du rectorat");
+				tabV[i] = v;
+				this.listeVoeux.put(v.noE, tabV);
+				System.out.println("le voeu est enregistré");
+			} else {
+				System.err.println("Déjà 5 voeux ont été fait");
+			}
+		}else{
+			System.out.println("L'Etudiant n'a pas de voeu.");
+			Voeu[] tabV = new Voeu[1];
+			tabV[0] = v;
+			listeVoeux.put(v.noE, tabV);
+			System.out.println(">On a put un premier voeu pour l'étuiant "+v.noE);
 		}
-		if (i < tabV.length) {
-			tabV[i] = v;
-			this.listeVoeux.put(v.noE, tabV);
-		} else {
-			System.out.println("Déjà 5 voeux ont été fait");
-		}
+		
 	}
 
 	private void initialiserEtudiants(String path) {
@@ -284,6 +316,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String mdp = "";
 		String prenom="";
 		String nom="";
+		String univ="";
+		String diplome="";
 		int score=0;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -306,14 +340,13 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 						nom=lineSplit[2];
 						break;
 					case 3 : 
-						score = Integer.parseInt(lineSplit[3]);
-
+						diplome = lineSplit[3];
 					default:
 						break;
 					}
 				}
 				// System.out.println("Login : "+login + " - mdp : "+mdp);
-				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp,score));
+				this.listeEtudiant.put(login, new Etudiant(login,nom,mdp,new Accred("1", diplome, univ)));
 			
 			}
 
@@ -321,7 +354,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			e.printStackTrace();
 		}
 	}
-
 	private void initialiserAccred(String path) {
 		/*
 		 * Réfléchir à un moyen d'intégrer les notes pour les prérequis! 
@@ -472,6 +504,18 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}else{
 			return "Erreur lors de la récupération de la période.";
 		}
+	}
+
+	@Override
+	public void enregistrerUniversite(Universite univ) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Accred[] getLesAccred() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
