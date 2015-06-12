@@ -23,7 +23,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
-	
+
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
 
@@ -35,18 +35,18 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
 	private static String nomObj;
-	
+
 	// pour les pré-requisV2
 	private static Accred[] listeAccred;
 	//key : libelle diplome, voeux demandant un diplome
 	private Hashtable<String,ArrayList<Voeu>> listeVoeuxDiplome;
-	
+
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
-		
+
 		//initialisation des listes 
 		this.listeCandidatures = new ArrayList<Voeu>();
 		this.listePrincipale = new ArrayList<Voeu>();
@@ -251,7 +251,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 	}
 
-	
+
 	/**
 	 * Permet de charger les formations pré-requis
 	 * @param path
@@ -282,7 +282,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
-			
+
 			while ((lineRead = br.readLine()) != null) {
 				lineSplit = lineRead.split(";",7);
 				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
@@ -314,7 +314,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
-					
+
 				}
 				numDipPrecedent = numDip;
 				nomDipPrecedent = nomDip;
@@ -394,10 +394,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 
-		
-		
 
-	
+
+
+
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));
@@ -421,9 +421,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.remplirVoeuxDip(tabVoeux);
 		this.ordonnerVoeuxDip();
 		this.etablirListe();
-		
+
 	}
-	
+
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
@@ -460,11 +460,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxTmp = triBulle(tabVoeuxTmp);
 			//On remplace l'ancien tableau par le tableau trié
 			listeVoeuxDiplome.put(dip, tabVoeuxTmp);
-			
+
 		}
 	}
-	
-/**
+
+	/**
 	 * Etablie le score de l'étudiant en fonction de sa position et de sa période de validité du semestre
 	 * Remplie la hashtable numEtu, son score
 	 */
@@ -487,9 +487,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 			score = (moyPos+moyValid)/6;
 			scoreEtu.put(numEtuTmp, score);
 		}
-	
+
 	}
-	
+
 	private static int testPos(Note n){
 		int pos = n.position;
 		int score = 0;
@@ -502,10 +502,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}else if (pos == 4){
 			score = 1;
 		}
-		
+
 		return score;
 	}
-	
+
 	private static int testValid(Note n){
 		int score = 0;
 		String valid = n.validation;
@@ -518,40 +518,57 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 		return score;
 	}
-	
-public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
-	{
-	    int longueur=tabV.size();
-	    boolean permut;
-	 
-	    do
-	    {
-	        // hypothèse : le tableau est trié
-	        permut=false;
-	        for (int i=0 ; i<longueur-1 ; i++)
-	        {
-	            // Teste si 2 éléments successifs sont dans le bon ordre ou non
-	        	// En fonction du score de l'étudiant qui a fait le voeu
-	            if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
-	            {
-	                // s'ils ne le sont pas on échange leurs positions
-	                Voeu voeuPermut = tabV.get(i);
-	                tabV.add(i, tabV.get(i+1));
-	                tabV.add(i+1, voeuPermut);
-	                permut=true;
-	            }
-	        }
-	    }
-	    while(permut);
-	    
-	    return tabV;
+
+	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV){
+		int longueur=tabV.size();
+		boolean permut;
+
+		do
+		{
+			// hypothèse : le tableau est trié
+			permut=false;
+			for (int i=0 ; i<longueur-1 ; i++)
+			{
+				// Teste si 2 éléments successifs sont dans le bon ordre ou non
+				// En fonction du score de l'étudiant qui a fait le voeu
+				if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
+				{
+					// s'ils ne le sont pas on échange leurs positions
+					Voeu voeuPermut = tabV.get(i);
+					tabV.add(i, tabV.get(i+1));
+					tabV.add(i+1, voeuPermut);
+					permut=true;
+				}
+			}
+		}
+		while(permut);
+
+		return tabV;
 	}
-	
+
 	/**
-	 * Permet d'établir les premières listes en fonction des prérequis
+	 * Permet d'établir les premières listes en fonction des quotas et score
 	 */
 	private void etablirListe(){
-		
-		
+		while(listeVoeuxDiplome.keys().hasMoreElements()){
+			//pour le premier diplome
+			String dipTmp = listeVoeuxDiplome.keys().nextElement();
+			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
+			int quota = quotaDiplome.get(dipTmp);
+			for (int i=0; i <quota && i<listeVoeuxTmp.size(); i++){
+				try {
+					ajouterListePrincipale(listeVoeuxTmp.get(i));
+				} catch (voeuNonTrouve e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(listeVoeuxTmp.size()>=quota){
+				for (int j=quota; j<listeVoeuxTmp.size(); j++){
+					
+				}
+			}
+
+		}
 	}
 }
