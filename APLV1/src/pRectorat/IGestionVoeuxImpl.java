@@ -19,6 +19,7 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
 import Applications.PeriodeApplication;
+import ClientsServeurs.ClientEtudiantGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxUniversite;
@@ -46,6 +47,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.nomObj = nomObj;
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
+		
 
 
 		listeVoeux = new Hashtable<String, Voeu[]>();
@@ -81,6 +83,35 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public Accred[] getListeAccreditations() {
 		return lesAccredIntern;
+	}
+	
+	public void getLesAccredExterne(){
+		ArrayList<Accred> tempAccred=new ArrayList<Accred>();
+		
+		for(int i=0;i<mesRectorats.size();i++){
+			// nom de l'objet 
+			System.out.println("Connexion avec le rectorat "+mesRectorats.get(i)+"_GestionVoeux");
+			//Cas d'une connexion avec un GestionVoeux : 
+			String idObj = mesRectorats.get(i)+"_GestionVoeux";
+			// Construction du nom a enregistrer
+			String nomObj = "ClientGVGV";
+
+			System.out.println("lancement du client GV");
+			ClientEtudiantGV ce = new ClientEtudiantGV(orb, nameRoot, nomObj, idObj);
+			
+			//Recupération des Accreditation d'un autre rectorat et stockage dans un tableau temporaire
+			Accred[] tempAccredRecupExterieur;
+			tempAccredRecupExterieur=ce.getListeAccreditation();
+			int tailleArrayAccred = tempAccred.size();
+			
+			//Boucle permettant de remplir l'arraylistTemporaire qui recense l'ensemble des accreditation récupérées
+			for(int y=tailleArrayAccred;y<tempAccredRecupExterieur.length;y++){
+				int iterateurAccredRecup=0;
+				tempAccred.add(tempAccredRecupExterieur[iterateurAccredRecup]);
+				iterateurAccredRecup++;
+			}
+		}
+		
 	}
 
 	/**
@@ -318,8 +349,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String nom="";
 		String univ="";
 		String diplome="";
-		String univ="";
-		String diplome="";
+	
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -526,8 +556,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Accred[] getLesAccred() {
-		// TODO Auto-generated method stub
-		return null;
+		return lesAccredIntern;
 	}
 
 	
