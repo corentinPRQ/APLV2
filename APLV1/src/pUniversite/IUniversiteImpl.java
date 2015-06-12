@@ -4,11 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
-<<<<<<< HEAD
-=======
 import java.util.Collections;
 import java.util.Properties;
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 import org.apache.xerces.utils.Hash2intTable;
 import org.omg.CORBA.ORB;
@@ -429,6 +426,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
+		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
@@ -473,6 +471,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private void etablirScore(){
 		//TODO récupérer l'université de l'étudiant
 		//TODO Récupérer ses notes avec un appel distant de son université
+		scoreEtu=new Hashtable<String, Integer>();
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
