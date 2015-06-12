@@ -30,6 +30,7 @@ import ClientsServeurs.ClientUniversiteGV;
 public class IUniversiteImpl extends IUniversitePOA{
 
 	private static Hashtable<String, Diplome[]> preRequis;
+	private static Hashtable<String, Integer> quotaDiplome;
 
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
@@ -422,6 +423,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	public void verifCandidature(Voeu[] tabVoeux) {
 		this.remplirVoeuxDip(tabVoeux);
 		this.ordonnerVoeuxDip();
+		this.etablirListe();
 		
 	}
 	
@@ -548,6 +550,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 	    while(permut);
 	    
 	    return tabV;
+	}
+	
+	/**
+	 * Permet d'établir les premières listes en fonction des prérequis
+	 */
+	private void etablirListe(){
+		
+		
 	}
 	
 
