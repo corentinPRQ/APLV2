@@ -15,6 +15,7 @@ import ClientsServeurs.ClientUniversiteGV;
 public class IHM_Universitaire extends javax.swing.JFrame {
 	
 	public static ClientUniversiteGV clientUnivGV; 
+	public static String nomUNiv;
     /**
      * Creates new form IHM_Universitaire
      */
@@ -24,6 +25,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         cu.setVisible(true);
         this.setVisible(false);
         IHM_Universitaire.clientUnivGV = client;
+       
         
     }
 

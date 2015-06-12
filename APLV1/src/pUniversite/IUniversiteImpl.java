@@ -33,7 +33,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	/**
 	 * Nom de l'université (pour récupération des bons fichiers).
 	 */
-	private String nomUniversité;
+	private String nomUniversite;
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
 
@@ -68,7 +68,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
-		initialiserPrerequis("src/PS_prerequis.csv");
+		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
+		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -78,6 +79,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		
+		
 	}
 
 
