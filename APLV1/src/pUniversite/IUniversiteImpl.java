@@ -21,6 +21,10 @@ import pRectorat.Voeu;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
+	/**
+	 * Nom de l'université (pour récupération des bons fichiers).
+	 */
+	private String nomUniversité;
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
 	
