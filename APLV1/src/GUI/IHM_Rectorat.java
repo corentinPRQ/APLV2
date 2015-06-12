@@ -6,17 +6,22 @@
 
 package GUI;
 
+import pRectorat.IGestionVoeuxImpl;
+import ClientsServeurs.ClientGestionVoeuxMinistere;
+
 /**
  *
  * @author guilhem
  */
 public class IHM_Rectorat extends javax.swing.JFrame {
 
+	public static ClientGestionVoeuxMinistere clientGVM;
     /**
      * Creates new form IHM_Rectorat
      */
-    public IHM_Rectorat() {
+    public IHM_Rectorat(ClientGestionVoeuxMinistere cgvm) {
         initComponents();
+        IHM_Rectorat.clientGVM = cgvm; 
     }
 
     /**
@@ -75,11 +80,12 @@ public class IHM_Rectorat extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void bt_changerPeriodeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+    	//Mettre le code de changement de période au sein d'un rectorat.
     }                                                 
 
     private void bt_recupAccredActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
+        IGestionVoeuxImpl.setMesRectorats(IHM_Rectorat.clientGVM.recupererRectorat());
+        System.out.println("Taille de la liste des rectorats : " + IGestionVoeuxImpl.getMesRectorats().size());
     }                                              
 
     /**
@@ -112,7 +118,7 @@ public class IHM_Rectorat extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new IHM_Rectorat().setVisible(true);
+                new IHM_Rectorat(IHM_Rectorat.clientGVM).setVisible(true);
             }
         });
     }
