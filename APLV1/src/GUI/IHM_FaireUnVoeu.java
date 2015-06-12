@@ -205,6 +205,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+    	this.dispose();
     	this.setVisible(false);
     }                                          
 
@@ -216,9 +217,6 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
         this.chargerUniversité();
     }  
     
-  
-    
-
     /**
      * @param args the command line arguments
      */
