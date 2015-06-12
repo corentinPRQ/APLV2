@@ -25,13 +25,14 @@ import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxUniversite;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
-	private static final int NB_VOEUX_MAX = 5;
 	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
 	private static String nomObj;
 	
 	private static ArrayList<String> mesRectorats;
-	private static ArrayList<Universite> mesUniversites;
+	private static Hashtable<String, String> mesUniversites;
+	
+	//Voeux en fonction du numéro d'étudiant
 	
 	//Voeux en fonction du numéro d'étudiant
 	private static Hashtable<String, Voeu[]> listeVoeux;
@@ -39,7 +40,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
-
+	
+		/**
+	 * Constante nombre de voeux max pour gestion tableaux.
+	 */
+	 
+	private final static int NB_VOEUX_MAX = 5;
 	//constructeur par défaut
 	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
@@ -50,7 +56,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.idRectorat=pidRectorat;
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
-		mesRectorats = getLesRectorats();		
+		
 		//mesRectorats = getLesRectorats();
 		//TODO Charger les accred externes
 		initialiserEtudiants("src/usersEtuMP.csv");
@@ -62,7 +68,15 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**
+	 * Identification d'un étudiant
+	 * (Car les étudiants sont contenus dans leur rectorat).
+	 * @param login
+	 * @param mdp
+	 * @return
+	 * @throws EtudiantNonTrouve
+	 */
 	public boolean identifier(String login, String mdp)
 			throws EtudiantNonTrouve {
 		System.out.println("Identification depuis le rectorat");
@@ -162,7 +176,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			throws VoeuNonTrouve {
 		v.decEtudiant = pDecision;
 	}
-
+	
+	/**
+	 * Validation des voeux en fonction des préqueris
+	 * @param v
+	 * @throws VoeuNonTrouve
+	 */
 	private void validerVoeu(Voeu v) throws VoeuNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
 		ClientGestionVoeuxUniversite cu = new ClientGestionVoeuxUniversite(orb,
@@ -221,7 +240,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	
+    /**
+	 * CHangement de période de l'application
+	 */
 	public static void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
 		Properties p;
