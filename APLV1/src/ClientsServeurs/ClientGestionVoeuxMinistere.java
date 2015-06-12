@@ -27,6 +27,7 @@ public class ClientGestionVoeuxMinistere implements Runnable{
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
 		this.idObj = idObj;
+		travailler();
 	}
 	
 	public void travailler(){
@@ -47,7 +48,7 @@ public class ClientGestionVoeuxMinistere implements Runnable{
 	
 			//this.monUniv = IUniversiteHelper.narrow(distantObj);
 			//this.monGV = IGestionVoeuxHelper.narrow(distantObj);
-			this.monM = IMinistereHelper.narrow(distantObj);
+			ClientGestionVoeuxMinistere.monM = IMinistereHelper.narrow(distantObj);
 			
 			recupererReferenciel();
 			/* ici il faut mettre les trucs de l'interface graphique manière que 
@@ -72,8 +73,8 @@ public class ClientGestionVoeuxMinistere implements Runnable{
 	}
 
 	public ArrayList<String> recupererRectorat(){
-		String[] rectorats = new String[ClientGestionVoeuxMinistere.monM.getRectorats().length];
-		rectorats = ClientGestionVoeuxMinistere.monM.getRectorats();
+		//String[] rectorats = new String[ClientGestionVoeuxMinistere.monM.getRectorats().length];
+		String[] rectorats = ClientGestionVoeuxMinistere.monM.getRectorats();
 		ArrayList<String> lesRectorats = new ArrayList<String>();
 		for (int i = 0; i<rectorats.length; i++){
 			lesRectorats.add(rectorats[i]);
