@@ -331,6 +331,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					case 6 : quota = Integer.parseInt(lineSplit[6]);
 					break;
 					case 7 : seuilScore = Integer.parseInt(lineSplit[7]);
+					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
@@ -354,11 +355,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 					ne=NiveauEtude.master;
 				}
 				//Gestion des quotas
-				if(!quotaDiplome.containsKey(numDip)){
-					quotaDiplome.put(numDip, quota);
+				if(!quotaDiplome.containsKey(nomDip)){
+					quotaDiplome.put(nomDip, quota);
 				}
-				if (!seuilScoreDiplome.containsKey(numDip)){
-					seuilScoreDiplome.put(numDip, seuilScore);
+				if (!seuilScoreDiplome.containsKey(nomDip)){
+					seuilScoreDiplome.put(nomDip, seuilScore);
 				}
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;

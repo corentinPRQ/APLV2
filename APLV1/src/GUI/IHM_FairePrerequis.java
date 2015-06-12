@@ -6,11 +6,12 @@
 
 package GUI;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
-import Applications.ApplicationUniversite;
 import pRectorat.Diplome;
 import pUniversite.IUniversiteImpl;
+import Applications.ApplicationUniversite;
 
 /**
  *
@@ -30,6 +31,8 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		preRequis=IUniversiteImpl.getPreRequis();
 		quota = IUniversiteImpl.getQuotaDiplome();
 		score = IUniversiteImpl.getSeuilScoreDiplome();
+
+		chargerPrerequisTable();
 	}
 
 	/**
@@ -53,7 +56,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		jt_Prerequis = new javax.swing.JTable();
 		jb_Enregistrer = new javax.swing.JButton();
 		jb_Supprimer = new javax.swing.JButton();
-		btn_Annuler = new javax.swing.JButton();
+		jButton2 = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,15 +113,40 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 						{null, null, null, null, null},
 						{null, null, null, null, null},
 						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
 						{null, null, null, null, null}
 				},
 				new String [] {
-						"Master", "Licence", "Moyenne Français", "Moyenne Maths", "Moyenne Anglais"
+						"Université", "Master", "Licence", "Quota Max", "Score d'entrée"
 				}
 				) {
+			Class[] types = new Class [] {
+					java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+			};
 			boolean[] canEdit = new boolean [] {
 					false, false, false, false, false
 			};
+
+			public Class getColumnClass(int columnIndex) {
+				return types [columnIndex];
+			}
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return canEdit [columnIndex];
@@ -140,10 +168,10 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 			}
 		});
 
-		btn_Annuler.setText("Annuler");
-		btn_Annuler.addActionListener(new java.awt.event.ActionListener() {
+		jButton2.setText("Annuler");
+		jButton2.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btn_AnnulerActionPerformed(evt);
+				jButton2ActionPerformed(evt);
 			}
 		});
 
@@ -174,7 +202,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 																						.addGap(18, 18, 18)
 																						.addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
 																						.addGap(18, 18, 18)
-																						.addComponent(btn_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+																						.addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
 																						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 				);
 		jPanel2Layout.setVerticalGroup(
@@ -195,7 +223,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 										.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 												.addComponent(jb_Enregistrer)
 												.addComponent(jb_Supprimer)
-												.addComponent(btn_Annuler)))
+												.addComponent(jButton2)))
 				);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -239,13 +267,35 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}                                              
 
-	private void btn_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                            
+	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		// TODO add your handling code here:
-	}                                           
+	}                                        
 
 	private void jb_SupprimerActionPerformed(java.awt.event.ActionEvent evt) {                                             
 		// TODO add your handling code here:
-	}                                            
+	}        
+
+	private void chargerPrerequisTable(){
+		System.out.println("taille Prerequis : " + preRequis.size());
+		ArrayList<String> lesDiplomes = new ArrayList<String>();
+		lesDiplomes.addAll(preRequis.keySet());
+		System.out.println("taille DIplomes : " + lesDiplomes.size());
+
+		for (int i=0; i<lesDiplomes.size();i++){
+
+			for (Diplome dip : preRequis.get(lesDiplomes.get(i))) {
+
+				if(dip !=null){
+					jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, i, 0);
+					jt_Prerequis.setValueAt(lesDiplomes.get(i), i, 1);
+					jt_Prerequis.setValueAt(dip.libelle, i, 2);
+					jt_Prerequis.setValueAt(quota.get(lesDiplomes.get(i)), i, 3);
+					jt_Prerequis.setValueAt(score.get(lesDiplomes.get(i)), i, 4);
+				}
+			}
+		}
+		this.repaint();
+	}
 
 	/**
 	 * @param args the command line arguments
@@ -282,28 +332,8 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		});
 	}
 
-//	private void chargerPrerequisTable(){
-//		for (int i=0; i<preRequis.size();i++){
-//			for (int j=0; j<preRequis.get(i).length; j++){
-//				jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, i, 0);
-//				jt_Prerequis.setValueAt(preRequis.get(i)[j].libelle, i, 1);
-//				jt_Prerequis.setValueAt(preRequis.get(i)[j]., i, 2);
-//				jt_Prerequis.setValueAt(arg0, i, 3);
-//				jt_Prerequis.setValueAt(arg0, i, 4);
-//				jt_Prerequis.setValueAt(arg0, i, 5);
-//				jt_Prerequis.setValueAt(arg0, i, 6);
-//				jt_Prerequis.setValueAt(arg0, i, 7);
-//				jt_Prerequis.setValueAt(arg0, i, 8);
-//			}
-//			
-//		}
-//		
-//		
-//		
-//	}
-
 	// Variables declaration - do not modify                     
-	private javax.swing.JButton btn_Annuler;
+	private javax.swing.JButton jButton2;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;
