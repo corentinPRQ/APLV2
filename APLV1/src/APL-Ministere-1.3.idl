@@ -2,11 +2,12 @@ import ::pRectorat::Diplome;
 
 module pMinistere{
 
-	typedef sequence<::pRectorat::Diplome> Referenciel;
-
-	interface IMinistere{
+		typedef sequence<::pRectorat::Diplome> Referenciel;
 		
 		typedef sequence<string> TabRectorat;
+		
+
+	interface IMinistere{
 		
 		readonly attribute Referenciel getReferenciel;	
 		readonly attribute TabRectorat getRectorats;
