@@ -1,8 +1,6 @@
 package ClientsServeurs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
@@ -11,8 +9,6 @@ import org.omg.CosNaming.NamingContext;
 import pMinistere.IMinistere;
 import pMinistere.IMinistereHelper;
 import pRectorat.Diplome;
-import pRectorat.IGestionVoeux;
-import pUniversite.IUniversite;
 
 
 public class ClientGestionVoeuxMinistere implements Runnable{
@@ -64,15 +60,28 @@ public class ClientGestionVoeuxMinistere implements Runnable{
 		
 	}
 	
-	private void recupererReferenciel (){
-		Diplome[] referenciel = new Diplome[100]; 
+	public ArrayList<Diplome> recupererReferenciel (){
+		Diplome[] referenciel = new Diplome[ClientGestionVoeuxMinistere.monM.getReferenciel().length]; 
 		referenciel = ClientGestionVoeuxMinistere.monM.getReferenciel();
 		System.out.println("Taille du tableau : " + referenciel.length);
+		ArrayList<Diplome> lesDiplomes = new ArrayList<Diplome>();
 		for (int i = 0; i<referenciel.length; i++){
-			System.out.println(referenciel[i].libelle);
+			lesDiplomes.add(referenciel[i]);
 		}
+		return (lesDiplomes);
 	}
 
+	public ArrayList<String> recupererRectorat(){
+		String[] rectorats = new String[ClientGestionVoeuxMinistere.monM.getRectorats().length];
+		rectorats = ClientGestionVoeuxMinistere.monM.getRectorats();
+		ArrayList<String> lesRectorats = new ArrayList<String>();
+		for (int i = 0; i<rectorats.length; i++){
+			lesRectorats.add(rectorats[i]);
+		}
+		return (lesRectorats);
+	}
+	
+	
 	public static void main(String args[]) {
 		try {
 			// Intialisation de l'orb
