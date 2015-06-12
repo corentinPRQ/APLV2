@@ -42,7 +42,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaire de notre Univ
+	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -453,7 +453,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		try {
 			this.etablirListe();
 		} catch (voeuNonTrouve e) {
-			// TODO Auto-generated catch block
 			System.err.println("Le voeu ne peut pas être ajouté à une liste car il n'est pas dans la liste des candidatures");
 			e.printStackTrace();
 		}
