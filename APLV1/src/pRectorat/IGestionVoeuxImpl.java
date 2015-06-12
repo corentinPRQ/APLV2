@@ -19,6 +19,7 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
 import Applications.PeriodeApplication;
+import ClientsServeurs.ClientEtudiantGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxUniversite;
@@ -32,23 +33,20 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static Hashtable<String, String> mesUniversites;
 	
 	//Voeux en fonction du numéro d'étudiant
+	
+	//Voeux en fonction du numéro d'étudiant
 	private static Hashtable<String, Voeu[]> listeVoeux;
 	private static Accred[] lesAccredIntern;
 	private static Accred[] lesAccredExtern;
 	private Hashtable<String,Etudiant> listeEtudiant;
 	private static String idRectorat="";
-	/**
+	
+		/**
 	 * Constante nombre de voeux max pour gestion tableaux.
 	 */
+	 
 	private final static int NB_VOEUX_MAX = 5;
-	
-	/**
-	 * constructeur par défaut.
-	 * @param orb
-	 * @param nameRoot
-	 * @param nomObj
-	 * @param pidRectorat
-	 */
+	//constructeur par défaut
 	public IGestionVoeuxImpl(ORB orb, NamingContext nameRoot, String nomObj,String pidRectorat){
 		//Liste d'accréditation à charger avec un fichier
 		this.orb = orb;
@@ -56,10 +54,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		this.nomObj = nomObj;
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
-
-
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
+		
 		//mesRectorats = getLesRectorats();
 		//TODO Charger les accred externes
 		initialiserEtudiants("src/usersEtuMP.csv");
@@ -71,7 +68,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	/**
 	 * Identification d'un étudiant
 	 * (Car les étudiants sont contenus dans leur rectorat).
@@ -99,11 +96,39 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public Accred[] getListeAccreditations() {
 		return lesAccredIntern;
 	}
+	
+	public void getLesAccredExterne(){
+		ArrayList<Accred> tempAccred=new ArrayList<Accred>();
+		
+		for(int i=0;i<mesRectorats.size();i++){
+			// nom de l'objet 
+			System.out.println("Connexion avec le rectorat "+mesRectorats.get(i)+"_GestionVoeux");
+			//Cas d'une connexion avec un GestionVoeux : 
+			String idObj = mesRectorats.get(i)+"_GestionVoeux";
+			// Construction du nom a enregistrer
+			String nomObj = "ClientGVGV";
+
+			System.out.println("lancement du client GV");
+			ClientEtudiantGV ce = new ClientEtudiantGV(orb, nameRoot, nomObj, idObj);
+			
+			//Recupération des Accreditation d'un autre rectorat et stockage dans un tableau temporaire
+			Accred[] tempAccredRecupExterieur;
+			tempAccredRecupExterieur=ce.getListeAccreditation();
+			int tailleArrayAccred = tempAccred.size();
+			
+			//Boucle permettant de remplir l'arraylistTemporaire qui recense l'ensemble des accreditation récupérées
+			for(int y=tailleArrayAccred;y<tempAccredRecupExterieur.length;y++){
+				int iterateurAccredRecup=0;
+				tempAccred.add(tempAccredRecupExterieur[iterateurAccredRecup]);
+				iterateurAccredRecup++;
+			}
+		}
+		
+	}
 
 	/**
-	 *  * Renvoie tous les voeux le return est un tableau de voeux qui peut
+	 * Renvoie tous les voeux le return est un tableau de voeux qui peut
 	 * contenir des valeurs null à la fin
-	 * @return les voeux
 	 */
 	@Override
 	public Voeu[] getVoeux() {
@@ -151,7 +176,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			throws VoeuNonTrouve {
 		v.decEtudiant = pDecision;
 	}
-
+	
 	/**
 	 * Validation des voeux en fonction des préqueris
 	 * @param v
@@ -215,7 +240,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	/**
+    /**
 	 * CHangement de période de l'application
 	 */
 	public static void changerPeriode() {
@@ -289,32 +314,17 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Tester si on est dans le bon rectorat ou pas
-		System.out.println("on rentre dans faire voeux");
-		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
 		if(v.idRDest.nomAcademie.equals(idRectorat)){
 			//Création d'un voeu dans ce rectorat
-			System.out.println("on est dans le if");
-			if(listeVoeux.containsKey(v.noE)){
-				System.out.println("tentative d'enregistrement d'un voeu");
 				enregistrerVoeu(v);
-			}else{
-				System.out.println("Premier voeu d'un etudiant! On enregistre aussi");
-				
-				enregistrerVoeu(v);
-			}
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
-			System.out.println("je suis dans le else");
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idRectorat);
 			cgv.faireVoeu(v);
 		}
 		
 	}
-
-	/**
-	 * Enregistrement du voeu à proprement dit : dans la liste contenu dans le rectorat.
-	 * @param v
-	 */
+		
 	private void enregistrerVoeu(Voeu v) {
 		System.out.println(">Enregistrement dun voeu.");
 		//Si l'étudiant a déjà des voeux, on les récupère.
@@ -345,6 +355,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		
 	}
 
+	
+
 	private void initialiserEtudiants(String path) {
 		String lineRead;
 		String[] lineSplit;
@@ -353,7 +365,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String nom="";
 		String univ="";
 		String diplome="";
-
+	
 
 		
 		try {
@@ -504,18 +516,17 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @param args
 	 * @throws EtudiantNonTrouve
 	 */
-	
-//	 public static void main (String [] args) throws EtudiantNonTrouve{
-//	 System.out.println("Debut du test");
-//	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
-//	 igV.afficherLesEtu();
-//	 System.out.println(igV.identifier("21001324", "hugo"));
-//	 
-//	 System.out.println(igV.getUtilisateur("21001324").nom);
-//	 
-//	 for(int i=0;i<lesAccredIntern.length;i++){
-//		 System.out.println(lesAccredIntern[i].toString());
-//	 }
+	 public static void main (String [] args) throws EtudiantNonTrouve{
+	 System.out.println("Debut du test");
+	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
+	 igV.afficherLesEtu();
+	 System.out.println(igV.identifier("21001324", "hugo"));
+	 
+	 System.out.println(igV.getUtilisateur("21001324").nom);
+	 
+	 for(int i=0;i<lesAccredIntern.length;i++){
+		 System.out.println(lesAccredIntern[i].toString());
+	 }
 	 
 	 
 	// try {
@@ -528,7 +539,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	// }
 	//
 	// }
-//}
+}
 
 	@Override
 	public String getIdRectorat() {
@@ -573,8 +584,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Accred[] getLesAccred() {
-		// TODO Auto-generated method stub
-		return null;
+		return lesAccredIntern;
 	}
 
 	
@@ -582,29 +592,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
 		return (cgm.recupererRectorat());
 	}
-
-	/**
-	 * @return the mesRectorats
-	 */
-	public static ArrayList<String> getMesRectorats() {
-		return mesRectorats;
-	}
-
-	/**
-	 * @param mesRectorats the mesRectorats to set
-	 */
-	public static void setMesRectorats(ArrayList<String> mesRectorats) {
-		IGestionVoeuxImpl.mesRectorats = mesRectorats;
-	}
-
-	@Override
-	public void enregistrerUniversite(String ior, String nom) {
-		System.out.println("Enregistrement de l'universités" + nom);
-		mesUniversites.put(nom, ior);
-		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
-		
-	}
-
 
 
 	
