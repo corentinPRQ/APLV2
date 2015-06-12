@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
+<<<<<<< HEAD
+=======
+import java.util.Collections;
+import java.util.Properties;
+>>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 import org.apache.xerces.utils.Hash2intTable;
 import org.omg.CORBA.ORB;
@@ -21,7 +26,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
-
+	
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
 
@@ -391,7 +396,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}		
 	}
 
+
 		
+		
+
+	
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));
@@ -418,10 +427,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		
 	}
 	
-	/**
-	 * Permet d'alimenter la hashtable : pour chaque diplome, un tableau de voeux le demandant
-	 * @param tabVoeux
-	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		//on charge les voeux dans le tableau des candidatures
@@ -440,12 +445,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
-	
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
 	private void ordonnerVoeuxDip(){
 		this.etablirScore();
+		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
@@ -460,8 +465,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 			
 		}
 	}
-
-	/**
+	
+/**
 	 * Etablie le score de l'étudiant en fonction de sa position et de sa période de validité du semestre
 	 * Remplie la hashtable numEtu, son score
 	 */
@@ -515,7 +520,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return score;
 	}
 	
-	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
+public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
 	{
 	    int longueur=tabV.size();
 	    boolean permut;
@@ -550,6 +555,4 @@ public class IUniversiteImpl extends IUniversitePOA{
 		
 		
 	}
-	
-
 }
