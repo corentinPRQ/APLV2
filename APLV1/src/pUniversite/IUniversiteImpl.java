@@ -1,37 +1,29 @@
 package pUniversite;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Collections;
 import java.util.Properties;
 
+import org.apache.xerces.utils.Hash2intTable;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
 import pRectorat.Diplome;
-import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
-import pRectorat.IGestionVoeuxImpl;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
-import utilitaires.utils;
-import Applications.ApplicationUniversite;
-import Applications.PeriodeApplication;
-import ClientsServeurs.ClientUniversiteGV;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
-
+	
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
 
@@ -277,9 +269,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDip = "";
 		String numDipPR="";
 		String nomDipPR="";
-		float moyFR = 0f;
-		float moyMat = 0f;
-		float moyEn= 0f;
+		int quota =0;
 
 		//variable comptant le nombre de lignes du fichier par diplome
 		int cpteur = 0;
@@ -287,13 +277,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
-
+		//Hasthable pour les quotas des masters
+		Hashtable<String, Integer> lesQuotas = new Hashtable<String, Integer>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
-
+			
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",9);
+				lineSplit = lineRead.split(";",7);
 				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){  
@@ -310,23 +301,20 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					case 5 : nomDipPR = lineSplit[5];
 					break;
-					case 6 : moyFR = Float.parseFloat(lineSplit[6]);
-					break;
-					case 7 : moyMat = Float.parseFloat(lineSplit[7]);
-					break;
-					case 8 : moyEn = Float.parseFloat(lineSplit[8]);
+					case 6 : quota = Integer.parseInt(lineSplit[6]);
 					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
 				}
-				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
+				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!numDip.equals(numDipPrecedent)){
 					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
+					
 				}
 				numDipPrecedent = numDip;
 				nomDipPrecedent = nomDip;
@@ -337,6 +325,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 				else{ 
 					ne=NiveauEtude.master;
 				}
+				//Gestion des quotas
+				if(!lesQuotas.containsKey(numDip)){
+					lesQuotas.put(numDip, quota);
+				}
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;
 				cpteur++;
@@ -344,7 +336,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}
 			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
-
+			quotaDiplome = lesQuotas;
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -401,7 +393,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}		
 	}
 
+
 		
+		
+
+	
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));
@@ -428,12 +424,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 		
 	}
 	
-	/**
-	 * Permet d'alimenter la hashtable : pour chaque diplome, un tableau de voeux le demandant
-	 * @param tabVoeux
-	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
+		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
@@ -450,12 +443,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
-	
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
 	private void ordonnerVoeuxDip(){
 		this.etablirScore();
+		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
@@ -470,14 +463,15 @@ public class IUniversiteImpl extends IUniversitePOA{
 			
 		}
 	}
-
-	/**
+	
+/**
 	 * Etablie le score de l'étudiant en fonction de sa position et de sa période de validité du semestre
 	 * Remplie la hashtable numEtu, son score
 	 */
 	private void etablirScore(){
 		//TODO récupérer l'université de l'étudiant
 		//TODO Récupérer ses notes avec un appel distant de son université
+		scoreEtu=new Hashtable<String, Integer>();
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
@@ -525,7 +519,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return score;
 	}
 	
-	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
+public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
 	{
 	    int longueur=tabV.size();
 	    boolean permut;
@@ -560,6 +554,4 @@ public class IUniversiteImpl extends IUniversitePOA{
 		
 		
 	}
-	
-
 }
