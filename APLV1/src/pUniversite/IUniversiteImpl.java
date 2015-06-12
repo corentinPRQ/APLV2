@@ -400,7 +400,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 	
-		
 	private void elaborerScoreEtudiant (Etudiant etu){
 		Note[] lesNotes = listeNotesEtudiants.get(etu);
 		int somme = 0;
