@@ -57,7 +57,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		System.out.println(pidRectorat);
 		this.idRectorat=pidRectorat;
 
-
+		mesRectorats = new ArrayList<String>();
+		mesUniversites = new Hashtable<String, String>();
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		//mesRectorats = getLesRectorats();
@@ -561,16 +562,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	@Override
-	/**
-	 * Permet à une université de s'enregistrer auprès du rectorat
-	 */
-	public void enregistrerUniversite(Universite univ) {
-		// TODO Auto-generated method stub
-		
-		
-	}
-
+	
 	@Override
 	public Accred[] getLesAccred() {
 		// TODO Auto-generated method stub
@@ -599,13 +591,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public void enregistrerUniversite(String ior, String nom) {
-		System.out.println("Enregistrement de l'universités" + nom);
-		mesUniversites.put(nom, ior);
+		System.out.println("Enregistrement de l'universités - " + nom + " - IOR : " + ior);
+		IGestionVoeuxImpl.mesUniversites.put(nom, ior);
 		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
 		
 	}
 
-
-
-	
 }

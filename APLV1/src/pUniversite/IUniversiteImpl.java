@@ -410,6 +410,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 	public static Hashtable<String, Diplome[]> getPreRequis() {
 		return preRequis;
 	}
+	
+	
 
 
 	/**
