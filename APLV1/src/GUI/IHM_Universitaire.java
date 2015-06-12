@@ -186,7 +186,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_etablirPreRequisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_etablirPreRequisActionPerformed
-        // TODO add your handling code here:
+        IHM_FairePrerequis ihmFP = new IHM_FairePrerequis();
     }//GEN-LAST:event_bt_etablirPreRequisActionPerformed
 
     private void bt_ExaminerCandidatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ExaminerCandidatureActionPerformed
@@ -199,6 +199,8 @@ public class IHM_Universitaire extends javax.swing.JFrame {
 
     private void bt_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_QuitterActionPerformed
         // TODO add your handling code here:
+    	this.dispose();
+    	this.setVisible(false);
     }//GEN-LAST:event_bt_QuitterActionPerformed
 
     /**
