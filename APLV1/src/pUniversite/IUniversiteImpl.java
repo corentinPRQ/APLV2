@@ -1,7 +1,10 @@
 package pUniversite;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Collections;
@@ -14,13 +17,23 @@ import org.omg.CosNaming.NamingContext;
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
 import pRectorat.Diplome;
+import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
+import pRectorat.IGestionVoeuxImpl;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
+import utilitaires.utils;
+import Applications.ApplicationUniversite;
+import Applications.PeriodeApplication;
+import ClientsServeurs.ClientUniversiteGV;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
+	/**
+	 * Nom de l'université (pour récupération des bons fichiers).
+	 */
+	private String nomUniversité;
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
 

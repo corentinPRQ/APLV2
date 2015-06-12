@@ -24,7 +24,7 @@ import ClientsServeurs.ClientEtudiantGV;
  */
 public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
-	private static ClientEtudiantGV clientEtuGV; 
+	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
 	private String idRectorat;
@@ -64,7 +64,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		
 		while(i<lesAccred.length||trouve!=false){
 			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].libelleD)
-					&&cb_universite.getSelectedItem().toString().equals(lesAccred[i].libelleU)){
+					&&cb_universite.getSelectedItem().toString().equals(lesAccred[i].libelleD)){
 				trouve=true;
 				noAccred=lesAccred[i].noAccred;
 				return noAccred;
@@ -194,17 +194,19 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
-    	//Construction du voeu et ajout de celui-ci.
     	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
-    	IHM_FaireUnVoeu.clientEtuGV.faireVoeu(voeu);
-    	//Rafraichissement de l'IHM parente 
-    	IHM_FaireUnVoeu.parent.remplirTableVoeu(IHM_FaireUnVoeu.clientEtuGV.consulterListeVoeux(parent.utilisateur));
-    	IHM_FaireUnVoeu.parent.repaint();
+    	//clientEtuGV.faireVoeux(voeu);
+
+    	//Voeu voeu = new Voeu(parent.utilisateur,accred,new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
+    	//clientEtuGV.faireVoeux(parent.utilisateur.getNoEtu(),accred, v);
+
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+    	this.dispose();
     	this.setVisible(false);
     }                                          
 
@@ -216,9 +218,6 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
         this.chargerUniversité();
     }  
     
-  
-    
-
     /**
      * @param args the command line arguments
      */
