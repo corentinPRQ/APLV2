@@ -42,7 +42,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ
+	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ. En fait ya quoi dedans et c'est chargé quand ?
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -615,6 +615,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			int i=0;
 			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
+				//TODO appel à setEtatVoeu
 				i++;
 			}
 			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
@@ -623,17 +624,20 @@ public class IUniversiteImpl extends IUniversitePOA{
 				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
 				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
 					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
+					//TODO appel à setEtatVoeu
 					cptV++;
 				}
 				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
 				if(cptV<listeVoeuxTmp.size()){
 					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
 						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
+						//TODO appel à setEtatVoeu
 					}
 				}
 			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
 				while(i<listeVoeuxTmp.size()){
 					ajouterListeRejet(listeVoeuxTmp.get(i));
+					//TODO appel à setEtatVoeu
 					i++;
 				}
 			}
