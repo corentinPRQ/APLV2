@@ -303,33 +303,28 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		
 	}
 		
-	
-
 	private void enregistrerVoeu(Voeu v) {
-		System.out.println("Enregistrement dun voeu");
+		System.out.println(">Enregistrement dun voeu.");
+		//Si l'étudiant a déjà des voeux, on les récupère.
 		if(listeVoeux.containsKey(v.noE)){
-			System.out.println(">Un tableau existe pour l'étudiant.");
-			Voeu[] tabV = new Voeu[5];
-			tabV = this.listeVoeux.get(v.noE);
-			if(tabV!=null){
-				System.out.println(">>Ce tableau n'est pas null");
-			}
-			
-			int i = 0;
-			while (tabV[i] != null && i < tabV.length) {
-				System.out.println(tabV[i].acreditation.libelleD);
-				i++;
-			}
-			if (i < tabV.length) {
-				System.out.println("on put le voeu dans la liste du rectorat");
-				tabV[i] = v;
-				this.listeVoeux.put(v.noE, tabV);
-				System.out.println("le voeu est enregistré");
+			Voeu[] tabV = IGestionVoeuxImpl.listeVoeux.get(v.noE);
+			//Combien l'étudiant a de voeux ? 
+			//Indice dans lequel on va insérer.
+			int insertion = tabV.length;
+			if (insertion<NB_VOEUX_MAX) {
+				//On récupère les anciens voeux pour y ajouter les nouveaux.
+				Voeu[] aInserer = new Voeu[insertion+1];
+				aInserer[insertion-1]=tabV[insertion-1];
+				aInserer[insertion] = v;
+				//On répercute les modifications su la liste.
+				IGestionVoeuxImpl.listeVoeux.put(v.noE, aInserer);
+				System.out.println(">Le voeu est enregistré.");
 			} else {
-				System.err.println("Déjà 5 voeux ont été fait");
+				System.err.println("Déjà 5 voeux ont été faits.");
 			}
 		}else{
-			System.out.println("L'Etudiant n'a pas de voeu.");
+			//Cas où l'étudiant n'a pas de voeux.
+			//Création d'un tableau de 1 voeu.
 			Voeu[] tabV = new Voeu[1];
 			tabV[0] = v;
 			listeVoeux.put(v.noE, tabV);
@@ -337,6 +332,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		
 	}
+
+	
 
 	private void initialiserEtudiants(String path) {
 		String lineRead;
@@ -347,6 +344,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		String univ="";
 		String diplome="";
 	
+
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -490,6 +488,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		System.out.println(listeEtudiant.get(numeroEtudiant));
 		return(listeEtudiant.get(numeroEtudiant));
 	}
+	
+	/**
+	 * Main pour test.
+	 * @param args
+	 * @throws EtudiantNonTrouve
+	 */
 	 public static void main (String [] args) throws EtudiantNonTrouve{
 	 System.out.println("Debut du test");
 	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
@@ -522,6 +526,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	
 	@Override
+	/**
+	 * Renvoie la période de l'application.
+	 * Celle-ci est contenue dans un properties.
+	 * @return la période en cours
+	 */
 	public String getPeriodeEnCours() {
 		Properties p;
 		p = null;
