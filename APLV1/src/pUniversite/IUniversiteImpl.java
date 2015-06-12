@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -398,40 +399,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			e.printStackTrace();
 		}		
 	}
-
-	
-		
-	private void elaborerScoreEtudiant (Etudiant etu){
-		Note[] lesNotes = listeNotesEtudiants.get(etu);
-		int somme = 0;
-		for (int i =0; i< lesNotes.length; i++){
-			//1234=4321 pour les classement
-			//1S = 3; 2S=2; R=1
-			switch(lesNotes[i].position){
-			case 1: somme += 4;
-				break;
-			case 2: somme += 3;
-				break;
-			case 3: somme += 2;
-				break;
-			case 4 : somme += 1;
-				break;
-			}
-			
-			if (lesNotes[i].validation.equals("1S")){
-				somme+=3;
-			}else{
-				if (lesNotes[i].validation.equals("2S")){
-					somme+=3;
-				}
-				else {
-					somme+=1;
-				}
-			}
-		}
-		
-		etu.score = somme;
-	}
 	
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
@@ -453,12 +420,16 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	@Override
 	public void verifCandidature(Voeu[] tabVoeux) {
-		this.trierVoeuxDip(tabVoeux);
+		this.remplirVoeuxDip(tabVoeux);
 		this.ordonnerVoeuxDip();
 		
 	}
 	
-	private void trierVoeuxDip(Voeu[] tabVoeux){
+	/**
+	 * Permet d'alimenter la hashtable : pour chaque diplome, un tableau de voeux le demandant
+	 * @param tabVoeux
+	 */
+	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
@@ -477,11 +448,30 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 	}
 	
+	/**
+	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
+	 */
 	private void ordonnerVoeuxDip(){
 		this.etablirScore();
-		//classer les voeux par diplome et par score dans listeVoeuxDiplome
+		//classe les voeux par diplome et par score dans listeVoeuxDiplome
+		//On parcourt les diplomes dans la hashT de diplome/liste voeux
+		while(listeVoeuxDiplome.keys().hasMoreElements()){
+			//pour le premier diplome
+			String dip = listeVoeuxDiplome.keys().nextElement();
+			//on récupère tous les voeux
+			ArrayList<Voeu> tabVoeuxTmp = listeVoeuxDiplome.get(dip);
+			//on tri ces voeux en fonction du score
+			tabVoeuxTmp = triBulle(tabVoeuxTmp);
+			//On remplace l'ancien tableau par le tableau trié
+			listeVoeuxDiplome.put(dip, tabVoeuxTmp);
+			
+		}
 	}
 
+	/**
+	 * Etablie le score de l'étudiant en fonction de sa position et de sa période de validité du semestre
+	 * Remplie la hashtable numEtu, son score
+	 */
 	private void etablirScore(){
 		//TODO récupérer l'université de l'étudiant
 		//TODO Récupérer ses notes avec un appel distant de son université
@@ -492,8 +482,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 			int moyPos = 0;
 			int moyValid = 0;
 			for(int i=0; i<noteEtuTmp.length; i++){
-				int pos = this.testPos(noteEtuTmp[i]);
-				int valid = this.testValid(noteEtuTmp[i]);
+				int pos = IUniversiteImpl.testPos(noteEtuTmp[i]);
+				int valid = IUniversiteImpl.testValid(noteEtuTmp[i]);
 				moyPos += pos;
 				moyValid +=valid;
 			}
@@ -503,7 +493,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	
 	}
 	
-	private int testPos(Note n){
+	private static int testPos(Note n){
 		int pos = n.position;
 		int score = 0;
 		if (pos == 1){
@@ -519,7 +509,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return score;
 	}
 	
-	private int testValid(Note n){
+	private static int testValid(Note n){
 		int score = 0;
 		String valid = n.validation;
 		if(valid.equals("s1")){
@@ -530,6 +520,34 @@ public class IUniversiteImpl extends IUniversitePOA{
 			score = 1;
 		}
 		return score;
+	}
+	
+	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
+	{
+	    int longueur=tabV.size();
+	    boolean permut;
+	 
+	    do
+	    {
+	        // hypothèse : le tableau est trié
+	        permut=false;
+	        for (int i=0 ; i<longueur-1 ; i++)
+	        {
+	            // Teste si 2 éléments successifs sont dans le bon ordre ou non
+	        	// En fonction du score de l'étudiant qui a fait le voeu
+	            if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
+	            {
+	                // s'ils ne le sont pas on échange leurs positions
+	                Voeu voeuPermut = tabV.get(i);
+	                tabV.add(i, tabV.get(i+1));
+	                tabV.add(i+1, voeuPermut);
+	                permut=true;
+	            }
+	        }
+	    }
+	    while(permut);
+	    
+	    return tabV;
 	}
 	
 
