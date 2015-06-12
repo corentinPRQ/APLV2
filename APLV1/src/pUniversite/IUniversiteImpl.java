@@ -293,8 +293,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
-		//Hasthable pour les quotas des masters
-		Hashtable<String, Integer> lesQuotas = new Hashtable<String, Integer>();
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
@@ -442,7 +441,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
-		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
