@@ -36,6 +36,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private String nomUniversité;
 	private static Hashtable<String, Diplome[]> preRequis;
 	private static Hashtable<String, Integer> quotaDiplome;
+	private static Hashtable<String, Integer> seuilScoreDiplome;
 
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
@@ -66,6 +67,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
+		quotaDiplome = new Hashtable<String, Integer>();
+		seuilScoreDiplome = new Hashtable<String, Integer>();
+		
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
 		initialiserPrerequis("src/PS_prerequis.csv");
@@ -283,6 +287,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String numDipPR="";
 		String nomDipPR="";
 		int quota =0;
+		int seuilScore=0;
 
 		//variable comptant le nombre de lignes du fichier par diplome
 		int cpteur = 0;
@@ -291,13 +296,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
 		//Hasthable pour les quotas des masters
-		Hashtable<String, Integer> lesQuotas = new Hashtable<String, Integer>();
+	
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",7);
+				lineSplit = lineRead.split(";",8);
 				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){  
@@ -316,6 +321,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					case 6 : quota = Integer.parseInt(lineSplit[6]);
 					break;
+					case 7 : seuilScore = Integer.parseInt(lineSplit[7]);
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
@@ -339,8 +345,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 					ne=NiveauEtude.master;
 				}
 				//Gestion des quotas
-				if(!lesQuotas.containsKey(numDip)){
-					lesQuotas.put(numDip, quota);
+				if(!quotaDiplome.containsKey(numDip)){
+					quotaDiplome.put(numDip, quota);
+				}
+				if (!seuilScoreDiplome.containsKey(numDip)){
+					seuilScoreDiplome.put(numDip, seuilScore);
 				}
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;
@@ -349,7 +358,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}
 			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
-			quotaDiplome = lesQuotas;
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -584,4 +592,39 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		}
 	}
+
+
+	/**
+	 * @return the quotaDiplome
+	 */
+	public static Hashtable<String, Integer> getQuotaDiplome() {
+		return quotaDiplome;
+	}
+
+
+	/**
+	 * @param quotaDiplome the quotaDiplome to set
+	 */
+	public static void setQuotaDiplome(Hashtable<String, Integer> quotaDiplome) {
+		IUniversiteImpl.quotaDiplome = quotaDiplome;
+	}
+
+
+	/**
+	 * @return the seuilScoreDiplome
+	 */
+	public static Hashtable<String, Integer> getSeuilScoreDiplome() {
+		return seuilScoreDiplome;
+	}
+
+
+	/**
+	 * @param seuilScoreDiplome the seuilScoreDiplome to set
+	 */
+	public static void setSeuilScoreDiplome(
+			Hashtable<String, Integer> seuilScoreDiplome) {
+		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
+	}
+	
+	
 }
