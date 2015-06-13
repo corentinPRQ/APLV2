@@ -93,7 +93,10 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		jb_Enregistrer = new javax.swing.JButton();
 		jb_Supprimer = new javax.swing.JButton();
 		jb_Annuler = new javax.swing.JButton();
-
+		
+		
+		pack();
+	}// </editor-fold>                        
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -543,5 +546,8 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	private javax.swing.JTable jt_Prerequis;
 	private javax.swing.JTextField jt_quota;
 	private javax.swing.JTextField jt_score;
+
+	private javax.swing.JTable jt_Prerequis;
+
 	// End of variables declaration                   
 }

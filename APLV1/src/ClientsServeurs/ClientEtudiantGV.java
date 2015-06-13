@@ -106,6 +106,10 @@ public class ClientEtudiantGV implements Runnable{
 		return ClientEtudiantGV.monGestionVoeu.getListeAccreditations();
 	}
 	
+	public Accred[] getListeAccreditationExternes(){
+		return ClientEtudiantGV.monGestionVoeu.getListeAccreditationExternes();
+	}
+	
 	public boolean identifier(String login, String mdp) throws EtudiantNonTrouve{
 		System.out.println(login + " - " +mdp );
 		
