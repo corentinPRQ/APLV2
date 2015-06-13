@@ -87,7 +87,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.nomObj = nomObj;
 
 		// méthode appelée par l'universitaire pour consulter les voeux
-		String idObj = ApplicationUniversite.getIdentiteUniversite().idR.nomAcademie + "_Gestion";
+		String idObj = ApplicationUniversite.getIdentiteUniversite().idR.nomAcademie + "_GestionVoeux";
 		cugv = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
 
 	}
