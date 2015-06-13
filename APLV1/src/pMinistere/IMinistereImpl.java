@@ -15,7 +15,7 @@ public class IMinistereImpl extends IMinisterePOA {
 		referenciel = new ArrayList<Diplome>();
 		rectorats = new ArrayList<String>();
 		initialiserReferenciel("src/formations.csv");
-		initialiserRectorats("src/rectorats.csv");
+		initialiserRectorats("src/rectoratsTest.csv");
 	}
 
 	@Override
@@ -33,10 +33,11 @@ public class IMinistereImpl extends IMinisterePOA {
 
 	@Override
 	public String[] getRectorats() {
+		System.out.println("GET LES RECTORATS");
 		String[] rect = new String[rectorats.size()];
 		for (int i=0; i<rectorats.size(); i++){
 			rect[i] = rectorats.get(i);
-			System.out.println(rect[i]);
+			System.out.println("Académie : " + rect[i]);
 		}
 		return (rect);
 	}
@@ -93,7 +94,7 @@ public class IMinistereImpl extends IMinisterePOA {
 				idRectorat = lineRead;
 				rectorats.add(idRectorat);
 			}
-
+			System.out.println("Taille de la liste de rectorats : " + rectorats.size());
 		}catch (Exception e){
 			e.printStackTrace();
 		}
