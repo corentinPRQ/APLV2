@@ -40,6 +40,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static String nomObj;
 	
 	private static ArrayList<String> mesRectorats;
+	// nom/ior
 	private static Hashtable<String, String> mesUniversites;
 	
 	//Voeux en fonction du numéro d'étudiant
@@ -203,16 +204,19 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * Validation des voeux en fonction des préqueris
 	 * @param v
 	 * @throws VoeuNonTrouve
+	 * @throws EtudiantNonTrouve 
 	 */
-	private void validerVoeu(Voeu v) throws VoeuNonTrouve {
+	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
 		ClientGestionVoeuxUniversite cu = new ClientGestionVoeuxUniversite(orb,
 				nameRoot, nomObj, idObj);
 
 		boolean prerequisOK = false;
+		//On récupère les accred pour un diplome
 		String dipV = v.acreditation.libelleD;
 		Diplome[] pr = cu.getListePrerequis(dipV);
-		String formaEtu = "L3 Miage"; // TODO récupérer la formation du mec
+		//On récupère le diplome de l'étudiant qui a fait le voeu
+		String formaEtu = getUtilisateur(v.noE).formation.libelleD;
 		for (int i = 0; i < pr.length; i++) {
 			if (pr[i].libelle.equals(formaEtu)) {
 				prerequisOK = true;
