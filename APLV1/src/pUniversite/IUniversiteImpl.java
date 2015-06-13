@@ -42,7 +42,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ
+	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ. En fait ya quoi dedans et c'est chargé quand ?
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -76,7 +76,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.scoreEtu=new Hashtable<String, Integer>();
 		
 		// initialisation des fichiers
-		preRequis = new Hashtable<String, Diplome[]>();
+		this.preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
 		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
 
@@ -454,7 +454,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		try {
 			this.etablirListe();
 		} catch (voeuNonTrouve e) {
-			// TODO Auto-generated catch block
+			System.err.println("Le voeu ne peut pas être ajouté à une liste car il n'est pas dans la liste des candidatures");
 			e.printStackTrace();
 		}
 
@@ -466,7 +466,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
-		listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
@@ -483,6 +482,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
+	
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
@@ -510,7 +510,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private void etablirScore(){
 		//TODO récupérer l'université de l'étudiant
 		//TODO Récupérer ses notes avec un appel distant de son université
-		scoreEtu=new Hashtable<String, Integer>();
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
@@ -612,17 +611,42 @@ public class IUniversiteImpl extends IUniversitePOA{
 			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
 			//On récupère le quota défini par l'universitaire concernant le diplome
 			int quota = quotaDiplome.get(dipTmp);
-			//Tant qu'il y a de la place pour la promo, on rempli la liste principale
-			//sachant que le voeux sont déjà triés par ordre de pertinance
-			for (int i=0; i <quota && i<listeVoeuxTmp.size(); i++){
+			//Tant qu'il y a de la place pour la promo ET que le score de l'étudiant est conforme au pré-requis,
+			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
+			int i=0;
+			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
+				//TODO appel à setEtatVoeu
+				i++;
 			}
-			//S'il y a plus de voeux de que places dispo, on met en liste secondaire
+			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
 			if(listeVoeuxTmp.size()>=quota){
-				for (int j=quota; j<listeVoeuxTmp.size(); j++){
-					ajouterListeComplementaire(listeVoeuxTmp.get(j));
+				int cptV=quota;
+				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
+				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
+					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
+					//TODO appel à setEtatVoeu
+					cptV++;
+				}
+				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
+				if(cptV<listeVoeuxTmp.size()){
+					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
+						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
+						//TODO appel à setEtatVoeu
+					}
+				}
+			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
+				while(i<listeVoeuxTmp.size()){
+					ajouterListeRejet(listeVoeuxTmp.get(i));
+					//TODO appel à setEtatVoeu
+					i++;
 				}
 			}
+			
+			/*******************************************************************************
+			 * REGLE METIER : on ne tient pas compte du nombre d'élèves dans le promotion  *
+			 * s'il n'y a qu'un élève qui a le bon score, il sera le premier de la classe  *
+			 *******************************************************************************/
 
 		}
 	}
