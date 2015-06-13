@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
@@ -27,6 +30,8 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	private static ClientEtudiantGV clientEtuGV;
 	private static IHM_Etudiant parent;
 	private Accred[] lesAccred;
+	private Accred [] lesAccredExternes;
+	private Hashtable<String, ArrayList<String>> regroupementAccred ;
 	private String idRectorat;
 
 	/**
@@ -36,12 +41,52 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		parent = pParent;
 		clientEtuGV = pClientEtuGV;
 		lesAccred = ConnexionEtudiant.clientEtuGV.getListeAccreditation();
+		lesAccredExternes= ConnexionEtudiant.clientEtuGV.getListeAccreditationExternes();
 		idRectorat=ConnexionEtudiant.clientEtuGV.getIdRectorat();
+		regroupementAccred=new Hashtable<String,ArrayList<String>>();
 		initComponents();
+		this.regrouperAccred();
 		this.chargerLesDiplomes();
 		
 	}
-
+	
+	//Fonction permettant de scinder les deux listes d'accreditations dans une hashtable en vue du remplissage des listes 
+	private void regrouperAccred(){
+		//Premier Element de la liste : On instancie l'arraylist des université et on put le premier diplome avec son université
+		
+		ArrayList<String> lesUniv = new ArrayList<String>();
+		lesUniv.add(lesAccred[0].libelleU);
+		regroupementAccred.put(lesAccred[0].libelleD,lesUniv);
+		
+		//La boucle va maintenant parcourir l'ensemble des accreditations internes dans la hashtable
+		for(int i=1;i<lesAccred.length;i++){
+			//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
+			if(regroupementAccred.containsKey(lesAccred[i].libelleD)){
+				regroupementAccred.get(lesAccred[i].libelleD).add(lesAccred[i].libelleU);
+			}else{
+				//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
+				lesUniv = new ArrayList<String>();
+				lesUniv.add(lesAccred[i].libelleU);
+				regroupementAccred.put(lesAccred[i].libelleD,lesUniv);
+			}
+		}
+		
+		for(int i=0;i<lesAccredExternes.length;i++){
+			//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
+			if(regroupementAccred.containsKey(lesAccredExternes[i].libelleD)){
+				regroupementAccred.get(lesAccredExternes[i].libelleD).add(lesAccredExternes[i].libelleU);
+			}else{
+				//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
+				lesUniv = new ArrayList<String>();
+				lesUniv.add(lesAccredExternes[i].libelleU);
+				regroupementAccred.put(lesAccredExternes[i].libelleD,lesUniv);
+			}
+		}
+		
+	
+	}
+		
+	
 	private void chargerLesDiplomes() {
 		// TODO Auto-generated method stub
 		int itemCount = cb_diplome.getItemCount();
@@ -49,13 +94,34 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	    for(int i=0;i<itemCount;i++){
 	        cb_diplome.removeItemAt(0);
 	     }
+	    
+	    /*
+	    Obtenir les valeurs dans un énumérateur
+	    */
+	  Enumeration e = regroupementAccred.keys();
+	   
+	  //Parourir et afficher les valeurs
+	  while(e.hasMoreElements())
+		  cb_diplome.addItem(e.nextElement().toString());
+	  
+	 }
+	  
+	    
+	    
+	    
+	   /*
+	    //Remplissage de la jcombobox avec la premiere liste d'accreditation (les internes au rectorat)
 		cb_diplome.addItem(lesAccred[0].libelleD);
 		for (int i = 1; i < lesAccred.length-1; i++) {
-			if(!lesAccred[i-1].libelleD.equals(lesAccred[1].libelleD)){
+			if(!lesAccred[i-1].libelleD.equals(lesAccred[i].libelleD)){
 				cb_diplome.addItem(lesAccred[i].libelleD);
 			}
-		}
-	}
+		}*/
+		
+		
+	
+	
+	
 	
 	private String getNoAccred(){
 		boolean trouve =false;
@@ -81,10 +147,9 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	    for(int i=0;i<itemCount;i++){
 	        cb_universite.removeItemAt(0);
 	     }
-		for(int i=0;i< lesAccred.length;i++){
-			if(cb_diplome.getSelectedItem().toString().equals(lesAccred[i].libelleD)){
-				cb_universite.addItem(lesAccred[i].libelleU);
-			}
+	    
+		for(int i=0;i< regroupementAccred.get(cb_diplome.getSelectedItem().toString()).size();i++){
+				cb_universite.addItem(regroupementAccred.get(cb_diplome.getSelectedItem().toString()).get(i));
 		}
 		
 	}
@@ -206,6 +271,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+    	this.dispose();
     	this.setVisible(false);
     }                                          
 
@@ -214,12 +280,9 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }                                             
 
     private void cb_diplomeActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        this.chargerUniversité();
+       this.chargerUniversité();
     }  
     
-  
-    
-
     /**
      * @param args the command line arguments
      */
