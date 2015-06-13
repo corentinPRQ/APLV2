@@ -122,7 +122,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				
 				int iterateurAccredRecup=0;
 				//Boucle permettant de remplir l'arraylistTemporaire qui recense l'ensemble des accreditation récupérées
-				for(int y=tailleArrayAccred;y<tempAccredRecupExterieur.length;y++){
+				for(int y=tailleArrayAccred;y<tailleArrayAccred+tempAccredRecupExterieur.length;y++){
 					tempAccred.add(tempAccredRecupExterieur[iterateurAccredRecup]);
 					iterateurAccredRecup++;
 				}
