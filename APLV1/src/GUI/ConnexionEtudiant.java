@@ -129,14 +129,14 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
     	if (ConnexionEtudiant.clientEtuGV.identifier(this.tf_numEtu.getText(),this.tf_mdp.getText()))
     	{
     		this.setVisible(false);
-    		this.parent.setVisible(true);
-    		this.parent.setEnabled(true);
+    		ConnexionEtudiant.parent.setVisible(true);
+    		ConnexionEtudiant.parent.setEnabled(true);
     		Etudiant etu = ConnexionEtudiant.clientEtuGV.getEtudiant(this.tf_numEtu.getText());
-    		this.parent.utilisateur=etu;
-    		this.parent.setLb_nomEtud(this.parent.utilisateur.nom);
+    		ConnexionEtudiant.parent.utilisateur=etu;
+    		ConnexionEtudiant.parent.setLb_nomEtud(ConnexionEtudiant.parent.utilisateur.nom);
     		Voeu[] lesvoeux=ConnexionEtudiant.clientEtuGV.consulterListeVoeux(etu);
-    		this.parent.setEtu(etu);
-    		this.parent.remplirTableVoeu(lesvoeux);
+    		IHM_Etudiant.setEtu(etu);
+    		ConnexionEtudiant.parent.remplirTableVoeu(lesvoeux);
     	
     		
     	}
