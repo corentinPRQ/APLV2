@@ -616,7 +616,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
 			//s'il n'est pas cette université, il faut demander ses notes à la sienne
 			//On regarde si on a déjà un client pour cette université sinon on en crée un
-			if(listeClientsUniv.contains(etuTmp.formation.libelleU)){
+			if(listeClientsUniv.containsKey(etuTmp.formation.libelleU)){
 				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
 			}else{
 				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU);

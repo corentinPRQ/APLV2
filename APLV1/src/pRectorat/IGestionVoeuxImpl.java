@@ -1,10 +1,7 @@
 package pRectorat;
 
-import java.io.FileNotFoundException;
-
-import utilitaires.utils;
-
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,21 +15,13 @@ import java.util.Properties;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
-import org.omg.CosNaming.NamingContextPackage.CannotProceed;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-import org.omg.PortableServer.POA;
-import org.omg.PortableServer.POAHelper;
-import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
-import org.omg.PortableServer.POAPackage.ServantAlreadyActive;
-import org.omg.PortableServer.POAPackage.ServantNotActive;
-import org.omg.PortableServer.POAPackage.WrongPolicy;
 
-import pMinistere.IMinistereImpl;
+import pUniversite.IUniversite;
+import pUniversite.IUniversiteHelper;
+import utilitaires.utils;
 import Applications.PeriodeApplication;
-import ClientsServeurs.ClientEtudiantGV;
-import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ClientGestionVoeuGV;
-import ClientsServeurs.ClientGestionVoeuxUniversite;
+import ClientsServeurs.ClientGestionVoeuxMinistere;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	private static org.omg.CORBA.ORB orb;
@@ -207,20 +196,20 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
-		ClientGestionVoeuxUniversite cu = new ClientGestionVoeuxUniversite(orb,
-				nameRoot, nomObj, idObj);
-
+		org.omg.CORBA.Object distantObj = orb.string_to_object(mesUniversites.get(v.acreditation.libelleU));
+		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
+		
 		boolean prerequisOK = false;
 		//On récupère les accred pour un diplome
 		String dipV = v.acreditation.libelleD;
-		Diplome[] pr = cu.getListePrerequis(dipV);
+		Diplome[] pr = monUniv.getListePrerequis(dipV);
 		//On récupère le diplome de l'étudiant qui a fait le voeu
 		String formaEtu = getUtilisateur(v.noE).formation.libelleD;
 		for (int i = 0; i < pr.length; i++) {
 			if (pr[i].libelle.equals(formaEtu)) {
 				prerequisOK = true;
+				break;
 			}
-			break;
 		}
 
 		if (prerequisOK) {
