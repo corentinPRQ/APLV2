@@ -36,6 +36,7 @@ public class ClientUniversiteGV implements Runnable{
 		this.nomObj = nomObj;
 		this.idObj = idObj;
 		this.listeDeVoeux = new ArrayList<Voeu>();
+		travailler();
 	}
 	
 	public void travailler(){
@@ -86,7 +87,7 @@ public class ClientUniversiteGV implements Runnable{
 
 			// Construction du nom a enregistrer
 			String nomObj = "Midi-Pyrenees_GVC";
-			ClientGestionVoeuxMinistere cu = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, idObj);
+			ClientUniversiteGV cu = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
 			cu.travailler();
 			
 		} catch (InvalidName e) {
@@ -100,6 +101,23 @@ public class ClientUniversiteGV implements Runnable{
 		travailler();
 	}
 	
+	/**
+	 * Renvoie les accréditations pour une université donnée
+	 * @param nomUniv
+	 * @return
+	 */
+	public Accred[] getListeAccredUniversite(String nomUniv){
+		int cpteur= 0;
+		Accred[] toutesAccreds =  ClientUniversiteGV.monGestionVoeu.getLesAccred();
+		Accred[] monUniversite = new Accred[toutesAccreds.length];
+		for (int i=0; i<toutesAccreds.length; i++) {
+			if(toutesAccreds[i].libelleU.replace(" ", "").equals(nomUniv.trim())){
+				monUniversite[cpteur] = toutesAccreds[i];
+				cpteur++;
+			}
+		}
+		return (monUniversite);
+	}
 	
 
 }
