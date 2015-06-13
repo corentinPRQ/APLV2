@@ -678,7 +678,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public Accred[] getListeAccreditationExternes() {
 		return lesAccredExtern;
-	}
+	} 
 
 	 
 
