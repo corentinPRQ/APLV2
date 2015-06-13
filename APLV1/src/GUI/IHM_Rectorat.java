@@ -7,6 +7,7 @@
 package GUI;
 
 import pRectorat.IGestionVoeuxImpl;
+import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
 
 /**
@@ -16,6 +17,7 @@ import ClientsServeurs.ClientGestionVoeuxMinistere;
 public class IHM_Rectorat extends javax.swing.JFrame {
 
 	public static ClientGestionVoeuxMinistere clientGVM;
+
     /**
      * Creates new form IHM_Rectorat
      */
@@ -86,6 +88,7 @@ public class IHM_Rectorat extends javax.swing.JFrame {
     private void bt_recupAccredActionPerformed(java.awt.event.ActionEvent evt) {                                               
         IGestionVoeuxImpl.setMesRectorats(IHM_Rectorat.clientGVM.recupererRectorat());
         System.out.println("Taille de la liste des rectorats : " + IGestionVoeuxImpl.getMesRectorats().size());
+        IGestionVoeuxImpl.setMesAccredExternes(IGestionVoeuxImpl.getLesAccredExterne());
     }                                              
 
     /**
