@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Collections;
 import java.util.Properties;
 
+import org.apache.xerces.utils.Hash2intTable;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
@@ -29,11 +30,19 @@ import ClientsServeurs.ClientUniversiteGV;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
+	/**
+	 * Nom de l'université (pour récupération des bons fichiers).
+	 */
+	private String nomUniversite;
+	//pour un diplome, les diplomes acceptés pour postuler. Etabli par l'universitaire
 	private static Hashtable<String, Diplome[]> preRequis;
+	//nombre de places disponibles pour une formation dans l'université
 	private static Hashtable<String, Integer> quotaDiplome;
-	
+	//le score minimum pour être potentiellement accepté. Etabli par l'universitaire
+	private static Hashtable<String, Integer> seuilScoreDiplome;
+	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires;
+	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ. En fait ya quoi dedans et c'est chargé quand ?
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -43,27 +52,33 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
 	private static String nomObj;
-	
-	// pour les pré-requisV2
+
+	// accréditations de l'université
 	private static Accred[] listeAccred;
-	//key : libelle diplome, voeux demandant un diplome
+	//key : libelle diplome, voeux demandant le diplome
 	private Hashtable<String,ArrayList<Voeu>> listeVoeuxDiplome;
-	
+
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
-		
+
 		//initialisation des listes 
 		this.listeCandidatures = new ArrayList<Voeu>();
 		this.listePrincipale = new ArrayList<Voeu>();
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
+		this.quotaDiplome = new Hashtable<String, Integer>();
+		this.seuilScoreDiplome = new Hashtable<String, Integer>();
+		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
+		this.scoreEtu=new Hashtable<String, Integer>();
+		
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
-		initialiserPrerequis("src/PS_prerequis.csv");
+		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
+		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -73,6 +88,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
+		
+		
 	}
 
 
@@ -259,7 +276,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 	}
 
-	
+
 	/**
 	 * Permet de charger les formations pré-requis
 	 * @param path
@@ -277,9 +294,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDip = "";
 		String numDipPR="";
 		String nomDipPR="";
-		float moyFR = 0f;
-		float moyMat = 0f;
-		float moyEn= 0f;
+		int quota =0;
+		int seuilScore=0;
 
 		//variable comptant le nombre de lignes du fichier par diplome
 		int cpteur = 0;
@@ -288,12 +304,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[10];
 
+		//Hasthable pour les quotas des masters
+	
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",9);
+				lineSplit = lineRead.split(";",8);
 				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){  
@@ -310,23 +328,22 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					case 5 : nomDipPR = lineSplit[5];
 					break;
-					case 6 : moyFR = Float.parseFloat(lineSplit[6]);
+					case 6 : quota = Integer.parseInt(lineSplit[6]);
 					break;
-					case 7 : moyMat = Float.parseFloat(lineSplit[7]);
-					break;
-					case 8 : moyEn = Float.parseFloat(lineSplit[8]);
+					case 7 : seuilScore = Integer.parseInt(lineSplit[7]);
 					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
 				}
-				//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
+				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!numDip.equals(numDipPrecedent)){
 					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
+
 				}
 				numDipPrecedent = numDip;
 				nomDipPrecedent = nomDip;
@@ -337,6 +354,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 				else{ 
 					ne=NiveauEtude.master;
 				}
+				//Gestion des quotas
+				if(!quotaDiplome.containsKey(nomDip)){
+					quotaDiplome.put(nomDip, quota);
+				}
+				if (!seuilScoreDiplome.containsKey(nomDip)){
+					seuilScoreDiplome.put(nomDip, seuilScore);
+				}
 				Diplome d = new Diplome(nomDipPR, ne);
 				diplomes[cpteur] = d;
 				cpteur++;
@@ -344,7 +368,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}
 			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
-
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -402,10 +425,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 
-		
-		
 
-	
+
+
+
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));
@@ -428,10 +451,19 @@ public class IUniversiteImpl extends IUniversitePOA{
 	public void verifCandidature(Voeu[] tabVoeux) {
 		this.remplirVoeuxDip(tabVoeux);
 		this.ordonnerVoeuxDip();
-		this.etablirListe();
-		
+		try {
+			this.etablirListe();
+		} catch (voeuNonTrouve e) {
+			System.err.println("Le voeu ne peut pas être ajouté à une liste car il n'est pas dans la liste des candidatures");
+			e.printStackTrace();
+		}
+
 	}
-	
+
+	/**
+	 * permet de remplir la hashtable diplome/liste voeux pour ce diplome
+	 * @param tabVoeux
+	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		//on charge les voeux dans le tableau des candidatures
@@ -450,12 +482,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
+	
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
 	private void ordonnerVoeuxDip(){
 		this.etablirScore();
-		//classer les voeux par diplome et par score dans listeVoeuxDiplome
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
 		while(listeVoeuxDiplome.keys().hasMoreElements()){
@@ -467,11 +499,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxTmp = triBulle(tabVoeuxTmp);
 			//On remplace l'ancien tableau par le tableau trié
 			listeVoeuxDiplome.put(dip, tabVoeuxTmp);
-			
+
 		}
 	}
-	
-/**
+
+	/**
 	 * Etablie le score de l'étudiant en fonction de sa position et de sa période de validité du semestre
 	 * Remplie la hashtable numEtu, son score
 	 */
@@ -493,9 +525,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 			score = (moyPos+moyValid)/6;
 			scoreEtu.put(numEtuTmp, score);
 		}
-	
+
 	}
-	
+
+	/**
+	 * Donne un nombre de point pour établir le score en fonction de la position de l'étudiant par rappor à sa promo
+	 * @param n
+	 * @return
+	 */
 	private static int testPos(Note n){
 		int pos = n.position;
 		int score = 0;
@@ -508,10 +545,15 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}else if (pos == 4){
 			score = 1;
 		}
-		
+
 		return score;
 	}
-	
+
+	/**
+	 * Donne un nombre de points en fonction de la période de validation du semestre (session1, 2 ou redoublement)
+	 * @param n
+	 * @return
+	 */
 	private static int testValid(Note n){
 		int score = 0;
 		String valid = n.validation;
@@ -524,40 +566,123 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 		return score;
 	}
-	
-public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV)
-	{
-	    int longueur=tabV.size();
-	    boolean permut;
-	 
-	    do
-	    {
-	        // hypothèse : le tableau est trié
-	        permut=false;
-	        for (int i=0 ; i<longueur-1 ; i++)
-	        {
-	            // Teste si 2 éléments successifs sont dans le bon ordre ou non
-	        	// En fonction du score de l'étudiant qui a fait le voeu
-	            if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
-	            {
-	                // s'ils ne le sont pas on échange leurs positions
-	                Voeu voeuPermut = tabV.get(i);
-	                tabV.add(i, tabV.get(i+1));
-	                tabV.add(i+1, voeuPermut);
-	                permut=true;
-	            }
-	        }
-	    }
-	    while(permut);
-	    
-	    return tabV;
-	}
-	
+
 	/**
-	 * Permet d'établir les premières listes en fonction des prérequis
+	 * effectue un tri des voeux par diplome en fonction du score
+	 * @param tabV
+	 * @return
 	 */
-	private void etablirListe(){
-		
-		
+	public ArrayList<Voeu> triBulle(ArrayList<Voeu> tabV){
+		int longueur=tabV.size();
+		boolean permut;
+
+		do
+		{
+			// hypothèse : le tableau est trié
+			permut=false;
+			for (int i=0 ; i<longueur-1 ; i++)
+			{
+				// Teste si 2 éléments successifs sont dans le bon ordre ou non
+				// En fonction du score de l'étudiant qui a fait le voeu
+				if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
+				{
+					// s'ils ne le sont pas on échange leurs positions
+					Voeu voeuPermut = tabV.get(i);
+					tabV.add(i, tabV.get(i+1));
+					tabV.add(i+1, voeuPermut);
+					permut=true;
+				}
+			}
+		}
+		while(permut);
+
+		return tabV;
 	}
+
+	/**
+	 * Permet d'établir les premières listes en fonction des quotas et score
+	 * @throws voeuNonTrouve 
+	 */
+	private void etablirListe() throws voeuNonTrouve{
+		//On parcourt la hashtable diplome/voeux
+		while(listeVoeuxDiplome.keys().hasMoreElements()){
+			String dipTmp = listeVoeuxDiplome.keys().nextElement();
+			//On récupère les voeux sur ce diplome
+			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
+			//On récupère le quota défini par l'universitaire concernant le diplome
+			int quota = quotaDiplome.get(dipTmp);
+			//Tant qu'il y a de la place pour la promo ET que le score de l'étudiant est conforme au pré-requis,
+			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
+			int i=0;
+			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
+				ajouterListePrincipale(listeVoeuxTmp.get(i));
+				//TODO appel à setEtatVoeu
+				i++;
+			}
+			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
+			if(listeVoeuxTmp.size()>=quota){
+				int cptV=quota;
+				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
+				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
+					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
+					//TODO appel à setEtatVoeu
+					cptV++;
+				}
+				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
+				if(cptV<listeVoeuxTmp.size()){
+					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
+						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
+						//TODO appel à setEtatVoeu
+					}
+				}
+			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
+				while(i<listeVoeuxTmp.size()){
+					ajouterListeRejet(listeVoeuxTmp.get(i));
+					//TODO appel à setEtatVoeu
+					i++;
+				}
+			}
+			
+			/*******************************************************************************
+			 * REGLE METIER : on ne tient pas compte du nombre d'élèves dans le promotion  *
+			 * s'il n'y a qu'un élève qui a le bon score, il sera le premier de la classe  *
+			 *******************************************************************************/
+
+		}
+	}
+
+
+	/**
+	 * @return the quotaDiplome
+	 */
+	public static Hashtable<String, Integer> getQuotaDiplome() {
+		return quotaDiplome;
+	}
+
+
+	/**
+	 * @param quotaDiplome the quotaDiplome to set
+	 */
+	public static void setQuotaDiplome(Hashtable<String, Integer> quotaDiplome) {
+		IUniversiteImpl.quotaDiplome = quotaDiplome;
+	}
+
+
+	/**
+	 * @return the seuilScoreDiplome
+	 */
+	public static Hashtable<String, Integer> getSeuilScoreDiplome() {
+		return seuilScoreDiplome;
+	}
+
+
+	/**
+	 * @param seuilScoreDiplome the seuilScoreDiplome to set
+	 */
+	public static void setSeuilScoreDiplome(
+			Hashtable<String, Integer> seuilScoreDiplome) {
+		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
+	}
+	
+	
 }
