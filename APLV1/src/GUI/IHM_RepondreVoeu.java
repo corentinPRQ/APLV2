@@ -181,7 +181,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      * @param evt
      */
     private void btnOuiActionPerformed(java.awt.event.ActionEvent evt) {
-        clientEtuGV.repondreProposition(DecisionEtudiant.oui, voeuAffiche);
+    	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.oui, voeuAffiche);
     }
     
     /**
@@ -189,7 +189,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      * @param evt
      */
     private void btnOuiMaisActionPerformed(java.awt.event.ActionEvent evt) {
-        clientEtuGV.repondreProposition(DecisionEtudiant.oui_mais, voeuAffiche);
+    	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.oui_mais, voeuAffiche);
     }
     
     /**
@@ -197,7 +197,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      * @param evt
      */
     private void btnNonActionPerformed(java.awt.event.ActionEvent evt) {
-        clientEtuGV.repondreProposition(DecisionEtudiant.non, voeuAffiche);
+        IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.non, voeuAffiche);
     }
     
     /**
@@ -205,7 +205,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      * @param evt
      */
     private void btnNonMaisActionPerformed(java.awt.event.ActionEvent evt) {
-        clientEtuGV.repondreProposition(DecisionEtudiant.non_mais, voeuAffiche);
+    	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.non_mais, voeuAffiche);
     }
     
     private void btnRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOuiActionPerformed
