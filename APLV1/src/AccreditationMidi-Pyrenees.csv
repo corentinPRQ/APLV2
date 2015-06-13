@@ -1,6 +1,6 @@
 NoAccred;Formation;NomUniversite
-1;M1Miage;Paul Sabatier
-2;M1Miage;Capitole
+1;M1 Miage;Paul Sabatier
+2;M1 Miage;Capitole
 3;M1 Informatique;Paul Sabatier
 4;M1 Informatique Statistiques;Paul Sabatier
 5;M1 Informatique Santé;Paul Sabatier
@@ -13,3 +13,14 @@ NoAccred;Formation;NomUniversite
 12;M1 Statistiques;Paul Sabatier
 13;M1 Langues Etrangeres;Capitole
 14;M1 Relations internationnale;Capitole
+15;L3 Miage;Paul Sabatier
+16;L3 Miage;Capitole
+17;L3 Informatique;Paul Sabatier
+18;L3 Informatique Statistiques;Paul Sabatier
+19;L3 STAPS;Paul Sabatier
+20;L3 Chimie;Paul Sabatier
+21;L3 Phisique;Paul Sabatier
+22;L3 Statistiques;Paul Sabatier
+23;L3 Economie;Capitole
+24;L3 Droit;Capitole
+25;M1 Suceur de bites;Paul Sabatier
