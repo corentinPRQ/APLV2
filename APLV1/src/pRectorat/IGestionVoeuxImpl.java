@@ -72,7 +72,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		
 		mesRectorats = getLesRectorats();
-		//lesAccredExtern=getLesAccredExterne();
 		initialiserEtudiants("src/usersEtu"+pidRectorat+".csv");
 		initialiserAccred("src/Accreditation"+pidRectorat+".csv");
 	}
@@ -132,9 +131,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				tempAccredRecupExterieur=ce.getListeAccreditation();
 				int tailleArrayAccred = tempAccred.size();
 				
+				int iterateurAccredRecup=0;
 				//Boucle permettant de remplir l'arraylistTemporaire qui recense l'ensemble des accreditation récupérées
 				for(int y=tailleArrayAccred;y<tempAccredRecupExterieur.length;y++){
-					int iterateurAccredRecup=0;
 					tempAccred.add(tempAccredRecupExterieur[iterateurAccredRecup]);
 					iterateurAccredRecup++;
 				}
@@ -585,10 +584,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 
-	@Override
-	public Accred[] getLesAccred() {
-		return lesAccredIntern;
-	}
 
 	
 	public ArrayList<String> getLesRectorats(){
@@ -690,6 +685,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//
 	// }
 }
+
+	@Override
+	public Accred[] getListeAccreditationExternes() {
+		return lesAccredExtern;
+	}
 
 	 
 

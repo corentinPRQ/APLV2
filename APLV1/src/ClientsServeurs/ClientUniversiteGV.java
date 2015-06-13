@@ -113,7 +113,7 @@ public class ClientUniversiteGV implements Runnable{
 	 */
 	public Accred[] getListeAccredUniversite(String nomUniv){
 		int cpteur= 0;
-		Accred[] toutesAccreds =  ClientUniversiteGV.monGestionVoeu.getLesAccred();
+		Accred[] toutesAccreds =  ClientUniversiteGV.monGestionVoeu.getListeAccreditations();
 		Accred[] monUniversite = new Accred[toutesAccreds.length];
 		for (int i=0; i<toutesAccreds.length; i++) {
 			if(toutesAccreds[i].libelleU.replace(" ", "").equals(nomUniv.trim())){
