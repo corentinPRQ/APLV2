@@ -35,15 +35,17 @@ public class IUniversiteImpl extends IUniversitePOA{
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
 	private static Hashtable<String, String> listeUniversitaires;
+	// liste de client d'université. key : intitule univ/ le client
+	private static Hashtable<String, ClientUniversiteUniv> listeClientsUniv;
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
 	private ArrayList<Voeu> listeRefuse;
 	private ArrayList<Voeu> listeCandidatures;
 
-	/*private static org.omg.CORBA.ORB orb;
+	private static org.omg.CORBA.ORB orb;
 	private static NamingContext nameRoot;
-	private static String nomObj;*/
+	private static String nomObj;
 
 	// accréditations de l'université
 	private static Accred[] listeAccred;
@@ -53,9 +55,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
 
-	private String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
 	private ClientUniversiteGV cugv;
-	private ClientUniversiteUniv cuu;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
@@ -70,6 +70,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		IUniversiteImpl.seuilScoreDiplome = new Hashtable<String, Integer>();
 		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		this.scoreEtu=new Hashtable<String, Integer>();
+		IUniversiteImpl.listeClientsUniv = new Hashtable<String, ClientUniversiteUniv>();
 
 		// initialisation des fichiers
 		IUniversiteImpl.preRequis = new Hashtable<String, Diplome[]>();
@@ -81,16 +82,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		IUniversiteImpl.listeUniversitaires = listeU;
 
-		/*this.orb = orb;
+		this.orb = orb;
 		this.nameRoot = nameRoot;
-		this.nomObj = nomObj;*/
+		this.nomObj = nomObj;
 
 		// méthode appelée par l'universitaire pour consulter les voeux
+		String idObj = ApplicationUniversite.getIdentiteUniversite().idR.nomAcademie + "_Gestion";
 		cugv = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
-
-		// méthode appelée par l'universitaire pour récupérer les notes d'un étudiant
-		cuu = new ClientUniversiteUniv(orb, nameRoot, nomObj, idObj);
-
 
 	}
 
@@ -611,11 +609,19 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @throws EtudiantNonTrouve 
 	 */
 	private void chargerNotesEtuExt(String noEtu) throws EtudiantNonTrouve{
+		ClientUniversiteUniv cuu = null;
 		//On récupère l'objet étudiant correspondant à son numéro
 		Etudiant etuTmp = cugv.getEtudiant(noEtu);
 		//On regarde si l'étudiant est de cette université ou d'une autre
 		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
 			//s'il n'est pas cette université, il faut demander ses notes à la sienne
+			//On regarde si on a déjà un client pour cette université sinon on en crée un
+			if(listeClientsUniv.contains(etuTmp.formation.libelleU)){
+				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
+			}else{
+				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU);
+				listeClientsUniv.put(etuTmp.formation.libelleU, cuu);
+			}
 			listeNotesEtudiants.put(noEtu, cuu.getNotes(etuTmp));
 		}
 	}
