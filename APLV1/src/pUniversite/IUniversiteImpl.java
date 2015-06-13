@@ -60,8 +60,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
-	
-	private ClientUniversiteGV cugv;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
@@ -76,11 +74,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		seuilScoreDiplome = new Hashtable<String, Integer>();
 		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		this.scoreEtu=new Hashtable<String, Integer>();
-
+		
 		// initialisation des fichiers
 		this.preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
-		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
+		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -90,13 +88,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
-
-		// méthode appelée par l'universitaire pour consulter les voeux
-		String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
-		cugv = new ClientUniversiteGV(orb,
-				nameRoot, nomObj, idObj);
-
-
+		
+		
 	}
 
 
@@ -312,7 +305,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		Diplome[] diplomes = new Diplome[10];
 
 		//Hasthable pour les quotas des masters
-
+	
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
@@ -489,7 +482,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
-
+	
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
@@ -517,7 +510,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private void etablirScore(){
 		//TODO récupérer l'université de l'étudiant
 		//TODO Récupérer ses notes avec un appel distant de son université
-		//cugv.getUtilisateurs
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
@@ -650,7 +642,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					i++;
 				}
 			}
-
+			
 			/*******************************************************************************
 			 * REGLE METIER : on ne tient pas compte du nombre d'élèves dans le promotion  *
 			 * s'il n'y a qu'un élève qui a le bon score, il sera le premier de la classe  *
@@ -691,6 +683,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			Hashtable<String, Integer> seuilScoreDiplome) {
 		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
 	}
-
-
+	
+	
 }

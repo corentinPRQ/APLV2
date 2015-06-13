@@ -131,7 +131,7 @@ module pRectorat {
 		void enregistrerUniversite(in string ior, in string nom);
 		
 		//Opération permettant de mettre à disposition les accréditations aux autres rectorats
-		TabAccred getLesAccred();
+		TabAccred getListeAccreditationExternes();
 	};
 };
 

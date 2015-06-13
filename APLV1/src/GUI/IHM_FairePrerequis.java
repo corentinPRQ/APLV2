@@ -67,6 +67,21 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
         jt_quota = new javax.swing.JTextField();
         jt_score = new javax.swing.JTextField();
 
+		jPanel1 = new javax.swing.JPanel();
+		jl_Titre = new javax.swing.JLabel();
+		jPanel2 = new javax.swing.JPanel();
+		jcb_Master = new javax.swing.JComboBox();
+		jl_MAster = new javax.swing.JLabel();
+		jcb_Licence = new javax.swing.JComboBox();
+		jl_Licence = new javax.swing.JLabel();
+		jb_Ajouter = new javax.swing.JButton();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		jt_Prerequis = new javax.swing.JTable();
+		jb_Enregistrer = new javax.swing.JButton();
+		jb_Supprimer = new javax.swing.JButton();
+		jButton2 = new javax.swing.JButton();
+
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jl_Titre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -271,7 +286,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
         pack();
     }// </editor-fold>     
 	private void jb_AjouterActionPerformed(java.awt.event.ActionEvent evt) {                                           
-		
+		// TODO add your handling code here:
 	}                                          
 
 	private void jcb_LicenceActionPerformed(java.awt.event.ActionEvent evt) {                                            
