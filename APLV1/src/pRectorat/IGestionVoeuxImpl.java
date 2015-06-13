@@ -675,9 +675,14 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	// }
 }
 
-	@Override
 	public Accred[] getListeAccreditationExternes() {
 		return lesAccredExtern;
+	}
+
+	@Override
+	public Accred[] getLesAccred() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	 
