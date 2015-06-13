@@ -288,9 +288,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		String lineRead;
 		String[] lineSplit;
-		String numUniv="";
 		String nomUniv="";
-		String numDip="";
 		String nomDip = "";
 		String numDipPR="";
 		String nomDipPR="";
@@ -311,26 +309,19 @@ public class IUniversiteImpl extends IUniversitePOA{
 			lineRead = br.readLine();
 
 			while ((lineRead = br.readLine()) != null) {
-				lineSplit = lineRead.split(";",8);
+				lineSplit = lineRead.split(";",5);
 				//				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){  
-					case 0 : numUniv = lineSplit[0];
+					case 0 : nomUniv = lineSplit[0];
 					break;
-					case 1 : nomUniv = lineSplit[1];
+					case 1 : nomDip = lineSplit[1];
 					break;
-					case 2 : numDip = lineSplit[2];
+					case 2 : nomDipPR = lineSplit[2];
 					break;
-					case 3 : nomDip = lineSplit[3];
-					System.out.println(nomDip);
+					case 3 : quota = Integer.parseInt(lineSplit[3]);
 					break;
-					case 4 : numDipPR = lineSplit[4];
-					break;
-					case 5 : nomDipPR = lineSplit[5];
-					break;
-					case 6 : quota = Integer.parseInt(lineSplit[6]);
-					break;
-					case 7 : seuilScore = Integer.parseInt(lineSplit[7]);
+					case 4 : seuilScore = Integer.parseInt(lineSplit[4]);
 					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
@@ -338,14 +329,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 				}
 				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
-				if (!numDip.equals(numDipPrecedent)){
+				if (!nomDip.equals(nomDipPrecedent)){
 					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
 					diplomes = new Diplome[10];
 					cpteur = 0;
 
 				}
-				numDipPrecedent = numDip;
 				nomDipPrecedent = nomDip;
 				//				System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
 				if (nomDipPR.contains("L3")){
