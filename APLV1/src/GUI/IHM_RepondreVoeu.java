@@ -59,7 +59,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
         setMeilleurVoeu();
         textFielMeilleurVoeu.setEnabled(false);
         if(voeuAffiche!=null){
-        	textFielMeilleurVoeu.setText(voeuAffiche.getAcreditation().libelleD + " à "+voeuAffiche.getAcreditation().libelleU);
+        	textFielMeilleurVoeu.setText(voeuAffiche.acreditation.libelleD + " à "+voeuAffiche.acreditation.libelleU);
         }else{
         	textFielMeilleurVoeu.setText("Aucun voeu n'est disponible pour vous.");
         }
@@ -268,7 +268,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
     private void setMeilleurVoeu(){
     	if(listeVoeux!=null){
     		for (Voeu voeu : listeVoeux) {
-				if(voeu.getEtatVoeu().equals(Etat.liste_principale)){
+				if(voeu.etatVoeu.equals(Etat.liste_principale)){
 					voeuAffiche = voeu;
 				}
     		}
