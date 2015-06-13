@@ -110,12 +110,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		return lesAccredIntern;
 	}
 	
-	public void getLesAccredExterne(){
+	public static Accred[] getLesAccredExterne(){
 		ArrayList<Accred> tempAccred=new ArrayList<Accred>();
 		
 		for(int i=0;i<mesRectorats.size();i++){
 			//Verifie que le rectorat que l'on va appeller n'est pas celui dans lequel on est
-			if(!(mesRectorats.get(i)==this.idRectorat)){
+			if(!mesRectorats.get(i).equals(IGestionVoeuxImpl.idRectorat)){
 				// nom de l'objet 
 				System.out.println("Connexion avec le rectorat "+mesRectorats.get(i)+"_GestionVoeux");
 				//Cas d'une connexion avec un GestionVoeux : 
@@ -124,7 +124,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				String nomObj = "ClientGVGV";
 	
 				System.out.println("lancement du client GV");
-				ClientEtudiantGV ce = new ClientEtudiantGV(orb, nameRoot, nomObj, idObj);
+				ClientGestionVoeuGV ce = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idObj);
 				
 				//Recupération des Accreditation d'un autre rectorat et stockage dans un tableau temporaire
 				Accred[] tempAccredRecupExterieur;
@@ -139,6 +139,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				}
 			}
 		}
+		
+		Accred[] tabARetourner= new Accred[tempAccred.size()];
+		for(int i=0;i<tempAccred.size();i++){
+			tabARetourner[i]=tempAccred.get(i);
+		}
+		return tabARetourner;
 		
 	}
 
@@ -599,6 +605,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public static void setMesRectorats(ArrayList<String> mesRectorats) {
 		IGestionVoeuxImpl.mesRectorats = mesRectorats;
 	}
+	
+	public static void setMesAccredExternes(Accred[] pLesAccredExternes){
+		IGestionVoeuxImpl.lesAccredExtern=pLesAccredExternes;
+	}
 
 	@Override
 	public void enregistrerUniversite(String ior, String nom) {
@@ -619,7 +629,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 public static void main (String [] args) throws EtudiantNonTrouve, InterruptedException, InvalidName{
 	 System.out.println("Debut du test");
 	 
-	//Il faut le faire qu'une fois!!!!!!
+	/*//Il faut le faire qu'une fois!!!!!!
 		System.out.println("init de l'orb");
 		org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(args,null);
 
@@ -636,7 +646,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		// Construction du nom a enregistrer
 		String nomObj = "ClientEtudiantGV";
 
-		System.out.println("lancement du client Etudiant");
+		System.out.println("lancement du client Etudiant");*/
 	 
 	 
 	 IGestionVoeuxImpl igV=new IGestionVoeuxImpl(orb, nameRoot, nomObj,idRectorat);
