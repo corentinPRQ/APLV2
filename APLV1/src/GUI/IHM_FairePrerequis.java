@@ -6,11 +6,17 @@
 
 package GUI;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.swing.JOptionPane;
+
 import pRectorat.Accred;
 import pRectorat.Diplome;
+import pRectorat.NiveauEtude;
 import pUniversite.IUniversiteImpl;
 import Applications.ApplicationUniversite;
 import ClientsServeurs.ClientUniversiteGV;
@@ -25,6 +31,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	private Hashtable<String, Diplome[]> preRequis;
 	private Hashtable<String, Integer> quota;
 	private Hashtable<String, Integer> score;
+	private Accred[] lesAccreds;
 
 	/**
 	 * Creates new form IHM_FairePrerequis
@@ -35,7 +42,13 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		quota = IUniversiteImpl.getQuotaDiplome();
 		score = IUniversiteImpl.getSeuilScoreDiplome();
 		clientUnivGV = client;
-		
+
+		jcb_Master.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jcb_MasterActionPerformed(evt);
+
+			}
+		});
 		chargerLesDiplomes();
 		chargerPrerequisTable();
 	}
@@ -47,25 +60,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	 */
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-	  private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jl_Titre = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jcb_Master = new javax.swing.JComboBox();
-        jl_MAster = new javax.swing.JLabel();
-        jcb_Licence = new javax.swing.JComboBox();
-        jl_Licence = new javax.swing.JLabel();
-        jb_Ajouter = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jt_Prerequis = new javax.swing.JTable();
-        jb_Enregistrer = new javax.swing.JButton();
-        jb_Supprimer = new javax.swing.JButton();
-        jb_Annuler = new javax.swing.JButton();
-        jl_quota = new javax.swing.JLabel();
-        jl_score = new javax.swing.JLabel();
-        jt_quota = new javax.swing.JTextField();
-        jt_score = new javax.swing.JTextField();
+	private void initComponents() {
 
 		jPanel1 = new javax.swing.JPanel();
 		jl_Titre = new javax.swing.JLabel();
@@ -79,234 +74,371 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		jt_Prerequis = new javax.swing.JTable();
 		jb_Enregistrer = new javax.swing.JButton();
 		jb_Supprimer = new javax.swing.JButton();
-		jButton2 = new javax.swing.JButton();
+		jb_Annuler = new javax.swing.JButton();
+		jl_quota = new javax.swing.JLabel();
+		jl_score = new javax.swing.JLabel();
+		jt_quota = new javax.swing.JTextField();
+		jt_score = new javax.swing.JTextField();
+
+		jPanel1 = new javax.swing.JPanel();
+		jl_Titre = new javax.swing.JLabel();
+		jPanel2 = new javax.swing.JPanel();
+		jcb_Master = new javax.swing.JComboBox();
+		jl_MAster = new javax.swing.JLabel();
+		jcb_Licence = new javax.swing.JComboBox();
+		jl_Licence = new javax.swing.JLabel();
+		jb_Ajouter = new javax.swing.JButton();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		jt_Prerequis = new javax.swing.JTable();
+		jb_Enregistrer = new javax.swing.JButton();
+		jb_Supprimer = new javax.swing.JButton();
+		jb_Annuler = new javax.swing.JButton();
 
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jl_Titre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jl_Titre.setText("Etablir des prerequis");
+		jl_Titre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+		jl_Titre.setText("Etablir des prerequis");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
-                .addComponent(jl_Titre)
-                .addGap(35, 35, 35))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jl_Titre)
-                .addContainerGap())
-        );
+		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+		jPanel1.setLayout(jPanel1Layout);
+		jPanel1Layout.setHorizontalGroup(
+				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+						.addContainerGap(64, Short.MAX_VALUE)
+						.addComponent(jl_Titre)
+						.addGap(35, 35, 35))
+				);
+		jPanel1Layout.setVerticalGroup(
+				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(jl_Titre)
+						.addContainerGap())
+				);
 
-        jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcb_Master.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcb_MasterActionPerformed(evt);
-            }
-        });
+		jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jl_MAster.setText("Diplome Presente : ");
+		jl_MAster.setText("Diplome Presente : ");
 
-        jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcb_Licence.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcb_LicenceActionPerformed(evt);
-            }
-        });
+		jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jcb_Licence.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jcb_LicenceActionPerformed(evt);
+			}
+		});
 
-        jl_Licence.setText("Diplome Requis : ");
+		jl_Licence.setText("Diplome Requis : ");
 
-        jb_Ajouter.setText("Ajouter");
-        jb_Ajouter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_AjouterActionPerformed(evt);
-            }
-        });
+		jb_Ajouter.setText("Ajouter");
+		jb_Ajouter.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jb_AjouterActionPerformed(evt);
+			}
+		});
 
-        jt_Prerequis.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Université", "Master", "Licence", "Quota Max", "Score d'entrée"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
+		jt_Prerequis.setModel(new javax.swing.table.DefaultTableModel(
+				new Object [][] {
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null}
+				},
+				new String [] {
+						"Université", "Master", "Licence", "Quota Max", "Score d'entrée"
+				}
+				) {
+			Class[] types = new Class [] {
+					java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+			};
+			boolean[] canEdit = new boolean [] {
+					false, false, false, false, false
+			};
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+			public Class getColumnClass(int columnIndex) {
+				return types [columnIndex];
+			}
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jt_Prerequis);
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit [columnIndex];
+			}
+		});
+		jScrollPane1.setViewportView(jt_Prerequis);
 
-        jb_Enregistrer.setText("Enregistrer");
-        jb_Enregistrer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_EnregistrerActionPerformed(evt);
-            }
-        });
+		jb_Enregistrer.setText("Enregistrer");
+		jb_Enregistrer.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jb_EnregistrerActionPerformed(evt);
+			}
+		});
 
-        jb_Supprimer.setText("Supprimer");
-        jb_Supprimer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_SupprimerActionPerformed(evt);
-            }
-        });
+		jb_Supprimer.setText("Supprimer");
+		jb_Supprimer.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jb_SupprimerActionPerformed(evt);
+			}
+		});
 
-        jb_Annuler.setText("Annuler");
-        jb_Annuler.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_AnnulerActionPerformed(evt);
-            }
-        });
+		jb_Annuler.setText("Annuler");
+		jb_Annuler.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jb_AnnulerActionPerformed(evt);
+			}
+		});
 
-        jl_quota.setText("Nombre de places : ");
+		jl_quota.setText("Nombre de places : ");
 
-        jl_score.setText("Score requis : ");
+		jl_score.setText("Score requis : ");
 
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jb_Ajouter)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jl_Licence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jl_MAster, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(72, 72, 72)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jl_quota)
-                                    .addComponent(jl_score))
-                                .addGap(26, 26, 26)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jt_quota)
-                                    .addComponent(jt_score, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE))))
-                        .addGap(0, 18, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jb_Enregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jb_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jl_MAster)
-                    .addComponent(jl_quota)
-                    .addComponent(jt_quota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jl_Licence)
-                    .addComponent(jl_score)
-                    .addComponent(jt_score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jb_Ajouter, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jb_Enregistrer)
-                    .addComponent(jb_Supprimer)
-                    .addComponent(jb_Annuler)))
-        );
+		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+		jPanel2.setLayout(jPanel2Layout);
+		jPanel2Layout.setHorizontalGroup(
+				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(jPanel2Layout.createSequentialGroup()
+						.addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+						.addContainerGap())
+						.addGroup(jPanel2Layout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(jPanel2Layout.createSequentialGroup()
+												.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+														.addComponent(jb_Ajouter)
+														.addGroup(jPanel2Layout.createSequentialGroup()
+																.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+																		.addComponent(jl_Licence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																		.addComponent(jl_MAster, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+																		.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+																				.addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+																				.addGap(72, 72, 72)
+																				.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																						.addComponent(jl_quota)
+																						.addComponent(jl_score))
+																						.addGap(26, 26, 26)
+																						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+																								.addComponent(jt_quota)
+																								.addComponent(jt_score, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE))))
+																								.addGap(0, 18, Short.MAX_VALUE))
+																								.addGroup(jPanel2Layout.createSequentialGroup()
+																										.addComponent(jb_Enregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+																										.addGap(18, 18, 18)
+																										.addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+																										.addGap(18, 18, 18)
+																										.addComponent(jb_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+																										.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+				);
+		jPanel2Layout.setVerticalGroup(
+				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(jPanel2Layout.createSequentialGroup()
+						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jl_MAster)
+								.addComponent(jl_quota)
+								.addComponent(jt_quota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGap(9, 9, 9)
+								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										.addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(jl_Licence)
+										.addComponent(jl_score)
+										.addComponent(jt_score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+										.addComponent(jb_Ajouter, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGap(24, 24, 24)
+										.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGap(18, 18, Short.MAX_VALUE)
+										.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jb_Enregistrer)
+												.addComponent(jb_Supprimer)
+												.addComponent(jb_Annuler)))
+				);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(110, 110, 110)
+						.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addContainerGap())
+				);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addContainerGap())
+				);
 
-        pack();
-    }// </editor-fold>     
+		pack();
+	}// </editor-fold>     
 	private void jb_AjouterActionPerformed(java.awt.event.ActionEvent evt) {                                           
-		// TODO add your handling code here:
+		// Ajout du prerequis dans la liste
+		if(jt_score.getText().isEmpty() || jt_quota.getText().isEmpty()){
+			JOptionPane.showMessageDialog(this, "L'un des champs n'est pas renseigné.", "Erreur", JOptionPane.ERROR_MESSAGE);
+		}else{
+			if (preRequis.containsKey(jcb_Master.getSelectedItem().toString())){
+				int taille = preRequis.get(jcb_Master.getSelectedItem().toString()).length;
+				//Récupération du tableau existant
+				Diplome[] existant = preRequis.get(jcb_Master.getSelectedItem().toString());
+				//boolean qui définit si le tableau est trop petit pour contenir un nouveau voeu ou si on a déjà ajouté
+				Boolean finParcours = false;
+				for(int i=0; i<taille &&  !finParcours; i++){
+					if(i==(taille-1)){
+						finParcours = true;
+					}else if(!finParcours && existant[i]==null){
+						//On a une case vide et de la place, on ajoute
+						existant[i] =  new Diplome(jcb_Licence.getSelectedItem().toString(), NiveauEtude.licence);
+						//Mise à jour de la table 
+						preRequis.put(jcb_Master.getSelectedItem().toString(), existant);
+						finParcours=true;
+					}
+
+				}
+			}else{
+				//Création d'un tableau pour ce diplome
+				Diplome [] nouveauDip = new Diplome[1];
+				nouveauDip[0] = new Diplome(jcb_Licence.getSelectedItem().toString(), NiveauEtude.licence);
+				//Mise à jour de la table 
+				preRequis.put(jcb_Master.getSelectedItem().toString(), nouveauDip);
+				score.put(jcb_Master.getSelectedItem().toString(), Integer.parseInt(jt_score.getText()));
+				quota.put(jcb_Master.getSelectedItem().toString(), Integer.parseInt(jt_quota.getText()));
+			}
+			chargerPrerequisTable();
+		}
 	}                                          
 
 	private void jcb_LicenceActionPerformed(java.awt.event.ActionEvent evt) {                                            
 		// TODO add your handling code here:
 	}                                           
 
-	private void jcb_MasterActionPerformed(java.awt.event.ActionEvent evt) {                                           
-		// TODO add your handling code here:
+	private void jcb_MasterActionPerformed(java.awt.event.ActionEvent evt) {
+		if(jcb_Master.getSelectedItem()!=null){
+			if(jcb_Master.getSelectedItem().toString().contains("M1")){
+				if(preRequis.containsKey(jcb_Master.getSelectedItem().toString())){
+					jt_quota.setText(quota.get(jcb_Master.getSelectedItem().toString()).toString());
+					jt_quota.setEnabled(false);
+					jt_score.setText(score.get(jcb_Master.getSelectedItem().toString()).toString());
+					jt_score.setEnabled(false);
+				}else{
+					jt_quota.setEnabled(true);
+					jt_score.setEnabled(true);
+				}
+			}
+		}
+
 	}                                          
 
 	private void jb_EnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                               
-		// TODO add your handling code here:
+		//Enregistrement de la liste dans un fichier .CSV (Annule et Remplace du fichier)
+		try {
+			String path = ".\\src\\prerequis"+ApplicationUniversite.getIdentiteUniversite().nomUniv+".csv";
+			BufferedWriter br = new BufferedWriter(new FileWriter(path));
+			StringBuilder sb = new StringBuilder();
+			System.out.println("taille Prerequis : " + preRequis.size());
+			ArrayList<String> lesDiplomes = new ArrayList<String>();
+			lesDiplomes.addAll(preRequis.keySet());
+			String nomUniv = ApplicationUniversite.getIdentiteUniversite().nomUniv;
+
+			//pour chaque clés de la Hashtable
+			for (int i=0; i<lesDiplomes.size(); i++){
+				//on récupère l'intitulé du master, le score et le quota
+				String master = lesDiplomes.get(i);
+				Integer q = quota.get(lesDiplomes.get(i));
+				Integer s = score.get(lesDiplomes.get(i));
+				//pour chaque diplome du tableau correspondant à la clé de la hashtable
+				for (Diplome dip : preRequis.get(lesDiplomes.get(i))) {
+					if (dip!= null){
+						//On créé la ligne à écrire dans le fichier CSV
+						sb.append(nomUniv);
+						sb.append(";");
+						sb.append(master);
+						sb.append(";");
+						sb.append(dip.libelle);
+						sb.append(";");
+						sb.append(q);
+						sb.append(";");
+						sb.append(s);
+						sb.append("\n");
+						br.write(sb.toString());
+					}
+				}
+			}
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}                                              
 
 	private void jb_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		// TODO add your handling code here:
+		this.dispose();
 	}                                        
 
-	private void jb_SupprimerActionPerformed(java.awt.event.ActionEvent evt) {                                             
-		// TODO add your handling code here:
+	private void jb_SupprimerActionPerformed(java.awt.event.ActionEvent evt) {   
+		int ligneSelectionnee = jt_Prerequis.getSelectedRow();
+		//Reconstruction du diplome à supprimer 
+		Diplome aSuppr = new Diplome(jt_Prerequis.getValueAt(ligneSelectionnee, 2).toString(), NiveauEtude.licence);
+		//Récupération du master pour mise à jour hastable
+		String master = jt_Prerequis.getValueAt(ligneSelectionnee, 1).toString();
+		//On cherche dans la map le tableau correspondant à ce master
+		if(preRequis.containsKey(master)){
+			Diplome[] lesLicences = preRequis.get(master);
+			//Création d'un nouveau tableau pour remplacement après effacement.
+			Diplome [] nouveau = new Diplome[lesLicences.length-1];
+			//Pour détecter une fois l'élément à supprimer passé...
+			Boolean supprime = false;
+			for (int i=0; i<lesLicences.length; i++) {
+				if(lesLicences[i]!=null && lesLicences[i].libelle.equals(aSuppr.libelle)){
+					supprime=true;
+				}else{
+					if(supprime){
+						nouveau[i-1]=lesLicences[i];
+					}else{
+						nouveau[i] = lesLicences[i];
+					}
+				}
+			}
+			preRequis.put(master, nouveau);
+		}
+		
+		chargerPrerequisTable();
+		//		int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to Save your Previous Note First?","Warning",dialogButton);
+		//		if(dialogResult == JOptionPane.YES_OPTION){
 	}        
 
 	private void chargerPrerequisTable(){
@@ -314,46 +446,48 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		ArrayList<String> lesDiplomes = new ArrayList<String>();
 		lesDiplomes.addAll(preRequis.keySet());
 		System.out.println("taille DIplomes : " + lesDiplomes.size());
-
+		int compteurDeLicences = 0;
 		for (int i=0; i<lesDiplomes.size();i++){
 
 			for (Diplome dip : preRequis.get(lesDiplomes.get(i))) {
 
 				if(dip !=null){
-					jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, i, 0);
-					jt_Prerequis.setValueAt(lesDiplomes.get(i), i, 1);
-					jt_Prerequis.setValueAt(dip.libelle, i, 2);
-					jt_Prerequis.setValueAt(quota.get(lesDiplomes.get(i)), i, 3);
-					jt_Prerequis.setValueAt(score.get(lesDiplomes.get(i)), i, 4);
+
+					jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, compteurDeLicences, 0);
+					jt_Prerequis.setValueAt(lesDiplomes.get(i), compteurDeLicences, 1);
+					jt_Prerequis.setValueAt(dip.libelle, compteurDeLicences, 2);
+					jt_Prerequis.setValueAt(quota.get(lesDiplomes.get(i)), compteurDeLicences, 3);
+					jt_Prerequis.setValueAt(score.get(lesDiplomes.get(i)), compteurDeLicences, 4);
+					compteurDeLicences++;
 				}
 			}
 		}
 		this.repaint();
 	}
-	
-	
+
+
 	private void chargerLesDiplomes() {
-		Accred[] lesAccreds = clientUnivGV.getListeAccredUniversite(ApplicationUniversite.getIdentiteUniversite().nomUniv);
+		this.lesAccreds = clientUnivGV.getListeAccredUniversite(ApplicationUniversite.getIdentiteUniversite().nomUniv);
 		System.out.println("taille des accreds : " + lesAccreds.length);
 		int compteMaster = jcb_Master.getItemCount();
 		int compteLicence = jcb_Licence.getItemCount();
 		//On vide les listes pour les recharger
-	    for(int i=0;i<compteMaster;i++){
-	    	jcb_Master.removeItemAt(0);
-	     }
-	    for(int i=0;i<compteLicence;i++){
-	    	jcb_Licence.removeItemAt(0);
-	     }
-	    //AJout du premier elt
-	    for (int i = 0; i < lesAccreds.length; i++) {
-	    	if(lesAccreds[i]!=null){
-			    if(lesAccreds[0].libelleD.contains("L3")){
-			    	jcb_Licence.addItem(lesAccreds[i].libelleD);
-			    }else{
-			    	jcb_Master.addItem(lesAccreds[i].libelleD);
-			    }
-	    	}
-	    }
+		for(int i=0;i<compteMaster;i++){
+			jcb_Master.removeItemAt(0);
+		}
+		for(int i=0;i<compteLicence;i++){
+			jcb_Licence.removeItemAt(0);
+		}
+		//AJout du premier elt
+		for (int i = 0; i < lesAccreds.length; i++) {
+			if(lesAccreds[i]!=null){
+				if(lesAccreds[i].libelleD.contains("L3")){
+					jcb_Licence.addItem(lesAccreds[i].libelleD);
+				}else{
+					jcb_Master.addItem(lesAccreds[i].libelleD);
+				}
+			}
+		}
 	}
 
 	/**
@@ -404,10 +538,10 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	private javax.swing.JLabel jl_Licence;
 	private javax.swing.JLabel jl_MAster;
 	private javax.swing.JLabel jl_Titre;
-    private javax.swing.JLabel jl_quota;
-    private javax.swing.JLabel jl_score;
-    private javax.swing.JTable jt_Prerequis;
-    private javax.swing.JTextField jt_quota;
-    private javax.swing.JTextField jt_score;
+	private javax.swing.JLabel jl_quota;
+	private javax.swing.JLabel jl_score;
+	private javax.swing.JTable jt_Prerequis;
+	private javax.swing.JTextField jt_quota;
+	private javax.swing.JTextField jt_score;
 	// End of variables declaration                   
 }
