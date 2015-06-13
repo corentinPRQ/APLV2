@@ -186,7 +186,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_etablirPreRequisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_etablirPreRequisActionPerformed
-        IHM_FairePrerequis ihmFPR = new IHM_FairePrerequis();
+        IHM_FairePrerequis ihmFPR = new IHM_FairePrerequis(clientUnivGV);
         ihmFPR.setVisible(true);
     }//GEN-LAST:event_bt_etablirPreRequisActionPerformed
 

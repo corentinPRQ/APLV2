@@ -1,15 +1,23 @@
 package ClientsServeurs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.JFrame;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
+import pRectorat.DecisionEtudiant;
+import pRectorat.Etat;
+import pRectorat.Etudiant;
+import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
 import pRectorat.Voeu;
+import pRectorat.VoeuNonTrouve;
 
 public class ClientUniversiteGV implements Runnable{
 	
@@ -29,7 +37,7 @@ public class ClientUniversiteGV implements Runnable{
 		this.nomObj = nomObj;
 		this.idObj = idObj;
 		this.listeDeVoeux = new ArrayList<Voeu>();
-    	travailler();
+		travailler();
 	}
 	
 	public void travailler(){
@@ -114,6 +122,14 @@ public class ClientUniversiteGV implements Runnable{
 			}
 		}
 		return (monUniversite);
+	}
+	
+	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
+		return (ClientEtudiantGV.monGestionVoeu.getUtilisateur(numEtudiant));
+	}
+	
+	public void setEtatVoeu(Voeu v, Etat e) {
+		ClientEtudiantGV.monGestionVoeu.setEtatVoeu(v, e);
 	}
 	
 

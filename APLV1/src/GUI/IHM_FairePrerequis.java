@@ -9,15 +9,18 @@ package GUI;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import pRectorat.Accred;
 import pRectorat.Diplome;
 import pUniversite.IUniversiteImpl;
 import Applications.ApplicationUniversite;
+import ClientsServeurs.ClientUniversiteGV;
 
 /**
  *
  * @author Corentin
  */
 public class IHM_FairePrerequis extends javax.swing.JFrame {
+	public static ClientUniversiteGV clientUnivGV;
 
 	private Hashtable<String, Diplome[]> preRequis;
 	private Hashtable<String, Integer> quota;
@@ -26,12 +29,14 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	/**
 	 * Creates new form IHM_FairePrerequis
 	 */
-	public IHM_FairePrerequis() {
+	public IHM_FairePrerequis(ClientUniversiteGV client) {
 		initComponents();
 		preRequis=IUniversiteImpl.getPreRequis();
 		quota = IUniversiteImpl.getQuotaDiplome();
 		score = IUniversiteImpl.getSeuilScoreDiplome();
-
+		clientUnivGV = client;
+		
+		chargerLesDiplomes();
 		chargerPrerequisTable();
 	}
 
@@ -56,7 +61,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		jt_Prerequis = new javax.swing.JTable();
 		jb_Enregistrer = new javax.swing.JButton();
 		jb_Supprimer = new javax.swing.JButton();
-		jButton2 = new javax.swing.JButton();
+		jb_Annuler = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,10 +173,10 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 			}
 		});
 
-		jButton2.setText("Annuler");
-		jButton2.addActionListener(new java.awt.event.ActionListener() {
+		jb_Annuler.setText("Annuler");
+		jb_Annuler.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton2ActionPerformed(evt);
+				jb_AnnulerActionPerformed(evt);
 			}
 		});
 
@@ -202,7 +207,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 																						.addGap(18, 18, 18)
 																						.addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
 																						.addGap(18, 18, 18)
-																						.addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+																						.addComponent(jb_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
 																						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 				);
 		jPanel2Layout.setVerticalGroup(
@@ -223,7 +228,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 										.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 												.addComponent(jb_Enregistrer)
 												.addComponent(jb_Supprimer)
-												.addComponent(jButton2)))
+												.addComponent(jb_Annuler)))
 				);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -252,7 +257,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	}// </editor-fold>                        
 
 	private void jb_AjouterActionPerformed(java.awt.event.ActionEvent evt) {                                           
-		// TODO add your handling code here:
+		
 	}                                          
 
 	private void jcb_LicenceActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -267,7 +272,7 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}                                              
 
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+	private void jb_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		// TODO add your handling code here:
 	}                                        
 
@@ -295,6 +300,31 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 			}
 		}
 		this.repaint();
+	}
+	
+	
+	private void chargerLesDiplomes() {
+		Accred[] lesAccreds = clientUnivGV.getListeAccredUniversite(ApplicationUniversite.getIdentiteUniversite().nomUniv);
+		System.out.println("taille des accreds : " + lesAccreds.length);
+		int compteMaster = jcb_Master.getItemCount();
+		int compteLicence = jcb_Licence.getItemCount();
+		//On vide les listes pour les recharger
+	    for(int i=0;i<compteMaster;i++){
+	    	jcb_Master.removeItemAt(0);
+	     }
+	    for(int i=0;i<compteLicence;i++){
+	    	jcb_Licence.removeItemAt(0);
+	     }
+	    //AJout du premier elt
+	    for (int i = 0; i < lesAccreds.length; i++) {
+	    	if(lesAccreds[i]!=null){
+			    if(lesAccreds[0].libelleD.contains("L3")){
+			    	jcb_Licence.addItem(lesAccreds[i].libelleD);
+			    }else{
+			    	jcb_Master.addItem(lesAccreds[i].libelleD);
+			    }
+	    	}
+	    }
 	}
 
 	/**
@@ -327,13 +357,13 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new IHM_FairePrerequis().setVisible(true);
+				new IHM_FairePrerequis(clientUnivGV).setVisible(true);
 			}
 		});
 	}
 
 	// Variables declaration - do not modify                     
-	private javax.swing.JButton jButton2;
+	private javax.swing.JButton jb_Annuler;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;

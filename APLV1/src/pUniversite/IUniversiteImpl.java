@@ -1,16 +1,10 @@
 package pUniversite;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Collections;
-import java.util.Properties;
 
-import org.apache.xerces.utils.Hash2intTable;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContext;
 
@@ -20,13 +14,11 @@ import pRectorat.Diplome;
 import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
-import pRectorat.IGestionVoeuxImpl;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
-import utilitaires.utils;
 import Applications.ApplicationUniversite;
-import Applications.PeriodeApplication;
 import ClientsServeurs.ClientUniversiteGV;
+import ClientsServeurs.ClientUniversiteUniv;
 
 public class IUniversiteImpl extends IUniversitePOA{
 
@@ -42,7 +34,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ. En fait ya quoi dedans et c'est chargé quand ?
+	private static Hashtable<String, String> listeUniversitaires;
+	// liste de client d'université. key : intitule univ/ le client
+	private static Hashtable<String, ClientUniversiteUniv> listeClientsUniv;
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -61,6 +55,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
 
+	private ClientUniversiteGV cugv;
+
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
 
@@ -70,26 +66,30 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
-		this.quotaDiplome = new Hashtable<String, Integer>();
-		this.seuilScoreDiplome = new Hashtable<String, Integer>();
+		IUniversiteImpl.quotaDiplome = new Hashtable<String, Integer>();
+		IUniversiteImpl.seuilScoreDiplome = new Hashtable<String, Integer>();
 		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		this.scoreEtu=new Hashtable<String, Integer>();
-		
+		IUniversiteImpl.listeClientsUniv = new Hashtable<String, ClientUniversiteUniv>();
+
 		// initialisation des fichiers
-		this.preRequis = new Hashtable<String, Diplome[]>();
+		IUniversiteImpl.preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
-		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
+		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
 
-		this.listeUniversitaires = listeU;
+		IUniversiteImpl.listeUniversitaires = listeU;
 
 		this.orb = orb;
 		this.nameRoot = nameRoot;
 		this.nomObj = nomObj;
-		
-		
+
+		// méthode appelée par l'universitaire pour consulter les voeux
+		String idObj = ApplicationUniversite.getIdentiteUniversite().idR.nomAcademie + "_Gestion";
+		cugv = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
+
 	}
 
 
@@ -105,82 +105,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 		return true;
 	}
-
-	/**
-	 * Permet de renvoyer les voeux à l'universitaire
-	 * Si on est en P3, on met à jour automatiquement la liste en fonction des décisions de l'étudiant
-	 * @return les voeux à jour
-	 */
-	/*public ArrayList<Voeu> getCandidatures() { 
-
-		// méthode appelée par l'universitaire pour consulter les voeux
-		String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
-		ClientUniversiteGV cugv = new ClientUniversiteGV(orb,
-				nameRoot, nomObj, idObj);
-
-		ArrayList<Voeu> lesVoeux = cugv.getVoeux();
-
-		listeCandidatures = lesVoeux;
-
-		// si P4
-		if(p3()){
-			// Permet de mettre à jour la liste en fonction des décisions des étudiants
-			this.majListes();
-		}
-
-		return lesVoeux; //renvoyer que les voeux qui ont de l'intérêt. A définir les états des voeux aux différentes étapes
-	}*/
-
-	/*private boolean p3(){
-		boolean P3=false;
-		Properties p;
-		p = null;
-		try {
-			p = utils.load("parametres.properties");
-		} catch (FileNotFoundException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		}
-		if (p != null) {
-			FileOutputStream fos;
-			try {
-				fos = new FileOutputStream("parametres.properties");
-				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
-					P3=true;
-				}
-			} catch (FileNotFoundException e1) {
-				System.out.println("Echec écriture properties");
-				e1.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return P3;
-	}*/
-
-	/**
-	 * Permet d'enregistrer la décision de l'universitaire concernant un Voeu
-	 * @param v
-	 * @param e
-	 * @throws voeuNonTrouve
-	 */
-	/*public void enregistrerEtatCandidature(Voeu v, Etat e) throws voeuNonTrouve {  
-		IGestionVoeuxImpl IGVI = new IGestionVoeuxImpl(orb, nameRoot, nomObj);
-		IGVI.setEtatVoeu(v, e);
-
-		if(e.equals(Etat.liste_principale)){
-			this.ajouterListePrincipale(v);
-		}else if (e.equals(Etat.liste_secondaire)){
-			this.ajouterListeComplementaire(v);
-		}else if (e.equals(Etat.refus)){
-			this.ajouterListeRejet(v);
-		}
-		//appel à relayer voeu dans la conception. WTF ?
-	}*/
 
 	public void ajouterListePrincipale(Voeu v) throws voeuNonTrouve { 
 		if (!listeCandidatures.contains(v)){ 
@@ -236,11 +160,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}
 		}
 	}
-
-	/*public void enregistrerAnnuaire(String ior) { 
-	// TODO Auto-generated method stub
-
-	}*/
 
 	public void ajouterListeRejet(Voeu v) throws voeuNonTrouve {
 		if (!listeCandidatures.contains(v)){
@@ -305,7 +224,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		Diplome[] diplomes = new Diplome[10];
 
 		//Hasthable pour les quotas des masters
-	
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
@@ -424,11 +343,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}		
 	}
 
-
-
-
-
-
 	//	public static void main (String [] args){
 	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
 	//		System.out.println(i.getListePrerequis("M1Miage"));
@@ -469,6 +383,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
+			try {
+				//on charge les notes de l'étudiants s'il n'est pas de cette univ
+				this.chargerNotesEtuExt(tabVoeux[i].noE);
+			} catch (EtudiantNonTrouve e) {
+				System.err.println("Vérification des voeux : Etudiant non trouvé");
+			}
 		}
 		// pour charque accreditation, on construit une hashtable avec un tableau des voeux demandant chaque formation
 		for (int i=0; i<listeAccred.length; i++){
@@ -482,7 +402,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
-	
+
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
@@ -508,8 +428,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Remplie la hashtable numEtu, son score
 	 */
 	private void etablirScore(){
-		//TODO récupérer l'université de l'étudiant
-		//TODO Récupérer ses notes avec un appel distant de son université
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
@@ -615,8 +533,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
 			int i=0;
 			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
+				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
-				//TODO appel à setEtatVoeu
+				cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
 				i++;
 			}
 			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
@@ -624,33 +543,34 @@ public class IUniversiteImpl extends IUniversitePOA{
 				int cptV=quota;
 				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
 				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
+					listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
 					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
-					//TODO appel à setEtatVoeu
+					cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
 					cptV++;
 				}
 				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
 				if(cptV<listeVoeuxTmp.size()){
 					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
+						listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
 						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
-						//TODO appel à setEtatVoeu
+						cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
 					}
 				}
 			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
 				while(i<listeVoeuxTmp.size()){
+					listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
 					ajouterListeRejet(listeVoeuxTmp.get(i));
-					//TODO appel à setEtatVoeu
+					cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
 					i++;
 				}
 			}
-			
+
 			/*******************************************************************************
 			 * REGLE METIER : on ne tient pas compte du nombre d'élèves dans le promotion  *
 			 * s'il n'y a qu'un élève qui a le bon score, il sera le premier de la classe  *
 			 *******************************************************************************/
-
 		}
 	}
-
 
 	/**
 	 * @return the quotaDiplome
@@ -683,6 +603,28 @@ public class IUniversiteImpl extends IUniversitePOA{
 			Hashtable<String, Integer> seuilScoreDiplome) {
 		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
 	}
-	
-	
+
+	/**
+	 * Permet de charger
+	 * @throws EtudiantNonTrouve 
+	 */
+	private void chargerNotesEtuExt(String noEtu) throws EtudiantNonTrouve{
+		ClientUniversiteUniv cuu = null;
+		//On récupère l'objet étudiant correspondant à son numéro
+		Etudiant etuTmp = cugv.getEtudiant(noEtu);
+		//On regarde si l'étudiant est de cette université ou d'une autre
+		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
+			//s'il n'est pas cette université, il faut demander ses notes à la sienne
+			//On regarde si on a déjà un client pour cette université sinon on en crée un
+			if(listeClientsUniv.contains(etuTmp.formation.libelleU)){
+				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
+			}else{
+				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU);
+				listeClientsUniv.put(etuTmp.formation.libelleU, cuu);
+			}
+			listeNotesEtudiants.put(noEtu, cuu.getNotes(etuTmp));
+		}
+	}
+
+
 }
