@@ -74,6 +74,10 @@ public class ClientUniversiteGV implements Runnable{
 		return listeDeVoeux;
 	}
 	
+	public void enregistrerUniversite (String nom, String ior){
+		ClientUniversiteGV.monGestionVoeu.enregistrerUniversite(ior, nom);
+	}
+	
 	public static void main(String args[]) {
 		try {
 			// Intialisation de l'orb

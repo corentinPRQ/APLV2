@@ -75,6 +75,11 @@ public class ClientGestionVoeuGV implements Runnable{
 		}
 	}
 	
+	public Accred[] getListeAccreditation(){
+		return ClientGestionVoeuGV.monGV.getListeAccreditations();
+	}
+
+	
 	public static void main(String args[]) {
 		try {
 			// Intialisation de l'orb
@@ -97,6 +102,7 @@ public class ClientGestionVoeuGV implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
 
 	@Override
 	public void run() {
