@@ -358,7 +358,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			if (insertion<NB_VOEUX_MAX) {
 				//On récupère les anciens voeux pour y ajouter les nouveaux.
 				Voeu[] aInserer = new Voeu[insertion+1];
-				aInserer[insertion-1]=tabV[insertion-1];
+				for(int i=0; i<insertion; i++){
+					aInserer[i]=tabV[i];
+				}
 				aInserer[insertion] = v;
 				//On répercute les modifications su la liste.
 				IGestionVoeuxImpl.listeVoeux.put(v.noE, aInserer);

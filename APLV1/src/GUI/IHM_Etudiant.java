@@ -27,7 +27,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 	private static Etudiant etu; // l'étudiant connecté.
 
 	//private ApplicationGestionEtudiant applicationGE;
-	public Voeu[] listeVoeux;
+	public static Voeu[] listeVoeux;
 	private static Hashtable<String, String> listeEtudiants;
 	public Etudiant utilisateur;
 
@@ -47,7 +47,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     	IHM_Etudiant.clientEtuGV = pCliEtGV;
     	ConnexionEtudiant coE = new ConnexionEtudiant(this,pCliEtGV);
     	coE.setVisible(true);
-    	this.setEnabled(false);
+    	setVisible(false);
     	initComponents();
     }
     
@@ -227,15 +227,12 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_modifAdressActionPerformed
 
     private void bt_quitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_quitterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bt_quitterActionPerformed
+    	this.dispose();
+    }
 
     private void bt_ajouterVoeuxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ajouterVoeuxActionPerformed
-        // TODO add your handling code here:
-    	if(this.tab_VoeuxEtudiant.getRowCount()==5){
     		IHM_FaireUnVoeu ihm_fv = new IHM_FaireUnVoeu(this,clientEtuGV);
     		ihm_fv.setVisible(true);
-    	}
     }//GEN-LAST:event_bt_ajouterVoeuxActionPerformed
 
     private void bt_repondreVoeuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_repondreVoeuActionPerformed
@@ -243,18 +240,22 @@ public class IHM_Etudiant extends javax.swing.JFrame {
         IHM_Rep.setVisible(true);
     }
     
-    @SuppressWarnings("unused") void remplirTableVoeu(final Voeu[] pVoeu){
-    	for(int i=0;i<pVoeu.length;i++){
-    		tab_VoeuxEtudiant.setValueAt(pVoeu[i].acreditation.libelleD,i, 0);
-    		tab_VoeuxEtudiant.setValueAt(pVoeu[i].etatVoeu.toString(),i, 1);
+    public void remplirTableVoeu(){
+    	IHM_Etudiant.listeVoeux=IHM_Etudiant.clientEtuGV.consulterListeVoeux(etu);
+    	for(int i=0;i<listeVoeux.length;i++){
+    		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acreditation.libelleD,i, 0);
+    		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].etatVoeu.toString(),i, 1);
     		tab_VoeuxEtudiant.setValueAt("nexiste pas dans le voeu",i, 2);
-    		tab_VoeuxEtudiant.setValueAt(pVoeu[i].decEtudiant,i, 3);
+    		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].decEtudiant,i, 3);
     	}
     	//refres
-    	SwingUtilities.updateComponentTreeUI(this);
+    	SwingUtilities.updateComponentTreeUI(this.tab_voeux);
     }
+    
+    
 
-    /**
+
+	/**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -285,7 +286,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                new IHM_Etudiant(clientEtuGV).setVisible(true);
+                new IHM_Etudiant(clientEtuGV).setVisible(false);
 
                 //new IHM_Etudiant(listeVoeux, listeEtudiants).setVisible(true);
 

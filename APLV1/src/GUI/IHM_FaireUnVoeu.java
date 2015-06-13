@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
 import pRectorat.Etat;
@@ -28,7 +31,7 @@ import ClientsServeurs.ClientEtudiantGV;
 public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
 	private static ClientEtudiantGV clientEtuGV;
-	private static IHM_Etudiant parent;
+	public static IHM_Etudiant parent;
 	private Accred[] lesAccred;
 	private Accred [] lesAccredExternes;
 	private Hashtable<String, ArrayList<String>> regroupementAccred ;
@@ -111,10 +114,6 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		  cb_diplome.addItem(e.nextElement().toString());
 	  
 	 }
-	  
-	    
-	    
-	    
 	   /*
 	    //Remplissage de la jcombobox avec la premiere liste d'accreditation (les internes au rectorat)
 		cb_diplome.addItem(lesAccred[0].libelleD);
@@ -125,10 +124,6 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		}*/
 		
 		
-	
-	
-	
-	
 	private String getNoAccred(){
 		boolean trouve =false;
 		String noAccred="";
@@ -268,7 +263,12 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
     	clientEtuGV.faireVoeu(voeu);
-
+     	parent.remplirTableVoeu();
+     	
+     	parent.repaint();
+     	SwingUtilities.updateComponentTreeUI(parent);
+     	
+     	JOptionPane.showMessageDialog(this, "Voeu bien Enregistré");
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           

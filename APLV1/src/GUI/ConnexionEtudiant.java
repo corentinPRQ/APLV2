@@ -134,9 +134,10 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
     		Etudiant etu = ConnexionEtudiant.clientEtuGV.getEtudiant(this.tf_numEtu.getText());
     		ConnexionEtudiant.parent.utilisateur=etu;
     		ConnexionEtudiant.parent.setLb_nomEtud(ConnexionEtudiant.parent.utilisateur.nom);
-    		Voeu[] lesvoeux=ConnexionEtudiant.clientEtuGV.consulterListeVoeux(etu);
+    		IHM_Etudiant.listeVoeux=ConnexionEtudiant.clientEtuGV.consulterListeVoeux(etu);
+    		System.out.println("Taille liste de voeux : " + parent.listeVoeux.length);
     		IHM_Etudiant.setEtu(etu);
-    		ConnexionEtudiant.parent.remplirTableVoeu(lesvoeux);
+    		ConnexionEtudiant.parent.remplirTableVoeu();
     	
     		
     	}
@@ -152,6 +153,9 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
 
     }//GEN-LAST:event_bt_quitterActionPerformed
 
+    
+    
+    
     /**
      * @param args the command line arguments
      */
