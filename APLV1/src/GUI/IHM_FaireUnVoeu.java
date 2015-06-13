@@ -60,27 +60,33 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 		
 		//La boucle va maintenant parcourir l'ensemble des accreditations internes dans la hashtable
 		for(int i=1;i<lesAccred.length;i++){
-			//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
-			if(regroupementAccred.containsKey(lesAccred[i].libelleD)){
-				regroupementAccred.get(lesAccred[i].libelleD).add(lesAccred[i].libelleU);
-			}else{
-				//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
-				lesUniv = new ArrayList<String>();
-				lesUniv.add(lesAccred[i].libelleU);
-				regroupementAccred.put(lesAccred[i].libelleD,lesUniv);
+			// Verification que l'accredition concerne un master 1
+			if(lesAccred[i].libelleD.contains("M1")){
+				//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
+				if(regroupementAccred.containsKey(lesAccred[i].libelleD)){
+					regroupementAccred.get(lesAccred[i].libelleD).add(lesAccred[i].libelleU);
+				}else{
+					//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
+					lesUniv = new ArrayList<String>();
+					lesUniv.add(lesAccred[i].libelleU);
+					regroupementAccred.put(lesAccred[i].libelleD,lesUniv);
+				}
 			}
 		}
 		
 		for(int i=0;i<lesAccredExternes.length;i++){
-			//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
-			if(regroupementAccred.containsKey(lesAccredExternes[i].libelleD)){
-				regroupementAccred.get(lesAccredExternes[i].libelleD).add(lesAccredExternes[i].libelleU);
-			}else{
-				//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
-				lesUniv = new ArrayList<String>();
-				lesUniv.add(lesAccredExternes[i].libelleU);
-				regroupementAccred.put(lesAccredExternes[i].libelleD,lesUniv);
-			}
+		// Verification que l'accredition concerne un master 1
+	      if(lesAccredExternes[i].libelleD.contains("M1")){
+				//On verifie si dans l'accredition que l'on analyse si le diplome est deja dans la hashtable
+				if(regroupementAccred.containsKey(lesAccredExternes[i].libelleD)){
+					regroupementAccred.get(lesAccredExternes[i].libelleD).add(lesAccredExternes[i].libelleU);
+				}else{
+					//Si le diplome n'existe pas en clé de la hashtable on crée une nouvelle clé diplome et on instancie une nouvelle liste d'université 
+					lesUniv = new ArrayList<String>();
+					lesUniv.add(lesAccredExternes[i].libelleU);
+					regroupementAccred.put(lesAccredExternes[i].libelleD,lesUniv);
+				}
+	      }
 		}
 		
 	
