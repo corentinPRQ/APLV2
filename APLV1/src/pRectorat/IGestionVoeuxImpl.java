@@ -448,12 +448,12 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		/*
 		 * Réfléchir à un moyen d'intégrer les notes pour les prérequis! 
 		 */
-		
+		System.out.println("INITIALISATION DES LES ACCREDS DE LUNIVERSITE");
 		String lineRead;
 		String[] lineSplit;
-		String Universite="";
-		String Diplome="";
-		String NoAccred="";
+		String universite="";
+		String diplome="";
+		String noAccred="";
 
 		
 		//variable comptant le nombre de lignes du fichier par diplome
@@ -472,17 +472,17 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 //				System.out.println("line split : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				for (int i=0; i<lineSplit.length; i++){
 					switch(i){ 
-					case 0 : NoAccred= lineSplit[0];
+					case 0 : noAccred= lineSplit[0];
 					break;
-					case 1 : Diplome= lineSplit[1];
+					case 1 : diplome= lineSplit[1];
 					break;
-					case 2 : Universite = lineSplit[2];
+					case 2 : universite = lineSplit[2];
 					break;
 					default : System.err.println("Erreur dans la lecture du fichier");
 					break;
 					}					
 				}
-				listAccred.add(new Accred(NoAccred,Diplome,Universite));
+				listAccred.add(new Accred(noAccred,diplome,universite));
 				
 				/*//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
 //				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
@@ -507,11 +507,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				lesUniv[i]=list.get(i);*/
 			
 			//} this.listeAccreditation.put(Diplome, lesUniv);
-			this.lesAccredIntern=new Accred[listAccred.size()];
+			lesAccredIntern=new Accred[listAccred.size()];
 			for(int i=0;i<listAccred.size();i++){
 				lesAccredIntern[i]=listAccred.get(i);
 			}		
-			NoAccred="";
+			noAccred="";
 			listAccred = new ArrayList<Accred>();
 		
 //			lesUniv = new String[list.size()];
