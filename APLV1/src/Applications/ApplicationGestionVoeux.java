@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
+import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
 import ClientsServeurs.ServeurGestionVoeux;
+import GUI.IHM_Rectorat;
 
 public class ApplicationGestionVoeux {	
 	
@@ -38,11 +40,18 @@ public class ApplicationGestionVoeux {
 			Thread tserv = new Thread(serv);
 			tserv.start();
 
+	
+			ClientGestionVoeuxMinistere cvm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
+			
+			Thread tclgv = new Thread(cvm);
+
+			
+			IHM_Rectorat ihmR = new IHM_Rectorat(cvm);
+			ihmR.setVisible(true);
+
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
 }
