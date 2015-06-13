@@ -42,7 +42,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-	private static Hashtable<String, String> listeUniversitaires; //TODO revoir l'intérêt de la hashtable vu qu'on a que les universitaires de notre Univ. En fait ya quoi dedans et c'est chargé quand ?
+	private static Hashtable<String, String> listeUniversitaires;  
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -70,8 +70,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
-		this.quotaDiplome = new Hashtable<String, Integer>();
-		this.seuilScoreDiplome = new Hashtable<String, Integer>();
+		quotaDiplome = new Hashtable<String, Integer>();
+		seuilScoreDiplome = new Hashtable<String, Integer>();
 		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		this.scoreEtu=new Hashtable<String, Integer>();
 		
