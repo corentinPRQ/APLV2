@@ -338,9 +338,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				enregistrerVoeu(v);
 			}else{
 				System.out.println("Premier voeu d'un etudiant! On enregistre aussi");
-				
 				enregistrerVoeu(v);
 			}
+			validerVoeu(v);
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");
