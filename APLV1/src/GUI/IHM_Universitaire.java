@@ -48,7 +48,6 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         tab_Voeux = new javax.swing.JTable();
         bt_etablirPreRequis = new javax.swing.JButton();
         bt_Quitter = new javax.swing.JButton();
-        bt_decisionFinale = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,7 +103,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tab_Voeux);
 
-        bt_etablirPreRequis.setText("Etablir pré-requis");
+        bt_etablirPreRequis.setText("Etablir pr�-requis");
         bt_etablirPreRequis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_etablirPreRequisActionPerformed(evt);
@@ -118,12 +117,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
             }
         });
 
-        bt_decisionFinale.setText("Prendre décision finale");
-        bt_decisionFinale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_decisionFinaleActionPerformed(evt);
-            }
-        });
+       
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,8 +150,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
                 .addGap(326, 326, 326)
                 .addComponent(bt_ExaminerCandidature, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(88, 88, 88)
-                .addComponent(bt_decisionFinale, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+              )
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,7 +169,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bt_ExaminerCandidature)
-                    .addComponent(bt_decisionFinale))
+                   )
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(bt_Quitter)
                 .addGap(39, 39, 39))
@@ -194,9 +187,6 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_ExaminerCandidatureActionPerformed
 
-    private void bt_decisionFinaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_decisionFinaleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bt_decisionFinaleActionPerformed
 
     private void bt_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_QuitterActionPerformed
         // TODO add your handling code here:
@@ -240,7 +230,6 @@ public class IHM_Universitaire extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_ExaminerCandidature;
     private javax.swing.JButton bt_Quitter;
-    private javax.swing.JButton bt_decisionFinale;
     private javax.swing.JButton bt_etablirPreRequis;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
