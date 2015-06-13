@@ -118,7 +118,7 @@ module pRectorat {
 		//Opération permettant de se connecter
 		boolean identifier(in string login,in string mdp)raises (EtudiantNonTrouve);
 
-		//Opération permettant de récuperer les utilisateur d'un étudiant
+		//Opération permettant de récuperer l'objet étudiant en fonction de son identifiant
 		Etudiant getUtilisateur(in string numeroEtudiant)raises(EtudiantNonTrouve);
 
 		//Opération permettant de récuperer lidentifiant du recorat
