@@ -78,7 +78,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		// initialisation des fichiers
 		preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
-		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
+		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -659,6 +659,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 			Hashtable<String, Integer> seuilScoreDiplome) {
 		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
 	}
+	
+	
 	
 	
 }
