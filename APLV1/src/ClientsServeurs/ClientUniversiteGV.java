@@ -11,6 +11,7 @@ import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
+import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
@@ -117,6 +118,14 @@ public class ClientUniversiteGV implements Runnable{
 			}
 		}
 		return (monUniversite);
+	}
+	
+	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
+		return (ClientEtudiantGV.monGestionVoeu.getUtilisateur(numEtudiant));
+	}
+	
+	public void setEtatVoeu(Voeu v, Etat e) {
+		ClientEtudiantGV.monGestionVoeu.setEtatVoeu(v, e);
 	}
 	
 
