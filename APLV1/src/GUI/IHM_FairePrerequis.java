@@ -47,215 +47,229 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	 */
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-	private void initComponents() {
+	  private void initComponents() {
 
-		jPanel1 = new javax.swing.JPanel();
-		jl_Titre = new javax.swing.JLabel();
-		jPanel2 = new javax.swing.JPanel();
-		jcb_Master = new javax.swing.JComboBox();
-		jl_MAster = new javax.swing.JLabel();
-		jcb_Licence = new javax.swing.JComboBox();
-		jl_Licence = new javax.swing.JLabel();
-		jb_Ajouter = new javax.swing.JButton();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		jt_Prerequis = new javax.swing.JTable();
-		jb_Enregistrer = new javax.swing.JButton();
-		jb_Supprimer = new javax.swing.JButton();
-		jb_Annuler = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jl_Titre = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jcb_Master = new javax.swing.JComboBox();
+        jl_MAster = new javax.swing.JLabel();
+        jcb_Licence = new javax.swing.JComboBox();
+        jl_Licence = new javax.swing.JLabel();
+        jb_Ajouter = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jt_Prerequis = new javax.swing.JTable();
+        jb_Enregistrer = new javax.swing.JButton();
+        jb_Supprimer = new javax.swing.JButton();
+        jb_Annuler = new javax.swing.JButton();
+        jl_quota = new javax.swing.JLabel();
+        jl_score = new javax.swing.JLabel();
+        jt_quota = new javax.swing.JTextField();
+        jt_score = new javax.swing.JTextField();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		jl_Titre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-		jl_Titre.setText("Etablir des prerequis");
+        jl_Titre.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jl_Titre.setText("Etablir des prerequis");
 
-		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(
-				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-						.addContainerGap(64, Short.MAX_VALUE)
-						.addComponent(jl_Titre)
-						.addGap(35, 35, 35))
-				);
-		jPanel1Layout.setVerticalGroup(
-				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jl_Titre)
-						.addContainerGap())
-				);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(64, Short.MAX_VALUE)
+                .addComponent(jl_Titre)
+                .addGap(35, 35, 35))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jl_Titre)
+                .addContainerGap())
+        );
 
-		jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-		jcb_Master.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jcb_MasterActionPerformed(evt);
-			}
-		});
+        jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcb_Master.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcb_MasterActionPerformed(evt);
+            }
+        });
 
-		jl_MAster.setText("Diplome Presente : ");
+        jl_MAster.setText("Diplome Presente : ");
 
-		jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-		jcb_Licence.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jcb_LicenceActionPerformed(evt);
-			}
-		});
+        jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcb_Licence.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcb_LicenceActionPerformed(evt);
+            }
+        });
 
-		jl_Licence.setText("Diplome Requis : ");
+        jl_Licence.setText("Diplome Requis : ");
 
-		jb_Ajouter.setText("Ajouter");
-		jb_Ajouter.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jb_AjouterActionPerformed(evt);
-			}
-		});
+        jb_Ajouter.setText("Ajouter");
+        jb_Ajouter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_AjouterActionPerformed(evt);
+            }
+        });
 
-		jt_Prerequis.setModel(new javax.swing.table.DefaultTableModel(
-				new Object [][] {
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null}
-				},
-				new String [] {
-						"Université", "Master", "Licence", "Quota Max", "Score d'entrée"
-				}
-				) {
-			Class[] types = new Class [] {
-					java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
-			};
-			boolean[] canEdit = new boolean [] {
-					false, false, false, false, false
-			};
+        jt_Prerequis.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Université", "Master", "Licence", "Quota Max", "Score d'entrée"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
-			public Class getColumnClass(int columnIndex) {
-				return types [columnIndex];
-			}
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit [columnIndex];
-			}
-		});
-		jScrollPane1.setViewportView(jt_Prerequis);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jt_Prerequis);
 
-		jb_Enregistrer.setText("Enregistrer");
-		jb_Enregistrer.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jb_EnregistrerActionPerformed(evt);
-			}
-		});
+        jb_Enregistrer.setText("Enregistrer");
+        jb_Enregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_EnregistrerActionPerformed(evt);
+            }
+        });
 
-		jb_Supprimer.setText("Supprimer");
-		jb_Supprimer.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jb_SupprimerActionPerformed(evt);
-			}
-		});
+        jb_Supprimer.setText("Supprimer");
+        jb_Supprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_SupprimerActionPerformed(evt);
+            }
+        });
 
-		jb_Annuler.setText("Annuler");
-		jb_Annuler.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jb_AnnulerActionPerformed(evt);
-			}
-		});
+        jb_Annuler.setText("Annuler");
+        jb_Annuler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_AnnulerActionPerformed(evt);
+            }
+        });
 
-		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-		jPanel2.setLayout(jPanel2Layout);
-		jPanel2Layout.setHorizontalGroup(
-				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel2Layout.createSequentialGroup()
-						.addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
-						.addContainerGap())
-						.addGroup(jPanel2Layout.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(jPanel2Layout.createSequentialGroup()
-												.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(jb_Ajouter)
-														.addGroup(jPanel2Layout.createSequentialGroup()
-																.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-																		.addComponent(jl_Licence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-																		.addComponent(jl_MAster, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
-																		.addGap(21, 21, 21)
-																		.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-																				.addComponent(jcb_Master, 0, 184, Short.MAX_VALUE)
-																				.addComponent(jcb_Licence, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-																				.addGap(0, 0, Short.MAX_VALUE))
-																				.addGroup(jPanel2Layout.createSequentialGroup()
-																						.addComponent(jb_Enregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-																						.addGap(18, 18, 18)
-																						.addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-																						.addGap(18, 18, 18)
-																						.addComponent(jb_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-																						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-				);
-		jPanel2Layout.setVerticalGroup(
-				jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel2Layout.createSequentialGroup()
-						.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(jl_MAster))
-								.addGap(9, 9, 9)
-								.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jl_Licence))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(jb_Ajouter, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(24, 24, 24)
-										.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(18, 18, Short.MAX_VALUE)
-										.addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jb_Enregistrer)
-												.addComponent(jb_Supprimer)
-												.addComponent(jb_Annuler)))
-				);
+        jl_quota.setText("Nombre de places : ");
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addGap(110, 110, 110)
-						.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addContainerGap())
-				);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addContainerGap())
-				);
+        jl_score.setText("Score requis : ");
 
-		pack();
-	}// </editor-fold>                        
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jb_Ajouter)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jl_Licence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jl_MAster, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(72, 72, 72)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jl_quota)
+                                    .addComponent(jl_score))
+                                .addGap(26, 26, 26)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jt_quota)
+                                    .addComponent(jt_score, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE))))
+                        .addGap(0, 18, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jb_Enregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jb_Supprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jb_Annuler, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcb_Master, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jl_MAster)
+                    .addComponent(jl_quota)
+                    .addComponent(jt_quota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcb_Licence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jl_Licence)
+                    .addComponent(jl_score)
+                    .addComponent(jt_score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jb_Ajouter, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb_Enregistrer)
+                    .addComponent(jb_Supprimer)
+                    .addComponent(jb_Annuler)))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>     
 	private void jb_AjouterActionPerformed(java.awt.event.ActionEvent evt) {                                           
 		
 	}                                          
@@ -375,6 +389,10 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	private javax.swing.JLabel jl_Licence;
 	private javax.swing.JLabel jl_MAster;
 	private javax.swing.JLabel jl_Titre;
-	private javax.swing.JTable jt_Prerequis;
+    private javax.swing.JLabel jl_quota;
+    private javax.swing.JLabel jl_score;
+    private javax.swing.JTable jt_Prerequis;
+    private javax.swing.JTextField jt_quota;
+    private javax.swing.JTextField jt_score;
 	// End of variables declaration                   
 }
