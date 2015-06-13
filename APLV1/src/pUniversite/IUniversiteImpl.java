@@ -34,11 +34,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static Hashtable<String, Integer> seuilScoreDiplome;
 	// liste des notes pour un étudiant
 	private Hashtable<String,Note[]> listeNotesEtudiants;
-<<<<<<< HEAD
 	private static Hashtable<String, String> listeUniversitaires;
-=======
-	private static Hashtable<String, String> listeUniversitaires;  
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 	private ArrayList<Voeu> listePrincipale;
 	private ArrayList<Voeu> listeComplementaire;
@@ -56,13 +52,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
-<<<<<<< HEAD
 
 	private String idObj = ApplicationUniversite.getIdentiteUniversite() + "_Gestion";
 	private ClientUniversiteGV cugv;
 	private ClientUniversiteUniv cuu;
-=======
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
@@ -73,20 +66,15 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeComplementaire = new ArrayList<Voeu>();
 		this.listeRefuse = new ArrayList<Voeu>();
 
-<<<<<<< HEAD
 		IUniversiteImpl.quotaDiplome = new Hashtable<String, Integer>();
 		IUniversiteImpl.seuilScoreDiplome = new Hashtable<String, Integer>();
-=======
-		quotaDiplome = new Hashtable<String, Integer>();
-		seuilScoreDiplome = new Hashtable<String, Integer>();
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 		this.listeVoeuxDiplome = new Hashtable<String, ArrayList<Voeu>>();
 		this.scoreEtu=new Hashtable<String, Integer>();
-		
+
 		// initialisation des fichiers
 		IUniversiteImpl.preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
-		initialiserPrerequis("src/prerequis"+nomUniversite+".csv");
+		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
@@ -95,7 +83,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		/*this.orb = orb;
 		this.nameRoot = nameRoot;
-<<<<<<< HEAD
 		this.nomObj = nomObj;*/
 
 		// méthode appelée par l'universitaire pour consulter les voeux
@@ -105,11 +92,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		cuu = new ClientUniversiteUniv(orb, nameRoot, nomObj, idObj);
 
 
-=======
-		this.nomObj = nomObj;
-		
-		
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 	}
 
 
@@ -244,7 +226,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		Diplome[] diplomes = new Diplome[10];
 
 		//Hasthable pour les quotas des masters
-	
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
 			lineRead = br.readLine();
@@ -422,7 +404,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			tabVoeuxDip.clear();
 		}
 	}
-	
+
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
@@ -448,11 +430,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Remplie la hashtable numEtu, son score
 	 */
 	private void etablirScore(){
-<<<<<<< HEAD
-=======
-		//TODO récupérer l'université de l'étudiant
-		//TODO Récupérer ses notes avec un appel distant de son université
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 		while(listeNotesEtudiants.keys().hasMoreElements()){
 			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
@@ -589,7 +566,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					i++;
 				}
 			}
-			
+
 			/*******************************************************************************
 			 * REGLE METIER : on ne tient pas compte du nombre d'élèves dans le promotion  *
 			 * s'il n'y a qu'un élève qui a le bon score, il sera le premier de la classe  *
@@ -628,7 +605,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			Hashtable<String, Integer> seuilScoreDiplome) {
 		IUniversiteImpl.seuilScoreDiplome = seuilScoreDiplome;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * Permet de charger
@@ -645,8 +621,4 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 
-=======
-	
-	
->>>>>>> branch 'master' of https://github.com/corentinPRQ/APLV2
 }
