@@ -55,6 +55,12 @@ public class ApplicationUniversite {
 			String nomOb = "Client_PaulSabatier_Gestion";
 			System.out.println("lancement du client Université");
 			ClientUniversiteGV cu = new ClientUniversiteGV (orb, nameRoot, nomOb, idObj);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			cu.enregistrerUniversite(nomObj, ServeurUniversite.getIOR());
 //			Thread tcli = new Thread(cu);
 //			tcli.start();

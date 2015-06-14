@@ -597,7 +597,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public void enregistrerUniversite(String ior, String nom) {
-		System.out.println("Enregistrement de l'universités" + nom);
+		System.out.println("\n\n\nEnregistrement de l'universités" + nom+"\n\n\n");
 		mesUniversites.put(nom, ior);
 		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
 

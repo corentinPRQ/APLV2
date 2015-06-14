@@ -14,6 +14,7 @@ import pRectorat.Diplome;
 import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
+import pRectorat.IGestionVoeuxImpl;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
 import Applications.ApplicationUniversite;
@@ -219,7 +220,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String numDipPrecedent = "";
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
-		Diplome[] diplomes = new Diplome[10];
+		Diplome[] diplomes = new Diplome[1];
 
 		//Hasthable pour les quotas des masters
 
@@ -249,9 +250,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!nomDip.equals(nomDipPrecedent)){
-					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
+//					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 					preRequis.put(nomDipPrecedent, diplomes);
-					diplomes = new Diplome[10];
+					diplomes = new Diplome[1];
 					cpteur = 0;
 
 				}
@@ -270,12 +271,21 @@ public class IUniversiteImpl extends IUniversitePOA{
 				if (!seuilScoreDiplome.containsKey(nomDip)){
 					seuilScoreDiplome.put(nomDip, seuilScore);
 				}
-				Diplome d = new Diplome(nomDipPR, ne);
-				diplomes[cpteur] = d;
-				cpteur++;
-
+				if(cpteur==0){
+					Diplome d = new Diplome(nomDipPR, ne);
+					diplomes[cpteur] = d;
+					cpteur++;
+				}
+				else{
+					Diplome[] aInserer = new Diplome[cpteur+1];
+					Diplome d = new Diplome(nomDipPR, ne);
+					aInserer[cpteur]= d;
+					cpteur++;
+					diplomes = aInserer;
+				}
+				System.out.println("Nombre de prerequis pour "+ nomDipPrecedent + " : " +  diplomes.length);
 			}
-			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
+//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
 		}catch (Exception e){
 			e.printStackTrace();
