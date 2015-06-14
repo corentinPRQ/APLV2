@@ -75,7 +75,10 @@ public class ClientUniversiteGV implements Runnable{
 	}
 	
 	public void enregistrerUniversite (String nom, String ior){
-		ClientUniversiteGV.monGestionVoeu.enregistrerUniversite(ior, nom);
+		String nomUniv = nom.replace("Client_", "");
+		nomUniv = nomUniv.replace("_Gestion", "");
+		nomUniv = nomUniv.replace("_", "");
+		ClientUniversiteGV.monGestionVoeu.enregistrerUniversite(ior, nomUniv);
 	}
 	
 	public static void main(String args[]) {

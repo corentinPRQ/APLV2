@@ -196,7 +196,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
-		org.omg.CORBA.Object distantObj = orb.string_to_object(mesUniversites.get(v.acreditation.libelleU));
+		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
+		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 
 		boolean prerequisOK = false;
@@ -334,7 +335,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			//Création d'un voeu dans ce rectorat
 			System.out.println("on est dans le if");
 			enregistrerVoeu(v);
-			//validerVoeu(v);
+			validerVoeu(v);
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");

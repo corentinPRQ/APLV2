@@ -52,9 +52,10 @@ public class ApplicationUniversite {
 			String idObj = args[1]+"_GestionVoeux";
 			// Construction du Client spécifique à l'action à faire
 //			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba Client ?");
-			String nomOb = "Client_PS_Gestion";
+			String nomOb = "Client_PaulSabatier_Gestion";
 			System.out.println("lancement du client Université");
 			ClientUniversiteGV cu = new ClientUniversiteGV (orb, nameRoot, nomOb, idObj);
+			cu.enregistrerUniversite(nomObj, ServeurUniversite.getIOR());
 //			Thread tcli = new Thread(cu);
 //			tcli.start();
 
