@@ -249,16 +249,22 @@ public class IUniversiteImpl extends IUniversitePOA{
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!nomDip.equals(nomDipPrecedent)){
 					if (preRequis.containsKey(nomDipPrecedent)){
+						//création d'un tableau de diplome temporaraire qui a une taille + 1 pour l'insertion du nouveau diplome
 						Diplome[] aInserer = new Diplome[cpteur+1];
+						//récupération des diplomes de la hashTable du master
+						Diplome[] lesDiplomesDuMaster = preRequis.get(nomDipPrecedent);
+						//Création du diplome a insérer
 						Diplome d = new Diplome(nomDipPR, ne);
 						//recopie des éléments du tableaux de dimplomes dans le nouveau tableau (taille+1) 
 						for (int i=0; i<preRequis.get(nomDipPrecedent).length; i++){
-							diplomes[i] = aInserer[i];
+							lesDiplomesDuMaster[i] = aInserer[i];
 						}
+						//Insertion du nouveau diplome prérequis dans le tableau de diplme
 						aInserer[cpteur]= d;
-						diplomes = aInserer;
+						lesDiplomesDuMaster = aInserer;
 						//System.out.println("Enregistrement du diplome prerequi\n\n");
-						preRequis.put(nomDipPrecedent, diplomes);
+						//ajout du nouveau tableau avec le nouveau diplome prerequis dans la hashtable.
+						preRequis.put(nomDipPrecedent, lesDiplomesDuMaster);
 						diplomes = new Diplome[1];
 						cpteur = 0;
 					}
