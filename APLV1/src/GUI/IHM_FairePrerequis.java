@@ -379,6 +379,18 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 				String master = lesDiplomes.get(i);
 				Integer q = quota.get(lesDiplomes.get(i));
 				Integer s = score.get(lesDiplomes.get(i));
+				//Ecriture de l'en-tête du tableau
+				sb.append("NomUniv");
+				sb.append(";");
+				sb.append("NomDiplome");
+				sb.append(";");
+				sb.append("NomDiplomePrerequis");
+				sb.append(";");
+				sb.append("Quota");
+				sb.append(";");
+				sb.append("Score Min");
+				sb.append("\n");
+				br.write(sb.toString());
 				//pour chaque diplome du tableau correspondant à la clé de la hashtable
 				for (Diplome dip : preRequis.get(lesDiplomes.get(i))) {
 					if (dip!= null){
