@@ -88,6 +88,10 @@ public class ClientEtudiantGV implements Runnable{
 		}
 	}
 	
+	public String getRectoratUniversite(String univ){
+		return(ClientEtudiantGV.monGestionVoeu.getRectoratUniversite(univ));
+	}
+	
 	public Voeu[] consulterListeVoeux(Etudiant etu){
 		//ClientEtudiantGV.monGestionVoeu.consulterListeVoeu(etu);
 		System.out.println("getVoeux du clientEtudiantGV");

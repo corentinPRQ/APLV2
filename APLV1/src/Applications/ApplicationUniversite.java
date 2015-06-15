@@ -47,7 +47,6 @@ public class ApplicationUniversite {
 			tserv.start();
 
 			// Saisie du nom de l'objet
-			System.out.println("Quel objet Corba voulez-vous contacter ?");
 			//Cas d'une connexion avec un GestionVoeux : 
 			String idObj = args[1]+"_GestionVoeux";
 			// Construction du Client spécifique à l'action à faire

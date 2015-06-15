@@ -37,6 +37,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	//Voeux en fonction du numéro d'étudiant
 	public static Hashtable<String, Voeu[]> listeVoeux;
+	//Voeux qui sont fait dans d'autres rectorats
+	public static Hashtable<String, Voeu[]> listeVoeuxExternes;
+
+
 	public static Accred[] lesAccredIntern;
 	//pour les rectorats ext, leurs accreds correspondantes
 	public static Hashtable<String,Accred[]> lesAccredExternRect;
@@ -62,6 +66,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		listeVoeux = new Hashtable<String, Voeu[]>();
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		lesAccredExternRect = new Hashtable<String, Accred[]>();
+		listeVoeuxExternes = new Hashtable<String, Voeu[]>();
 
 		mesRectorats = getLesRectorats();
 		initialiserEtudiants("src/usersEtu"+pidRectorat+".csv");
@@ -307,18 +312,40 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	@Override
 	public Voeu[] consulterListeVoeu(Etudiant etu) {
 		System.out.println("consulterListeVoeu "+etu.noEtu);
+		//S'il n'y a pas de voeux internes
 		if (!listeVoeux.containsKey(etu.noEtu)){
-			//Bouchon pour ne pas renvoyer NULL et satisfaire CORBA.
-			Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
-					Etat.cree);
-			Voeu[] lesV = new Voeu[1];
-			lesV[0] = v;
-			System.out.println("return liste Vide");
-			return (lesV);
+			//S'il n'y a pas de voeux externes
+			if(!listeVoeuxExternes.containsKey(etu.noEtu)){
+				//Bouchon pour ne pas renvoyer NULL et satisfaire CORBA.
+				Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
+						Etat.cree);
+				Voeu[] lesV = new Voeu[1];
+				lesV[0] = v;
+				System.out.println("return liste Vide");
+				return (lesV);
+			}
+			else{
+				//Sinon on n'a que des voeux externes et on renvoi les voeux externe
+				return listeVoeuxExternes.get(etu.noEtu);
+			}
 		}
 		else{
+			//Sinon on a des voeux internes, et on regarde s'il y a des voeux externes
 			System.out.println("return les voeux");
-			return listeVoeux.get(etu.noEtu);
+			if(listeVoeuxExternes.containsKey(etu.noEtu)){
+				Voeu[] lesV = new Voeu[listeVoeux.get(etu.noEtu).length+listeVoeuxExternes.get(etu.noEtu).length];
+
+				for (int i=0; i<listeVoeux.get(etu.noEtu).length; i++){
+					lesV[i] = listeVoeux.get(etu.noEtu)[i];
+				}
+				for (int i=listeVoeux.get(etu.noEtu).length, j=0; i<lesV.length; i++, j++){
+					lesV[i] = listeVoeuxExternes.get(etu.noEtu)[j];
+				}
+				return lesV;
+			}
+			else{
+				return listeVoeux.get(etu.noEtu);
+			}
 		}
 	}
 
@@ -334,15 +361,45 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			//Création d'un voeu dans ce rectorat
 			System.out.println("on est dans le if");
 			enregistrerVoeu(v);
-			validerVoeu(v);
+			//			validerVoeu(v);
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");
-			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idRectorat);
+			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
 			cgv.faireVoeu(v);
+			enregistrerVoeuxExterne(v);
 		}
 
 	}
+
+
+	/**
+	 * 
+	 * Enregistrement du voeu qui est fait dans un rectorat externe
+	 * @param v
+	 */
+	public void enregistrerVoeuxExterne(Voeu v){
+		if(listeVoeuxExternes.containsKey(v.noE)){
+
+			Voeu[] lesVoeux = listeVoeuxExternes.get(v.noE);
+			Voeu[] listeVoeu = new Voeu[lesVoeux.length+1];
+
+			int nbV=0;
+			for (int i=0; i<lesVoeux.length; i++){
+				listeVoeu[i]=lesVoeux[i];
+				nbV=i;
+			}
+			listeVoeu[nbV] = v;
+			listeVoeuxExternes.put(v.noE, listeVoeu);
+		}
+		else{
+			Voeu[] leVoeu = new Voeu[1];
+			leVoeu[0] = v;
+			listeVoeuxExternes.put(v.noE,  leVoeu);
+		}
+	}
+
 	/**
 	 * Enregistrement du voeu à proprement dit : dans la liste contenu dans le rectorat.
 	 * @param v
@@ -695,6 +752,34 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 		return lesAccredsExt;
 	}
-	//public void verifier
+
+	@Override
+	public String getRectoratUniversite(String nomUniv){
+		String rect = new String();
+		System.out.println("Nom de l'université à contacter : " + nomUniv);
+		if(mesUniversites.containsKey(nomUniv.replace(" ", ""))){
+			return idRectorat;
+		} 
+		else{
+
+			for(int i=0; i<mesRectorats.size(); i++){
+				System.out.println("Taille de la hashtable : " + lesAccredExternRect.size());
+				// si le rectorat courant est different du rectorat actuel
+				if(!mesRectorats.get(i).equals(idRectorat)){
+					//Pour chaque accreditation du rectorat courant 
+					for (int j=0; j<lesAccredExternRect.get(mesRectorats.get(i)).length; j++){
+						System.out.println("Taille de la liste de la HT : " + lesAccredExternRect.get(mesRectorats.get(i)).length);
+						//on ajout l'accreditation dans la liste globale
+						if(lesAccredExternRect.get(mesRectorats.get(i))[j].libelleU.equals(nomUniv)){
+							return mesRectorats.get(i);
+						}
+						//listeAccredExt.add(lesAccredExternRect.get(mesRectorats.get(i))[j]);	
+					}	
+				}
+			}
+		}
+		return ("Pas Trouvé");
+
+	}
 
 }

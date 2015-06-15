@@ -54,7 +54,7 @@ public class ConnexionUniversitaire extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lb_titre.setText("CONNEXION");
+        lb_titre.setText("Connexion Universitaire");
 
         lb_numUniv.setText("Login");
 

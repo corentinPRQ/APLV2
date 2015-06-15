@@ -27,7 +27,7 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
      * Creates new form ConnexionEtudiant
      */
     public ConnexionEtudiant(IHM_Etudiant pParent, ClientEtudiantGV client) {
-    	parent = pParent;
+    	ConnexionEtudiant.parent = pParent;
     	ConnexionEtudiant.clientEtuGV = client;
         initComponents();
     }
@@ -40,7 +40,6 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         lb_titre = new javax.swing.JLabel();
         lb_numEtu = new javax.swing.JLabel();
         lb_mdp = new javax.swing.JLabel();
@@ -48,10 +47,10 @@ public class ConnexionEtudiant extends javax.swing.JFrame {
         tf_mdp = new javax.swing.JTextField();
         bt_connexion = new javax.swing.JButton();
         bt_quitter = new javax.swing.JButton();
-
+    	ConnexionEtudiant.parent.setVisible(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lb_titre.setText("CONNEXION");
+        lb_titre.setText("Connexion Etudiant");
 
         lb_numEtu.setText("Numéro étudiant");
 
