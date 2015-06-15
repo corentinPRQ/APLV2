@@ -83,12 +83,14 @@ public class IHM_Rectorat extends javax.swing.JFrame {
 
     private void bt_changerPeriodeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
     	//Mettre le code de changement de période au sein d'un rectorat.
+    	IGestionVoeuxImpl.changerPeriode();
     }                                                 
 
     private void bt_recupAccredActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        IGestionVoeuxImpl.setMesRectorats(IHM_Rectorat.clientGVM.recupererRectorat());
-        System.out.println("Taille de la liste des rectorats : " + IGestionVoeuxImpl.getMesRectorats().size());
-        IGestionVoeuxImpl.setMesAccredExternes(IGestionVoeuxImpl.getLesAccredExterne());
+        IGestionVoeuxImpl.mesRectorats = IHM_Rectorat.clientGVM.recupererRectorat();
+        System.out.println("Taille de la liste des rectorats : " + IGestionVoeuxImpl.mesRectorats.size());
+        //chargement de la hashtable d'accreditation externe de IGestionVoeuxIMPL
+        IGestionVoeuxImpl.getLesAccredExterne();
     }                                              
 
     /**

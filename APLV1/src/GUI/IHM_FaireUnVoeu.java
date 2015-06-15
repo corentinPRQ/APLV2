@@ -261,6 +261,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
     	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+    	
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(idRectorat),DecisionEtudiant.cree,Etat.cree);
     	clientEtuGV.faireVoeu(voeu);
      	parent.remplirTableVoeu();

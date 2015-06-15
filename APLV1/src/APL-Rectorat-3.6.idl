@@ -95,9 +95,6 @@ module pRectorat {
 	interface IGestionVoeux{
 		
 		// Opération permettant de recuperer la liste des accreditations
-		readonly attribute TabUniv getCatalogueUniversite;
-		
-		// Opération permettant de recuperer la liste des accreditations
 		readonly attribute TabAccred getListeAccreditations;
 		
 		// Opération permettant de recuperer tous les voeux

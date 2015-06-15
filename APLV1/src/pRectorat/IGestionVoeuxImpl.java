@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -24,22 +25,23 @@ import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
-	private static org.omg.CORBA.ORB orb;
-	private static NamingContext nameRoot;
-	private static String nomObj;
+	public static org.omg.CORBA.ORB orb;
+	public static NamingContext nameRoot;
+	public static String nomObj;
 
-	private static ArrayList<String> mesRectorats;
+	public static ArrayList<String> mesRectorats;
 	// nom/ior
-	private static Hashtable<String, String> mesUniversites;
+	public static Hashtable<String, String> mesUniversites;
 
 	//Voeux en fonction du numéro d'étudiant
 
 	//Voeux en fonction du numéro d'étudiant
-	private static Hashtable<String, Voeu[]> listeVoeux;
-	private static Accred[] lesAccredIntern;
-	private static Accred[] lesAccredExtern;
+	public static Hashtable<String, Voeu[]> listeVoeux;
+	public static Accred[] lesAccredIntern;
+	//pour les rectorats ext, leurs accreds correspondantes
+	public static Hashtable<String,Accred[]> lesAccredExternRect;
 	private Hashtable<String,Etudiant> listeEtudiant;
-	private static String idRectorat="";
+	public static String idRectorat="";
 
 	/**
 	 * Constante nombre de voeux max pour gestion tableaux.
@@ -63,12 +65,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		mesRectorats = getLesRectorats();
 		initialiserEtudiants("src/usersEtu"+pidRectorat+".csv");
 		initialiserAccred("src/Accreditation"+pidRectorat+".csv");
-	}
-
-	@Override
-	public Universite[] getCatalogueUniversite() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
@@ -99,9 +95,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		return lesAccredIntern;
 	}
 
-	public static Accred[] getLesAccredExterne(){
+	public static Hashtable<String,Accred[]> getLesAccredExterne(){
 		ArrayList<Accred> tempAccred=new ArrayList<Accred>();
-
+		Accred[] tempAccredRecupExterieur;
 		for(int i=0;i<mesRectorats.size();i++){
 			//Verifie que le rectorat que l'on va appeller n'est pas celui dans lequel on est
 			if(!mesRectorats.get(i).equals(IGestionVoeuxImpl.idRectorat)){
@@ -116,7 +112,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				ClientGestionVoeuGV ce = new ClientGestionVoeuGV(orb, nameRoot, nomObj, idObj);
 
 				//Recupération des Accreditation d'un autre rectorat et stockage dans un tableau temporaire
-				Accred[] tempAccredRecupExterieur;
 				tempAccredRecupExterieur=ce.getListeAccreditation();
 				int tailleArrayAccred = tempAccred.size();
 
@@ -126,14 +121,16 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					tempAccred.add(tempAccredRecupExterieur[iterateurAccredRecup]);
 					iterateurAccredRecup++;
 				}
+				lesAccredExternRect.put(mesRectorats.get(i), tempAccredRecupExterieur);
 			}
+			
 		}
 
-		Accred[] tabARetourner= new Accred[tempAccred.size()];
+		/*Accred[] tabARetourner= new Accred[tempAccred.size()];
 		for(int i=0;i<tempAccred.size();i++){
 			tabARetourner[i]=tempAccred.get(i);
-		}
-		return tabARetourner;
+		}*/
+		return lesAccredExternRect;
 
 	}
 
@@ -576,24 +573,24 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb, nameRoot, nomObj, "Ministere");
 		return (cgm.recupererRectorat());
 	}
-
-	/**
-	 * @return the mesRectorats
-	 */
-	public static ArrayList<String> getMesRectorats() {
-		return mesRectorats;
-	}
-
-	/**
-	 * @param mesRectorats the mesRectorats to set
-	 */
-	public static void setMesRectorats(ArrayList<String> mesRectorats) {
-		IGestionVoeuxImpl.mesRectorats = mesRectorats;
-	}
-
-	public static void setMesAccredExternes(Accred[] pLesAccredExternes){
-		IGestionVoeuxImpl.lesAccredExtern=pLesAccredExternes;
-	}
+//
+//	/**
+//	 * @return the mesRectorats
+//	 */
+//	public static ArrayList<String> getMesRectorats() {
+//		return mesRectorats;
+//	}
+//
+//	/**
+//	 * @param mesRectorats the mesRectorats to set
+//	 */
+//	public static void setMesRectorats(ArrayList<String> mesRectorats) {
+//		IGestionVoeuxImpl.mesRectorats = mesRectorats;
+//	}
+//
+//	public static void setMesAccredExternes(Accred[] pLesAccredExternes){
+//		IGestionVoeuxImpl.lesAccredExternRect=pLesAccredExternes;
+//	}
 
 	@Override
 	public void enregistrerUniversite(String ior, String nom) {
@@ -672,8 +669,23 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		// }
 	}
 
+	@Override
 	public Accred[] getListeAccreditationExternes() {
-		return lesAccredExtern;
+		ArrayList<Accred> listeAccredExt = new ArrayList<Accred>();
+		for(int i=0; i<mesRectorats.size(); i++){
+			for (int j=0; j<lesAccredExternRect.get(mesRectorats.get(i)).length; j++){
+				listeAccredExt.add(lesAccredExternRect.get(mesRectorats.get(i))[j]);	
+			}			
+		}
+		
+		Accred[] lesAccredsExt =new Accred[listeAccredExt.size()];
+		for (int i=0; i< listeAccredExt.size(); i++) {
+			lesAccredsExt[i] = listeAccredExt.get(i);
+		}
+		
+		return lesAccredsExt;
 	} 
+	
+	//public void verifier
 
 }
