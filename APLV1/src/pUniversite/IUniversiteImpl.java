@@ -198,7 +198,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 
 	/**
-	 * Permet de charger les formations pré-requis
+	 * Permet de charger les formations pré-requis	 
 	 * @param path
 	 */
 	private static void initialiserPrerequis(String path) {
@@ -221,8 +221,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[1];
-
-		//Hasthable pour les quotas des masters
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));	 
@@ -250,27 +248,40 @@ public class IUniversiteImpl extends IUniversitePOA{
 				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
 				if (!nomDip.equals(nomDipPrecedent)){
-//					System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
-					preRequis.put(nomDipPrecedent, diplomes);
-					diplomes = new Diplome[1];
-					cpteur = 0;
+					if (preRequis.containsKey(nomDipPrecedent)){
+						Diplome[] aInserer = new Diplome[cpteur+1];
+						Diplome d = new Diplome(nomDipPR, ne);
+						//recopie des éléments du tableaux de dimplomes dans le nouveau tableau (taille+1) 
+						for (int i=0; i<preRequis.get(nomDipPrecedent).length; i++){
+							diplomes[i] = aInserer[i];
+						}
+						aInserer[cpteur]= d;
+						diplomes = aInserer;
+						//System.out.println("Enregistrement du diplome prerequi\n\n");
+						preRequis.put(nomDipPrecedent, diplomes);
+						diplomes = new Diplome[1];
+						cpteur = 0;
+					}
 
 				}
 				nomDipPrecedent = nomDip;
-				//				System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
+				//System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
+				//Elaboration du niveau d'étude
 				if (nomDipPR.contains("L3")){
 					ne = NiveauEtude.licence;
 				}
 				else{ 
 					ne=NiveauEtude.master;
 				}
-				//Gestion des quotas
+
+				//Gestion des quotas et des scores
 				if(!quotaDiplome.containsKey(nomDip)){
 					quotaDiplome.put(nomDip, quota);
 				}
 				if (!seuilScoreDiplome.containsKey(nomDip)){
 					seuilScoreDiplome.put(nomDip, seuilScore);
 				}
+				//Gestion dynamique des tailles des tableaux de chaque Prerequis
 				if(cpteur==0){
 					Diplome d = new Diplome(nomDipPR, ne);
 					diplomes[cpteur] = d;
@@ -279,13 +290,16 @@ public class IUniversiteImpl extends IUniversitePOA{
 				else{
 					Diplome[] aInserer = new Diplome[cpteur+1];
 					Diplome d = new Diplome(nomDipPR, ne);
+					for (int i=0; i<preRequis.get(nomDipPrecedent).length; i++){
+						diplomes[i] = aInserer[i];
+					}
 					aInserer[cpteur]= d;
 					cpteur++;
 					diplomes = aInserer;
 				}
 				System.out.println("Nombre de prerequis pour "+ nomDipPrecedent + " : " +  diplomes.length);
 			}
-//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
+			//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 			preRequis.put(nomDip, diplomes);
 		}catch (Exception e){
 			e.printStackTrace();
