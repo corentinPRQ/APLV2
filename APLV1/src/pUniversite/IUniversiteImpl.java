@@ -218,8 +218,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		//variable comptant le nombre de lignes du fichier par diplome
 		int cpteur = 0;
-		String numDipPrecedent = "";
-		String nomDipPrecedent = "";
 		NiveauEtude ne = null;
 		Diplome[] diplomes = new Diplome[1];
 
@@ -246,68 +244,87 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					}					
 				}
-				//si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
 				//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
-				if (!nomDip.equals(nomDipPrecedent)){
-					if (preRequis.containsKey(nomDipPrecedent)){
-						//création d'un tableau de diplome temporaraire qui a une taille + 1 pour l'insertion du nouveau diplome
-						Diplome[] aInserer = new Diplome[cpteur+1];
-						//récupération des diplomes de la hashTable du master
-						Diplome[] lesDiplomesDuMaster = preRequis.get(nomDipPrecedent);
-						//Création du diplome a insérer
-						Diplome d = new Diplome(nomDipPR, ne);
-						//recopie des éléments du tableaux de dimplomes dans le nouveau tableau (taille+1) 
-						for (int i=0; i<preRequis.get(nomDipPrecedent).length; i++){
-							lesDiplomesDuMaster[i] = aInserer[i];
-						}
-						//Insertion du nouveau diplome prérequis dans le tableau de diplme
-						aInserer[cpteur]= d;
-						lesDiplomesDuMaster = aInserer;
-						//System.out.println("Enregistrement du diplome prerequi\n\n");
-						//ajout du nouveau tableau avec le nouveau diplome prerequis dans la hashtable.
-						preRequis.put(nomDipPrecedent, lesDiplomesDuMaster);
-						diplomes = new Diplome[1];
-						cpteur = 0;
-					}
-
-				}
-				nomDipPrecedent = nomDip;
-				//System.out.println("Diplome : "+numDip+"-"+nomDip + " - Diplome Préparé : "+numDipPR+"-"+nomDipPR +" - " );
-				//Elaboration du niveau d'étude
-				if (nomDipPR.contains("L3")){
-					ne = NiveauEtude.licence;
-				}
-				else{ 
-					ne=NiveauEtude.master;
-				}
-
-				//Gestion des quotas et des scores
-				if(!quotaDiplome.containsKey(nomDip)){
-					quotaDiplome.put(nomDip, quota);
-				}
-				if (!seuilScoreDiplome.containsKey(nomDip)){
-					seuilScoreDiplome.put(nomDip, seuilScore);
-				}
-				//Gestion dynamique des tailles des tableaux de chaque Prerequis
-				if(cpteur==0){
-					Diplome d = new Diplome(nomDipPR, ne);
-					diplomes[cpteur] = d;
-					cpteur++;
-				}
-				else{
+				//Si le numéro diplome est différent du précédent c'est qu'on changé de diplome, donc on enregistre ses notes
+				if (preRequis.containsKey(nomDip)){
+					System.out.println("1 - Diplome "+ nomDip + " trouvé dans la hashtable - nombre des prerequis : " + preRequis.get(nomDip).length);
+					//création d'un tableau de diplome temporaraire qui a une taille + 1 pour l'insertion du nouveau diplome
+					cpteur = preRequis.get(nomDip).length;
 					Diplome[] aInserer = new Diplome[cpteur+1];
-					Diplome d = new Diplome(nomDipPR, ne);
-					for (int i=0; i<preRequis.get(nomDipPrecedent).length; i++){
-						diplomes[i] = aInserer[i];
+					//récupération des diplomes de la hashTable du master
+					Diplome[] lesDiplomesDuMaster = preRequis.get(nomDip);
+
+					//Création du diplome a insérer
+					if (nomDipPR.contains("L3")){
+						ne = NiveauEtude.licence;
 					}
+					else{ 
+						ne=NiveauEtude.master;
+					}
+					Diplome d = new Diplome(nomDipPR, ne);
+
+					//recopie des éléments du tableaux de dimplomes dans le nouveau tableau (taille+1) 
+					for (int i=0; i<preRequis.get(nomDip).length; i++){
+						aInserer[i] = lesDiplomesDuMaster[i];
+						System.out.println("nombre de prerequis : " + i+1);
+						cpteur = i+1 ;
+					}
+
+					//Insertion du nouveau diplome prérequis dans le tableau de diplme
+					//						System.out.println("Insertion - Compteur : " + cpteur);
 					aInserer[cpteur]= d;
-					cpteur++;
+					//System.out.println("Enregistrement du diplome prerequi\n\n");
+					//Ajout du nouveau tableau avec le nouveau diplome prerequis dans la hashtable + ajout du score et du quota
+					lesDiplomesDuMaster = aInserer;
+					preRequis.put(nomDip, lesDiplomesDuMaster);
+
+					//Gestion des quotas et des scores
+					if(!quotaDiplome.containsKey(nomDip)){
+						quotaDiplome.put(nomDip, quota);
+					}
+					if (!seuilScoreDiplome.containsKey(nomDip)){
+						seuilScoreDiplome.put(nomDip, seuilScore);
+					}
+
+					//						System.out.println("2 - Diplome inséré dans la hashtable - nombre des prerequis : " + preRequis.get(nomDip).length);
+					//raz des variables.
+					diplomes = new Diplome[1];
+					cpteur = 0;
+				}else {
+					//						System.out.println("Diplome pas encore trouvé dans la hashtable!");
+					//						System.out.println("Compteur du else : " + cpteur);
+					Diplome[] aInserer = new Diplome[cpteur+1];
+					if (nomDipPR.contains("L3")){
+						ne = NiveauEtude.licence;
+					}
+					else{ 
+						ne=NiveauEtude.master;
+					}
+
+					Diplome d = new Diplome(nomDipPR, ne);
+					//						System.out.println("NOm dip PR = " + nomDipPR + " Nom ne = " + ne);
+					for (int i=0; i<diplomes.length; i++){
+						aInserer[i] = diplomes[i];
+						cpteur = i;
+					}
+
+					aInserer[cpteur]= d;
+					cpteur=0;
 					diplomes = aInserer;
+
+					//insertion du nouveau diplome
+					preRequis.put(nomDip, diplomes);
+
+					//Gestion des quotas et des scores
+					if(!quotaDiplome.containsKey(nomDip)){
+						quotaDiplome.put(nomDip, quota);
+					}
+					if (!seuilScoreDiplome.containsKey(nomDip)){
+						seuilScoreDiplome.put(nomDip, seuilScore);
+					}
 				}
-				System.out.println("Nombre de prerequis pour "+ nomDipPrecedent + " : " +  diplomes.length);
 			}
 			//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
-			preRequis.put(nomDip, diplomes);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
