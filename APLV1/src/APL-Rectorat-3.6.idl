@@ -107,7 +107,7 @@ module pRectorat {
 		void setEtatVoeu(in Voeu v, in Etat e); 
 		
 		//Opération permettant a l'etudiant de faire un voeu
-		void faireVoeu(in Voeu v) raises (VoeuNonTrouve, EtudiantNonTrouve); 
+		Etat faireVoeu(in Voeu v, in string formation) raises (VoeuNonTrouve, EtudiantNonTrouve); 
 		
 		//Opération permettant a  letudiant de repondre a  un voeu en emettant sa decision "COMMENT ACCEDER AU VOEU PAR SON ID ? IOR ?"
 		void repondreVoeu(in DecisionEtudiant pDecision, in Voeu v) raises (VoeuNonTrouve);
@@ -116,7 +116,7 @@ module pRectorat {
 		boolean identifier(in string login,in string mdp)raises (EtudiantNonTrouve);
 
 		//Opération permettant de récuperer l'objet étudiant en fonction de son identifiant
-		Etudiant getUtilisateur(in string numeroEtudiant)raises(EtudiantNonTrouve);
+		Etudiant getEtudiant(in string numeroEtudiant)raises(EtudiantNonTrouve);
 
 		//Opération permettant de récuperer lidentifiant du recorat
 		string getIdRectorat();
@@ -129,6 +129,9 @@ module pRectorat {
 		
 		//Opération permettant de mettre à disposition les accréditations aux autres rectorats
 		TabAccred getListeAccreditationExternes();
+		
+		//Opération permettant de mettre à disposition le rectorat d'une université donnée
+		string getRectoratUniversite(in string nomUniv);
 	};
 };
 

@@ -66,9 +66,9 @@ public class ClientEtudiantGV implements Runnable{
 		
 	}
 	
-	public void faireVoeu(Voeu v){
+	public void faireVoeu(Voeu v, String f){
 		try {
-			ClientEtudiantGV.monGestionVoeu.faireVoeu(v);
+			ClientEtudiantGV.monGestionVoeu.faireVoeu(v, f);
 		} catch (VoeuNonTrouve e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,7 +132,7 @@ public class ClientEtudiantGV implements Runnable{
 	}
 	
 	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
-		return (ClientEtudiantGV.monGestionVoeu.getUtilisateur(numEtudiant));
+		return (ClientEtudiantGV.monGestionVoeu.getEtudiant(numEtudiant));
 	}
 	
 	public static void main(String args[]) {

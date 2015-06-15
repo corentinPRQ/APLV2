@@ -198,7 +198,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws VoeuNonTrouve
 	 * @throws EtudiantNonTrouve 
 	 */
-	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+	private void validerVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
 		String idObj = v.acreditation.libelleU + "_Gestion";
 		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
 		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
@@ -208,20 +208,21 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		//On récupère les accred pour un diplome
 		String dipV = v.acreditation.libelleD;
 		Diplome[] pr = monUniv.getListePrerequis(dipV);
-		//On récupère le diplome de l'étudiant qui a fait le voeu
-		String formaEtu = getUtilisateur(v.noE).formation.libelleD;
+
 		for (int i = 0; i < pr.length; i++) {
-			if (pr[i].libelle.equals(formaEtu)) {
+			if (pr[i].libelle.equals(formation)) {
 				prerequisOK = true;
 				break;
 			}
 		}
 
 		if (prerequisOK) {
+			System.out.println(v.idRSource.nomAcademie +" - "+ v.idRDest.nomAcademie);
 			this.setEtatVoeu(v, Etat.valide_encours);
-		} else {
+		}else{
 			this.setEtatVoeu(v, Etat.non_valide);
 		}
+
 	}
 
 	@Override
@@ -353,7 +354,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * Permet d'enregistrer un voeu dans la liste des voeux
 	 */
 	@Override
-	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+	public Etat faireVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Tester si on est dans le bon rectorat ou pas
 		System.out.println("on rentre dans faire voeux");
 		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
@@ -361,16 +362,17 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			//Création d'un voeu dans ce rectorat
 			System.out.println("on est dans le if");
 			enregistrerVoeu(v);
-			//			validerVoeu(v);
+			validerVoeu(v, formation);
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");
 			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
-			cgv.faireVoeu(v);
+			setEtatVoeu(v, cgv.faireVoeu(v, formation));
 			enregistrerVoeuxExterne(v);
 		}
 
+		return (v.etatVoeu);
 	}
 
 
@@ -585,7 +587,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 	@Override
-	public Etudiant getUtilisateur(String numeroEtudiant)
+	public Etudiant getEtudiant(String numeroEtudiant)
 			throws EtudiantNonTrouve {
 
 		System.out.println(listeEtudiant.get(numeroEtudiant));

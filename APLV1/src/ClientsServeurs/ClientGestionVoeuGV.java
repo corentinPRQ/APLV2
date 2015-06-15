@@ -8,6 +8,7 @@ import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
+import pRectorat.Etat;
 import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
@@ -63,9 +64,11 @@ public class ClientGestionVoeuGV implements Runnable{
 		
 	}
 	
-	public void faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+	public Etat faireVoeu(Voeu v, String f) throws VoeuNonTrouve, EtudiantNonTrouve {
+		//Par défaut le voeux est initialisé à lancien etat du voeu
+		Etat et=v.etatVoeu; 
 		try {
-			ClientGestionVoeuGV.monGV.faireVoeu(v);
+			et=ClientGestionVoeuGV.monGV.faireVoeu(v, f);
 		} catch (VoeuNonTrouve e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,6 +76,11 @@ public class ClientGestionVoeuGV implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return (et);
+	}
+	
+	public void setEtatVoeu(Voeu v, Etat e){
+		ClientGestionVoeuGV.monGV.setEtatVoeu(v, e);
 	}
 	
 	public Accred[] getListeAccreditation(){

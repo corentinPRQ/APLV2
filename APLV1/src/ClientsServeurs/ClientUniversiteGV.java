@@ -128,7 +128,7 @@ public class ClientUniversiteGV implements Runnable{
 	}
 	
 	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
-		return (ClientEtudiantGV.monGestionVoeu.getUtilisateur(numEtudiant));
+		return (ClientEtudiantGV.monGestionVoeu.getEtudiant(numEtudiant));
 	}
 	
 	public void setEtatVoeu(Voeu v, Etat e) {

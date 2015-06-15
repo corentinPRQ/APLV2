@@ -264,7 +264,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     	String nomRectDest = IHM_FaireUnVoeu.clientEtuGV.getRectoratUniversite(accred.libelleU);
     
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
-    	clientEtuGV.faireVoeu(voeu);
+    	clientEtuGV.faireVoeu(voeu, parent.utilisateur.formation.libelleD);
      	
     	//On ne renvoi pas les voeux des autres académie là...
     	parent.remplirTableVoeu();
