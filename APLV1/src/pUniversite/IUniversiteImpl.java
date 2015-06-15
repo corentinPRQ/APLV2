@@ -188,7 +188,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 	public Diplome[] getListePrerequis(String diplome) {
 		System.out.println("Taille de la hashtable : " + preRequis.size());
 		if (preRequis.containsKey(diplome)){
-			return preRequis.get(diplome);
+			Diplome[] dipPRTmp = preRequis.get(diplome);
+			return dipPRTmp;
 		}
 		else{
 			System.err.println("Valeur non trouvée");
