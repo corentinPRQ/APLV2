@@ -43,9 +43,9 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 	public IHM_FaireUnVoeu(IHM_Etudiant pParent, ClientEtudiantGV pClientEtuGV) {
 		parent = pParent;
 		clientEtuGV = pClientEtuGV;
-		lesAccred = ConnexionEtudiant.clientEtuGV.getListeAccreditation();
-		lesAccredExternes= ConnexionEtudiant.clientEtuGV.getListeAccreditationExternes();
-		idRectorat=ConnexionEtudiant.clientEtuGV.getIdRectorat();
+		lesAccred = IHM_FaireUnVoeu.clientEtuGV.getListeAccreditation();
+		lesAccredExternes= IHM_FaireUnVoeu.clientEtuGV.getListeAccreditationExternes();
+		idRectorat=IHM_FaireUnVoeu.clientEtuGV.getIdRectorat();
 		regroupementAccred=new Hashtable<String,ArrayList<String>>();
 		initComponents();
 		this.regrouperAccred();
