@@ -270,6 +270,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
     		for (Voeu voeu : listeVoeux) {
 				if(voeu.etatVoeu.equals(Etat.liste_principale)){
 					voeuAffiche = voeu;
+					break;
 				}
     		}
     	}

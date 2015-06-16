@@ -263,8 +263,10 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_ajouterVoeuxActionPerformed
 
     private void bt_repondreVoeuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_repondreVoeuActionPerformed
-        IHM_RepondreVoeu IHM_Rep = new IHM_RepondreVoeu(clientEtuGV, listeVoeux);
-        IHM_Rep.setVisible(true);
+        if(IHM_Etudiant.clientEtuGV.getPeriodeEnCours().equals(PeriodeApplication.PERIODE_3.toString())){
+        	IHM_RepondreVoeu IHM_Rep = new IHM_RepondreVoeu(clientEtuGV, listeVoeux);
+            IHM_Rep.setVisible(true);
+        }
     }
     
     public void remplirTableVoeu(){

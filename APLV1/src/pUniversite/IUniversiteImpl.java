@@ -127,15 +127,16 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	public void majListes() { 
 		//changement de période. P4
-		//on recharge les voeux et on regarde les décisions de l'étudiant
-
+		//TODO on recharge les voeux et on regarde les décisions de l'étudiant
 		for(int i=0; i<listeCandidatures.size(); i++){
 			Voeu vTmp = listeCandidatures.get(i);
 			if(vTmp.decEtudiant == DecisionEtudiant.oui){
 				//on suppr les autres candidatures de l'étudiant
 				i++;
 				Voeu vTmp2 = listeCandidatures.get(i);
+				//tant que le voeu suivant est du même étudiant
 				while(vTmp2.noE.equals(vTmp.noE)){
+					//on supprime le voeu suivant des listes
 					if(listePrincipale.contains(vTmp2)){
 						listePrincipale.remove(vTmp2);
 					}else if(listeComplementaire.contains(vTmp2)){
@@ -144,7 +145,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 					i++;
 					vTmp2 = listeCandidatures.get(i);
 				}
-				//on sort quand le voeux est d'un autre étudiant
+				//on sort quand le voeu est d'un autre étudiant
 				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
 				i--;
 
@@ -153,6 +154,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}else if(vTmp.decEtudiant == DecisionEtudiant.non_mais){
 				//TODO
 			}else if(vTmp.decEtudiant == DecisionEtudiant.non){
+				// si l'étudiant a refusé le voeu, on le supprime des listes
 				if(listePrincipale.contains(vTmp)){
 					listePrincipale.remove(vTmp);
 				}else if(listeComplementaire.contains(vTmp)){
