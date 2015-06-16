@@ -23,6 +23,7 @@ import utilitaires.utils;
 import Applications.PeriodeApplication;
 import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
+import ClientsServeurs.ClientGestionVoeuxUniversite;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public static org.omg.CORBA.ORB orb;
@@ -33,8 +34,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	// nom/ior
 	public static Hashtable<String, String> mesUniversites;
 
-	//Voeux en fonction du numéro d'étudiant
-
+	//Voeux en fonction de l'université voulue 
+	public static Hashtable<String, Voeu[]> listeVoeuxUniv;
 	//Voeux en fonction du numéro d'étudiant
 	public static Hashtable<String, Voeu[]> listeVoeux;
 	//Voeux qui sont fait dans d'autres rectorats
@@ -67,6 +68,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		listeEtudiant=new Hashtable<String, Etudiant>();
 		lesAccredExternRect = new Hashtable<String, Accred[]>();
 		listeVoeuxExternes = new Hashtable<String, Voeu[]>();
+		listeVoeuxUniv = new Hashtable<String, Voeu[]>();
 
 		mesRectorats = getLesRectorats();
 		initialiserEtudiants("src/usersEtu"+pidRectorat+".csv");
@@ -199,7 +201,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws EtudiantNonTrouve 
 	 */
 	private void validerVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
-		String idObj = v.acreditation.libelleU + "_Gestion";
 		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
 		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
@@ -280,18 +281,22 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			FileOutputStream fos;
 			try {
 				fos = new FileOutputStream("parametres.properties");
-				if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_1.toString())) {
-					p.setProperty("periode",
-							PeriodeApplication.PERIODE_2.toString());
-				} else if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_2.toString())) {
-					p.setProperty("periode",
-							PeriodeApplication.PERIODE_3.toString());
-				} else if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_3.toString())) {
-					p.setProperty("periode",
-							PeriodeApplication.PERIODE_4.toString());
+				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_1.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_2.toString());
+				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_2.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_3.toString());
+					//on contacte chaque université pour vérifier en fonction des pré-requis, les voeux qui lui sont destinés
+					String codeUniv="";
+					while(listeVoeuxUniv.keys().hasMoreElements()){
+						codeUniv=listeVoeuxUniv.keys().nextElement();
+					}
+					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+					IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
+					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
+				
+				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_4.toString());
 				}
 				// Enregistrement
 				p.store(fos, null);
@@ -434,6 +439,22 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			tabV[0] = v;
 			listeVoeux.put(v.noE, tabV);
 			System.out.println(">On a put un premier voeu pour l'étuiant "+v.noE);
+		}
+		
+		//Ajout du voeu dans la hashtable de univ/Voeux[]
+		if(listeVoeuxUniv.containsKey(v.acreditation.libelleU)){
+			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acreditation.libelleU);
+			int tailleVoeuxTmp = voeuxExistants.length+1;
+			Voeu[] voeuxTmp = new Voeu[tailleVoeuxTmp];
+			for (int i=0; i<tailleVoeuxTmp-1; i++){
+				voeuxTmp[i]= voeuxExistants[i];
+			}
+			voeuxTmp[voeuxTmp.length-1] = v;
+			listeVoeuxUniv.put(v.acreditation.libelleU, voeuxTmp);
+		}else{
+			// si l'université n'existe pas, on la crée
+			Voeu[] newTabV= {v};
+			listeVoeuxUniv.put(v.acreditation.libelleU, newTabV);
 		}
 
 	}
