@@ -192,7 +192,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
             }
         });
 
-        bt_Annuler.setText("Annuler");
+        bt_Annuler.setText("Retour");
         bt_Annuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_AnnulerActionPerformed(evt);
