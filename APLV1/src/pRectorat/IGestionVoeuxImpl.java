@@ -201,8 +201,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws EtudiantNonTrouve 
 	 */
 
-	private void validerVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
-		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
+	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+		String iorTmp = mesUniversites.get(v.acredVoeu.libelleU.replace(" ", ""));
 		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 
@@ -443,19 +443,19 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		
 		//Ajout du voeu dans la hashtable de univ/Voeux[]
-		if(listeVoeuxUniv.containsKey(v.acreditation.libelleU)){
-			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acreditation.libelleU);
+		if(listeVoeuxUniv.containsKey(v.acredVoeu.libelleU)){
+			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acredVoeu.libelleU);
 			int tailleVoeuxTmp = voeuxExistants.length+1;
 			Voeu[] voeuxTmp = new Voeu[tailleVoeuxTmp];
 			for (int i=0; i<tailleVoeuxTmp-1; i++){
 				voeuxTmp[i]= voeuxExistants[i];
 			}
 			voeuxTmp[voeuxTmp.length-1] = v;
-			listeVoeuxUniv.put(v.acreditation.libelleU, voeuxTmp);
+			listeVoeuxUniv.put(v.acredVoeu.libelleU, voeuxTmp);
 		}else{
 			// si l'université n'existe pas, on la crée
 			Voeu[] newTabV= {v};
-			listeVoeuxUniv.put(v.acreditation.libelleU, newTabV);
+			listeVoeuxUniv.put(v.acredVoeu.libelleU, newTabV);
 		}
 
 	}
