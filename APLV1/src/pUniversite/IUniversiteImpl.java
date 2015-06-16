@@ -432,7 +432,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		for (int i=0; i<listeAccred.length; i++){
 			// on parcours les voeux pour ajouter les voeux par diplome
 			for(int j=0; j<listeCandidatures.size(); j++){
-				if(listeCandidatures.get(j).acreditation.equals(listeAccred[i])){
+				if(listeCandidatures.get(j).acredVoeu.libelleD.equals(listeAccred[i].libelleD)){
 					tabVoeuxDip.add(listeCandidatures.get(j));
 				}
 			}

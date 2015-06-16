@@ -68,7 +68,7 @@ public class ClientEtudiantGV implements Runnable{
 	
 	public void faireVoeu(Voeu v, String f){
 		try {
-			ClientEtudiantGV.monGestionVoeu.faireVoeu(v, f);
+			ClientEtudiantGV.monGestionVoeu.faireVoeu(v);
 		} catch (VoeuNonTrouve e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

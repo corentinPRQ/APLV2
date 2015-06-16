@@ -65,7 +65,8 @@ module pRectorat {
 	
 	struct Voeu{
 		string noE;
-		Accred acreditation;
+		Accred acredFormation;
+		Accred acredVoeu;
 		Rectorat idRSource;
 		Rectorat idRDest;
 		DecisionEtudiant decEtudiant;
@@ -107,7 +108,7 @@ module pRectorat {
 		void setEtatVoeu(in Voeu v, in Etat e); 
 		
 		//Opération permettant a l'etudiant de faire un voeu
-		Etat faireVoeu(in Voeu v, in string formation) raises (VoeuNonTrouve, EtudiantNonTrouve); 
+		Etat faireVoeu(in Voeu v) raises (VoeuNonTrouve, EtudiantNonTrouve); 
 		
 		//Opération permettant a  letudiant de repondre a  un voeu en emettant sa decision "COMMENT ACCEDER AU VOEU PAR SON ID ? IOR ?"
 		void repondreVoeu(in DecisionEtudiant pDecision, in Voeu v) raises (VoeuNonTrouve);

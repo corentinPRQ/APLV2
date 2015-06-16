@@ -59,7 +59,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
         setMeilleurVoeu();
         textFielMeilleurVoeu.setEnabled(false);
         if(voeuAffiche!=null){
-        	textFielMeilleurVoeu.setText(voeuAffiche.acreditation.libelleD + " à "+voeuAffiche.acreditation.libelleU);
+        	textFielMeilleurVoeu.setText(voeuAffiche.acredVoeu.libelleD + " à "+voeuAffiche.acredVoeu.libelleU);
         }else{
         	textFielMeilleurVoeu.setText("Aucun voeu n'est disponible pour vous.");
         }

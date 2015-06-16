@@ -260,10 +260,10 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
-    	Accred accred= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
-    	String nomRectDest = IHM_FaireUnVoeu.clientEtuGV.getRectoratUniversite(accred.libelleU);
+    	Accred accredVoeu= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
+    	String nomRectDest = IHM_FaireUnVoeu.clientEtuGV.getRectoratUniversite(accredVoeu.libelleU);
     
-    	Voeu voeu = new Voeu(parent.utilisateur.noEtu,accred,new Rectorat(idRectorat),new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
+    	Voeu voeu = new Voeu(parent.utilisateur.noEtu, parent.utilisateur.formation ,accredVoeu, new Rectorat(idRectorat), new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
     	clientEtuGV.faireVoeu(voeu, parent.utilisateur.formation.libelleD);
      	
     	//On ne renvoi pas les voeux des autres académie là...

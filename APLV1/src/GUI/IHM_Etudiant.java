@@ -243,7 +243,9 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     public void remplirTableVoeu(){
     	IHM_Etudiant.listeVoeux=IHM_Etudiant.clientEtuGV.consulterListeVoeux(etu);
     	for(int i=0;i<listeVoeux.length;i++){
-    		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acreditation.libelleD,i, 0);
+    		//mettre la formation en cours de l'étudiant ainsi que l'université dans laquelle il postule
+//    		sysout;
+    		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acredVoeu.libelleD,i, 0);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].etatVoeu.toString(),i, 1);
     		tab_VoeuxEtudiant.setValueAt("nexiste pas dans le voeu",i, 2);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].decEtudiant,i, 3);

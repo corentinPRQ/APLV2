@@ -64,11 +64,11 @@ public class ClientGestionVoeuGV implements Runnable{
 		
 	}
 	
-	public Etat faireVoeu(Voeu v, String f) throws VoeuNonTrouve, EtudiantNonTrouve {
+	public Etat faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Par défaut le voeux est initialisé à lancien etat du voeu
 		Etat et=v.etatVoeu; 
 		try {
-			et=ClientGestionVoeuGV.monGV.faireVoeu(v, f);
+			et=ClientGestionVoeuGV.monGV.faireVoeu(v);
 		} catch (VoeuNonTrouve e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -170,7 +170,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println(tabV.length);
 			return tabV;
 		} else {
-			Voeu v = new Voeu("0", new Accred(), new Rectorat(),new Rectorat(),null,
+			Voeu v = new Voeu("0", new Accred(), new Accred(), new Rectorat(),new Rectorat(),null,
 					null);
 			Voeu[] lesV = new Voeu[1];
 			lesV[0] = v;
@@ -198,19 +198,19 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws VoeuNonTrouve
 	 * @throws EtudiantNonTrouve 
 	 */
-	private void validerVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
-		String idObj = v.acreditation.libelleU + "_Gestion";
-		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
+	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+		String idObj = v.acredVoeu.libelleU + "_Gestion";
+		String iorTmp = mesUniversites.get(v.acredVoeu.libelleU.replace(" ", ""));
 		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 
 		boolean prerequisOK = false;
 		//On récupère les accred pour un diplome
-		String dipV = v.acreditation.libelleD;
+		String dipV = v.acredVoeu.libelleD;
 		Diplome[] pr = monUniv.getListePrerequis(dipV);
 
 		for (int i = 0; i < pr.length; i++) {
-			if (pr[i].libelle.equals(formation)) {
+			if (pr[i].libelle.equals(v.acredFormation.libelleD)) {
 				prerequisOK = true;
 				break;
 			}
@@ -318,7 +318,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			//S'il n'y a pas de voeux externes
 			if(!listeVoeuxExternes.containsKey(etu.noEtu)){
 				//Bouchon pour ne pas renvoyer NULL et satisfaire CORBA.
-				Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
+				Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Accred("2", "d2", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 						Etat.cree);
 				Voeu[] lesV = new Voeu[1];
 				lesV[0] = v;
@@ -354,7 +354,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * Permet d'enregistrer un voeu dans la liste des voeux
 	 */
 	@Override
-	public Etat faireVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
+	public Etat faireVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
 		//Tester si on est dans le bon rectorat ou pas
 		System.out.println("on rentre dans faire voeux");
 		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
@@ -362,13 +362,13 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			//Création d'un voeu dans ce rectorat
 			System.out.println("on est dans le if");
 			enregistrerVoeu(v);
-			validerVoeu(v, formation);
+			validerVoeu(v);
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");
 			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
-			setEtatVoeu(v, cgv.faireVoeu(v, formation));
+			setEtatVoeu(v, cgv.faireVoeu(v));
 			enregistrerVoeuxExterne(v);
 		}
 
