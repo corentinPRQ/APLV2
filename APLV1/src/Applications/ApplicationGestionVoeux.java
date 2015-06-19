@@ -25,7 +25,8 @@ public class ApplicationGestionVoeux {
 			//*******************************************
 			// Recuperation du naming service
 			NamingContext nameRoot=org.omg.CosNaming.NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
-
+//			Voici la façon de faire pour faire un appel à distance
+			//NamingContext nameRoot = org.omg.CosNaming.NamingContextHelper.narrow(orb.string_to_object("corbaloc:iiop:1.2@130.120.214.43:2001/NameService"));
 			
 //			System.out.println("Quel est le nom du Rectorat ?");
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

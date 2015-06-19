@@ -27,7 +27,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 	private static Etudiant etu; // l'étudiant connecté.
 
 	//private ApplicationGestionEtudiant applicationGE;
-	public static Voeu[] listeVoeux;
+	public static Voeu[] listeVoeux = new Voeu[1];
 	private static Hashtable<String, String> listeEtudiants;
 	public Etudiant utilisateur;
 

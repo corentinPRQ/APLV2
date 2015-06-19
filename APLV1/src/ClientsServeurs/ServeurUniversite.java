@@ -123,7 +123,8 @@ public class ServeurUniversite implements Runnable {
 
 			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba ?");
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			String nomObj = in.readLine();
+//			String nomObj = in.readLine();
+			String nomObj = "SRV_ClientGV";
 
 			ServeurUniversite serv = new ServeurUniversite(orb, nameRoot, nomObj);
 			serv.travailler();

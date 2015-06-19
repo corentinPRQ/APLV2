@@ -31,6 +31,7 @@ public class ClientUniversiteUniv implements Runnable{
 		this.nomObj = nomObj;
 		this.idObj = idObj;
 		this.listeDeVoeux = new ArrayList<Voeu>();
+		travailler();
 	}
 
 	public void travailler(){

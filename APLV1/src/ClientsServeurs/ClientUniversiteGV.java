@@ -1,23 +1,18 @@
 package ClientsServeurs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.JFrame;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
-import pRectorat.DecisionEtudiant;
 import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
 import pRectorat.Voeu;
-import pRectorat.VoeuNonTrouve;
 
 public class ClientUniversiteGV implements Runnable{
 	
@@ -57,7 +52,7 @@ public class ClientUniversiteGV implements Runnable{
 			
 			// Récupération du nom de l'objet distant
 			ClientUniversiteGV.monGestionVoeu = IGestionVoeuxHelper.narrow(distantObj);
-			
+			System.out.println("fin travailler");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -127,12 +122,25 @@ public class ClientUniversiteGV implements Runnable{
 		return (monUniversite);
 	}
 	
-	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
-		return (ClientEtudiantGV.monGestionVoeu.getEtudiant(numEtudiant));
+	/**
+	 * Renvoi un objet etudiant via un numéro etudiant
+	 * @param numEtudiant
+	 * @return
+	 */
+	public Etudiant getEtudiant (String numEtudiant){
+		System.out.println("METHODE GetEtudiant - ClientUniversite --> monGV = " + monGestionVoeu);
+		try {
+			Etudiant e = ClientUniversiteGV.monGestionVoeu.getEtudiant(numEtudiant);
+			return (e);
+		} catch (EtudiantNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (null);
 	}
 	
 	public void setEtatVoeu(Voeu v, Etat e) {
-		ClientEtudiantGV.monGestionVoeu.setEtatVoeu(v, e);
+		ClientUniversiteGV.monGestionVoeu.setEtatVoeu(v, e);
 	}
 	
 

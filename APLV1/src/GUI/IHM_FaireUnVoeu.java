@@ -26,7 +26,6 @@ import ClientsServeurs.ClientEtudiantGV;
 
 /**
  *
- * @author guilhem
  */
 public class IHM_FaireUnVoeu extends javax.swing.JFrame {
 
@@ -264,7 +263,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     	String nomRectDest = IHM_FaireUnVoeu.clientEtuGV.getRectoratUniversite(accredVoeu.libelleU);
     
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu, parent.utilisateur.formation ,accredVoeu, new Rectorat(idRectorat), new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
-    	clientEtuGV.faireVoeu(voeu, parent.utilisateur.formation.libelleD);
+    	clientEtuGV.faireVoeu(voeu);
      	
     	//On ne renvoi pas les voeux des autres académie là...
     	parent.remplirTableVoeu();

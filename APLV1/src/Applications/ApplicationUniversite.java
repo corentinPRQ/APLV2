@@ -8,6 +8,7 @@ import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Rectorat;
 import pRectorat.Universite;
+import pUniversite.IUniversiteImpl;
 import ClientsServeurs.ClientUniversiteGV;
 import ClientsServeurs.ServeurUniversite;
 import GUI.IHM_Universitaire;
@@ -52,8 +53,9 @@ public class ApplicationUniversite {
 			// Construction du Client spécifique à l'action à faire
 //			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba Client ?");
 			String nomOb = "Client_PaulSabatier_Gestion";
-			System.out.println("lancement du client Université");
+			System.out.println("\n\n\ninitialisation du client GV depuis l'Appli université \n");
 			ClientUniversiteGV cu = new ClientUniversiteGV (orb, nameRoot, nomOb, idObj);
+			//sleep de synchro
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -61,6 +63,7 @@ public class ApplicationUniversite {
 				e.printStackTrace();
 			}
 			cu.enregistrerUniversite(nomObj, ServeurUniversite.getIOR());
+			IUniversiteImpl.initialiserAccred();
 //			Thread tcli = new Thread(cu);
 //			tcli.start();
 

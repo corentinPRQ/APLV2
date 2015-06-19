@@ -66,7 +66,7 @@ public class ClientEtudiantGV implements Runnable{
 		
 	}
 	
-	public void faireVoeu(Voeu v, String f){
+	public void faireVoeu(Voeu v){
 		try {
 			ClientEtudiantGV.monGestionVoeu.faireVoeu(v);
 		} catch (VoeuNonTrouve e) {

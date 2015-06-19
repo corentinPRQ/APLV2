@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import utilitaires.utils;
 import Applications.PeriodeApplication;
 import ClientsServeurs.ClientGestionVoeuGV;
 import ClientsServeurs.ClientGestionVoeuxMinistere;
-import ClientsServeurs.ClientGestionVoeuxUniversite;
 
 public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	public static org.omg.CORBA.ORB orb;
@@ -267,6 +265,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 */
 	public static void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
+		System.out.println("\n\n\n **************** Changement de PERIODE - Rectorat **************** \n\n");
 		Properties p;
 		p = null;
 		try {
@@ -288,14 +287,16 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					p.setProperty("periode",PeriodeApplication.PERIODE_3.toString());
 					//on contacte chaque université pour vérifier en fonction des pré-requis, les voeux qui lui sont destinés
 					String codeUniv="";
-					while(listeVoeuxUniv.keys().hasMoreElements()){
-						codeUniv=listeVoeuxUniv.keys().nextElement();
+					Enumeration <String> lesUniv = listeVoeuxUniv.keys();
+					while(lesUniv.hasMoreElements()){
+						codeUniv=lesUniv.nextElement();
+
+						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+						IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
+						monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
+						System.out.println("Fin verif candidature");
 					}
-					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
-					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
-					IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
-					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
-				
 				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
 					p.setProperty("periode",PeriodeApplication.PERIODE_4.toString());
 				}
@@ -309,6 +310,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Fin de changerPEriode");
 	}
 
 	/**
@@ -441,7 +443,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			listeVoeux.put(v.noE, tabV);
 			System.out.println(">On a put un premier voeu pour l'étuiant "+v.noE);
 		}
-		
+
 		//Ajout du voeu dans la hashtable de univ/Voeux[]
 		if(listeVoeuxUniv.containsKey(v.acredVoeu.libelleU)){
 			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acredVoeu.libelleU);
@@ -598,24 +600,28 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	public void afficherLesEtu(){
-		Enumeration nb=listeEtudiant.elements();
-		Object key;
-		while(nb.hasMoreElements()) {
-			key=nb.nextElement();
-			Etudiant value=(Etudiant) key;
-			System.out.println("cle = "+ key + "" + value.toString() );
-		}
-	}
+//	public void afficherLesEtu(){
+//		Enumeration nb=listeEtudiant.elements();
+//		Object key;
+//		while(nb.hasMoreElements()) {
+//			key=nb.nextElement();
+//			Etudiant value=(Etudiant) key;
+//			System.out.println("cle = "+ key + "" + value.toString() );
+//		}
+//	}
 
 	@Override
 	public Etudiant getEtudiant(String numeroEtudiant)
 			throws EtudiantNonTrouve {
-
-		System.out.println(listeEtudiant.get(numeroEtudiant));
-		return(listeEtudiant.get(numeroEtudiant));
+		System.out.println("Méthode GetEtudiant - Rectorat");
+		if (listeEtudiant.containsKey(numeroEtudiant)){
+			System.out.println(listeEtudiant.get(numeroEtudiant));
+			return(listeEtudiant.get(numeroEtudiant));
+		}
+		else {
+			throw new EtudiantNonTrouve();
+		}
 	}
-
 
 
 	@Override
@@ -676,11 +682,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//	}
 
 	@Override
-	public void enregistrerUniversite(String ior, String nom) {
+	public void  enregistrerUniversite(String ior, String nom) {
 		System.out.println("\n\n\nEnregistrement de l'universités" + nom+"\n\n\n");
 		mesUniversites.put(nom, ior);
 		System.out.println("enregistrement réalisé - taille = " + mesUniversites.size());
-
 	}
 
 	/**

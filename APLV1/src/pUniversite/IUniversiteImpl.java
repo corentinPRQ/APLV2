@@ -3,6 +3,7 @@ package pUniversite;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.omg.CORBA.ORB;
@@ -14,7 +15,8 @@ import pRectorat.Diplome;
 import pRectorat.Etat;
 import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
-import pRectorat.IGestionVoeuxImpl;
+import pRectorat.IGestionVoeux;
+import pRectorat.IGestionVoeuxHelper;
 import pRectorat.NiveauEtude;
 import pRectorat.Voeu;
 import Applications.ApplicationUniversite;
@@ -56,7 +58,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	//key idEtudiant, son score
 	private Hashtable<String,Integer> scoreEtu;
 
-	private ClientUniversiteGV cugv;
+	private static ClientUniversiteGV cugv;
 
 	public IUniversiteImpl(Hashtable<String, String> listeU, ORB orb, NamingContext nameRoot, String nomObj ) {
 		super();
@@ -80,7 +82,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		initialiserNotesEtudiant("src/notes.csv");
-
+		
 		IUniversiteImpl.listeUniversitaires = listeU;
 
 		this.orb = orb;
@@ -89,8 +91,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		// méthode appelée par l'universitaire pour consulter les voeux
 		String idObj = ApplicationUniversite.getIdentiteUniversite().idR.nomAcademie + "_GestionVoeux";
-		cugv = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
 
+		System.out.println("\n\n\ninitialisation du client GV depuis l'IMPL \n");
+
+		IUniversiteImpl.cugv = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
 	}
 
 
@@ -396,6 +400,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 		return preRequis;
 	}
 
+	public static void initialiserAccred(){
+		listeAccred=cugv.getListeAccredUniversite(ApplicationUniversite.getIdentiteUniversite().nomUniv);
+	}
 
 	/**
 	 * méthode appelée automatiquement par gestionVoeu (rectorat) en début de P3 pour faire la vérif des prérequis
@@ -403,15 +410,18 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	@Override
 	public void verifCandidature(Voeu[] tabVoeux) {
+		System.out.println("Vérification de la candidature - UNIVERSITE - remplir liste Voeu");
 		this.remplirVoeuxDip(tabVoeux);
+		System.out.println("Vérification de la candidature - UNIVERSITE - ordonner voeu dip");
 		this.ordonnerVoeuxDip();
 		try {
+			System.out.println("Vérification de la candidature - UNIVERSITE - Etablir les liste");
 			this.etablirListe();
 		} catch (voeuNonTrouve e) {
 			System.err.println("Le voeu ne peut pas être ajouté à une liste car il n'est pas dans la liste des candidatures");
 			e.printStackTrace();
 		}
-
+		System.out.println("Fin verifCandidature - UNIVERSITE");
 	}
 
 	/**
@@ -419,6 +429,8 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @param tabVoeux
 	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
+
+		System.out.println("METHODE REMPLIR VOEUX DIP - Universite");
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
 		//on charge les voeux dans le tableau des candidatures
 		for (int i=0;i<tabVoeux.length; i++){
@@ -431,28 +443,40 @@ public class IUniversiteImpl extends IUniversitePOA{
 			}
 		}
 		// pour charque accreditation, on construit une hashtable avec un tableau des voeux demandant chaque formation
+		System.out.println("Création de la hashTable Univ-Voeu[]");
 		for (int i=0; i<listeAccred.length; i++){
 			// on parcours les voeux pour ajouter les voeux par diplome
+			
 			for(int j=0; j<listeCandidatures.size(); j++){
-				if(listeCandidatures.get(j).acredVoeu.libelleD.equals(listeAccred[i].libelleD)){
-					tabVoeuxDip.add(listeCandidatures.get(j));
+				if(listeAccred[i]!=null){
+					System.out.println(listeCandidatures.get(j).acredVoeu.libelleD);
+					System.out.println(listeAccred[i].libelleD);
+					if(listeCandidatures.get(j).acredVoeu.libelleD.equals(listeAccred[i].libelleD)){
+						tabVoeuxDip.add(listeCandidatures.get(j));
+					}
 				}
 			}
-			listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
+			if (tabVoeuxDip.size()!=0){
+				listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
+			}
 			tabVoeuxDip.clear();
 		}
+		System.out.println("Sortie du remplirVoeuxDIP");
 	}
 
 	/**
 	 * Permet d'établir le score des étudiants pour trier les voeux par pertinance
 	 */
 	private void ordonnerVoeuxDip(){
+		System.out.println("EtablirScore");
 		this.etablirScore();
+		
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
-		while(listeVoeuxDiplome.keys().hasMoreElements()){
+		Enumeration <String> enumVoeu= listeVoeuxDiplome.keys();
+		while(enumVoeu.hasMoreElements()){
 			//pour le premier diplome
-			String dip = listeVoeuxDiplome.keys().nextElement();
+			String dip = enumVoeu.nextElement();
 			//on récupère tous les voeux
 			ArrayList<Voeu> tabVoeuxTmp = listeVoeuxDiplome.get(dip);
 			//on tri ces voeux en fonction du score
@@ -461,6 +485,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			listeVoeuxDiplome.put(dip, tabVoeuxTmp);
 
 		}
+		System.out.println("Fin de ordonnerVoeuDip");
 	}
 
 	/**
@@ -468,8 +493,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Remplie la hashtable numEtu, son score
 	 */
 	private void etablirScore(){
-		while(listeNotesEtudiants.keys().hasMoreElements()){
-			String numEtuTmp = listeNotesEtudiants.keys().nextElement();
+		System.out.println("Etablir score : ");
+		//ATTENTION boucle infinie!!! 
+		Enumeration <String> enumNotes= listeNotesEtudiants.keys();
+		while(enumNotes.hasMoreElements()){
+			String numEtuTmp = enumNotes.nextElement();
 			Note[] noteEtuTmp = listeNotesEtudiants.get(numEtuTmp);
 			Integer score = new Integer(0);
 			int moyPos = 0;
@@ -483,7 +511,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			score = (moyPos+moyValid)/6;
 			scoreEtu.put(numEtuTmp, score);
 		}
-
+		System.out.println("Fin du etablir score");
 	}
 
 	/**
@@ -515,9 +543,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private static int testValid(Note n){
 		int score = 0;
 		String valid = n.validation;
-		if(valid.equals("s1")){
+		if(valid.equals("1S")){
 			score = 3;
-		}else if(valid.equals("s2")){
+		}else if(valid.equals("2S")){
 			score = 2;
 		}else if(valid.equals("R")){
 			score = 1;
@@ -562,9 +590,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @throws voeuNonTrouve 
 	 */
 	private void etablirListe() throws voeuNonTrouve{
+		Enumeration <String> enumDip = listeVoeuxDiplome.keys();
 		//On parcourt la hashtable diplome/voeux
-		while(listeVoeuxDiplome.keys().hasMoreElements()){
-			String dipTmp = listeVoeuxDiplome.keys().nextElement();
+		while(enumDip.hasMoreElements()){
+			String dipTmp = enumDip.nextElement();
 			//On récupère les voeux sur ce diplome
 			ArrayList<Voeu> listeVoeuxTmp = listeVoeuxDiplome.get(dipTmp);
 			//On récupère le quota défini par l'universitaire concernant le diplome
@@ -575,7 +604,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
 				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
-				cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
+				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
 				i++;
 			}
 			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
@@ -585,7 +614,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
 					listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
 					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
-					cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
+					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
 					cptV++;
 				}
 				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
@@ -593,14 +622,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
 						listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
 						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
-						cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
+						IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
 					}
 				}
 			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
 				while(i<listeVoeuxTmp.size()){
 					listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
 					ajouterListeRejet(listeVoeuxTmp.get(i));
-					cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
+					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
 					i++;
 				}
 			}
@@ -649,17 +678,26 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @throws EtudiantNonTrouve 
 	 */
 	private void chargerNotesEtuExt(String noEtu) throws EtudiantNonTrouve{
+		System.out.println("Métode : Charger note Etu Ext - Universite");
 		ClientUniversiteUniv cuu = null;
 		//On récupère l'objet étudiant correspondant à son numéro
+		System.out.println("GET ETUDIANT DISTANT : " + cugv);
 		Etudiant etuTmp = cugv.getEtudiant(noEtu);
+
 		//On regarde si l'étudiant est de cette université ou d'une autre
+		System.out.println("On sort du getEtudiant avec Etu = " + etuTmp.nom);
 		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
+			
 			//s'il n'est pas cette université, il faut demander ses notes à la sienne
 			//On regarde si on a déjà un client pour cette université sinon on en crée un
 			if(listeClientsUniv.containsKey(etuTmp.formation.libelleU)){
+			
+				//Corentin : ici jsais pas pourquoi mais il manque le nom de l'universite "NomUniv_Gestion" dans cuu... 
+				//On se retrouve a faire un appel qui n'est donc pas bon!
+				
 				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
 			}else{
-				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU);
+				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU.replace(" ","")+"_Gestion");
 				listeClientsUniv.put(etuTmp.formation.libelleU, cuu);
 			}
 			listeNotesEtudiants.put(noEtu, cuu.getNotes(etuTmp));
