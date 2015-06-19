@@ -8,6 +8,7 @@ import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContext;
 
 import pRectorat.Accred;
+import pRectorat.DecisionEtudiant;
 import pRectorat.Etat;
 import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
@@ -87,6 +88,16 @@ public class ClientGestionVoeuGV implements Runnable{
 		return ClientGestionVoeuGV.monGV.getListeAccreditations();
 	}
 
+	public DecisionEtudiant repondreVoeu (DecisionEtudiant d, Voeu v) {
+		DecisionEtudiant dc = v.decEtudiant;
+		try {
+			return ClientGestionVoeuGV.monGV.repondreVoeu(d, v);
+		} catch (VoeuNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dc;
+	}
 	
 	public static void main(String args[]) {
 		try {

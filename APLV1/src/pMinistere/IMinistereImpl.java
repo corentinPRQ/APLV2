@@ -14,8 +14,11 @@ public class IMinistereImpl extends IMinisterePOA {
 	public IMinistereImpl() {
 		referenciel = new ArrayList<Diplome>();
 		rectorats = new ArrayList<String>();
-		initialiserReferenciel("src/formations.csv");
-		initialiserRectorats("src/rectoratsTest.csv");
+		
+		//initialiserReferenciel("C:/Users/"+System.getProperty("user.name" )+"/git/APLV3/APLV1/src/formations.csv");
+		//initialiserRectorats("C:/Users/"+System.getProperty("user.name" )+"/git/APLV3/APLV1/src/rectoratsTest.csv");
+	     initialiserReferenciel("src/formations.csv");
+		 initialiserRectorats("src/rectoratsTest.csv");
 	}
 
 	@Override

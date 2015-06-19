@@ -189,9 +189,37 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws VoeuNonTrouve
 	 */
 	@Override
-	public void repondreVoeu(DecisionEtudiant pDecision, Voeu v)
+	public DecisionEtudiant repondreVoeu(DecisionEtudiant pDecision, Voeu v)
 			throws VoeuNonTrouve {
 		v.decEtudiant = pDecision;
+
+		//Tester si on est dans le bon rectorat ou pas
+		System.out.println("on rentre dans répondre voeux");
+		System.out.println(v.idRDest.nomAcademie+ " ET "+ idRectorat);
+		if(v.idRDest.nomAcademie.equals(idRectorat)){
+			//Création d'un voeu dans ce rectorat
+			System.out.println("on est dans le if");
+			setDecisionEtudiant(v, pDecision);
+		}else{
+			//trouver le bon rectorat pour y créer le voeu
+			System.out.println("je suis dans le else");
+			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
+			 cgv.repondreVoeu(pDecision, v);
+			//setDecisionEtudiant(v, cgv.repondreVoeu(pDecision, v));
+
+			 // on veut changer l'état de la décision du voeu externe de l'étudiant
+			for (int i=0; i<listeVoeuxExternes.get(v.noE).length; i++){
+				Voeu[] tabVTmp = listeVoeuxExternes.get(v.noE);
+				if(v.acredVoeu.libelleD.equals(tabVTmp[i].acredVoeu.libelleD) &&  v.acredVoeu.libelleU.equals(tabVTmp[i].acredVoeu.libelleU) ){
+					listeVoeuxExternes.get(v.noE)[i].decEtudiant=pDecision;
+				}
+			}
+		}
+
+		return (v.decEtudiant);
+
+
 	}
 
 	/**
@@ -201,8 +229,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @throws EtudiantNonTrouve 
 	 */
 
-	private void validerVoeu(Voeu v, String formation) throws VoeuNonTrouve, EtudiantNonTrouve {
-		String iorTmp = mesUniversites.get(v.acreditation.libelleU.replace(" ", ""));
+	private void validerVoeu(Voeu v) throws VoeuNonTrouve, EtudiantNonTrouve {
+		String iorTmp = mesUniversites.get(v.acredVoeu.libelleU.replace(" ", ""));
 		org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 		IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 
@@ -263,6 +291,22 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 	/**
+	 *  Permet de mettre à jour la décision de l'étudiant
+	 * @param v
+	 * @param pDecision
+	 */
+	public void setDecisionEtudiant(Voeu v,DecisionEtudiant pDecision){
+		//recherche du voeu dans la liste de voeux et màj de la decision etudiant
+		for (int i=0; i<listeVoeux.get(v.noE).length; i++){
+			String nomDip = listeVoeux.get(v.noE)[i].acredVoeu.libelleD;
+			String nomUniv = listeVoeux.get(v.noE)[i].acredVoeu.libelleU;
+			if (nomDip.equals(v.acredVoeu.libelleD) && nomUniv.equals(v.acredVoeu.libelleU)){
+				listeVoeux.get(v.noE)[i].decEtudiant = pDecision;
+			}
+		}
+	}
+
+	/**
 	 * CHangement de période de l'application
 	 */
 	public static void changerPeriode() {
@@ -295,7 +339,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
 					IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
 					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
-				
+
 				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
 					p.setProperty("periode",PeriodeApplication.PERIODE_4.toString());
 				}
@@ -441,21 +485,21 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			listeVoeux.put(v.noE, tabV);
 			System.out.println(">On a put un premier voeu pour l'étuiant "+v.noE);
 		}
-		
+
 		//Ajout du voeu dans la hashtable de univ/Voeux[]
-		if(listeVoeuxUniv.containsKey(v.acreditation.libelleU)){
-			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acreditation.libelleU);
+		if(listeVoeuxUniv.containsKey(v.acredVoeu.libelleU)){
+			Voeu[] voeuxExistants = listeVoeuxUniv.get(v.acredVoeu.libelleU);
 			int tailleVoeuxTmp = voeuxExistants.length+1;
 			Voeu[] voeuxTmp = new Voeu[tailleVoeuxTmp];
 			for (int i=0; i<tailleVoeuxTmp-1; i++){
 				voeuxTmp[i]= voeuxExistants[i];
 			}
 			voeuxTmp[voeuxTmp.length-1] = v;
-			listeVoeuxUniv.put(v.acreditation.libelleU, voeuxTmp);
+			listeVoeuxUniv.put(v.acredVoeu.libelleU, voeuxTmp);
 		}else{
 			// si l'université n'existe pas, on la crée
 			Voeu[] newTabV= {v};
-			listeVoeuxUniv.put(v.acreditation.libelleU, newTabV);
+			listeVoeuxUniv.put(v.acredVoeu.libelleU, newTabV);
 		}
 
 	}

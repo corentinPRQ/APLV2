@@ -16,7 +16,8 @@ import ClientsServeurs.ClientEtudiantGV;
  */
 public class IHM_RepondreVoeu extends javax.swing.JFrame {
 
-	private static ClientEtudiantGV clientEtuGV;
+	public static ClientEtudiantGV clientEtuGV;
+	public static IHM_Etudiant parent;
 	/**
 	 * tableau des voeux de l'étudiant pour pouvoir afficher le "meilleur"
 	 */
@@ -29,10 +30,11 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
     /**
      * Creates new form IHM_RepondreVoeu
      */
-    public IHM_RepondreVoeu(ClientEtudiantGV pClientEtuGV, Voeu[] lesVoeux) {
-    	clientEtuGV = pClientEtuGV;
+    public IHM_RepondreVoeu(ClientEtudiantGV pClientEtuGV, Voeu[] lesVoeux, IHM_Etudiant p) {
+        clientEtuGV = pClientEtuGV;
     	listeVoeux = lesVoeux;
-        initComponents();
+    	parent=p;
+    	initComponents();
     }
 
     /**
@@ -182,6 +184,10 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      */
     private void btnOuiActionPerformed(java.awt.event.ActionEvent evt) {
     	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.oui, voeuAffiche);
+    	parent.remplirTableVoeu();
+    	this.setVisible(false);
+    	IHM_Etudiant.disableBtnRepondreVoeu();
+
     }
     
     /**
@@ -190,6 +196,9 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      */
     private void btnOuiMaisActionPerformed(java.awt.event.ActionEvent evt) {
     	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.oui_mais, voeuAffiche);
+    	parent.remplirTableVoeu();
+    	this.setVisible(false);
+    	
     }
     
     /**
@@ -198,6 +207,8 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      */
     private void btnNonActionPerformed(java.awt.event.ActionEvent evt) {
         IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.non, voeuAffiche);
+        parent.remplirTableVoeu();
+        this.setVisible(false);
     }
     
     /**
@@ -206,6 +217,8 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
      */
     private void btnNonMaisActionPerformed(java.awt.event.ActionEvent evt) {
     	IHM_RepondreVoeu.clientEtuGV.repondreProposition(DecisionEtudiant.non_mais, voeuAffiche);
+    	parent.remplirTableVoeu();
+    	this.setVisible(false);
     }
     
     private void btnRetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOuiActionPerformed
@@ -244,7 +257,7 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
             	//TODO changer le null, voir après tests
-                new IHM_RepondreVoeu(clientEtuGV, null).setVisible(true);
+                new IHM_RepondreVoeu(clientEtuGV, null, parent).setVisible(true);
             }
         });
     }
@@ -268,7 +281,8 @@ public class IHM_RepondreVoeu extends javax.swing.JFrame {
     private void setMeilleurVoeu(){
     	if(listeVoeux!=null){
     		for (Voeu voeu : listeVoeux) {
-				if(voeu.etatVoeu.equals(Etat.liste_principale)){
+    			//On prend le premier voeu pour lequel il à été accepté et un voeux dont il n'a pas deja refusé
+				if(voeu.etatVoeu.equals(Etat.liste_principale) && voeu.decEtudiant!=DecisionEtudiant.non){
 					voeuAffiche = voeu;
 					break;
 				}

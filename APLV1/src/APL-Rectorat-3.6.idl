@@ -111,7 +111,7 @@ module pRectorat {
 		Etat faireVoeu(in Voeu v) raises (VoeuNonTrouve, EtudiantNonTrouve); 
 		
 		//Opération permettant a  letudiant de repondre a  un voeu en emettant sa decision "COMMENT ACCEDER AU VOEU PAR SON ID ? IOR ?"
-		void repondreVoeu(in DecisionEtudiant pDecision, in Voeu v) raises (VoeuNonTrouve);
+		DecisionEtudiant repondreVoeu(in DecisionEtudiant pDecision, in Voeu v) raises (VoeuNonTrouve);
 
 		//Opération permettant de se connecter
 		boolean identifier(in string login,in string mdp)raises (EtudiantNonTrouve);
