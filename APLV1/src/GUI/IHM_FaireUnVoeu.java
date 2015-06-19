@@ -261,18 +261,36 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     private void bt_ValiderActionPerformed(java.awt.event.ActionEvent evt) { 
     	Accred accredVoeu= new Accred(getNoAccred(),cb_diplome.getSelectedItem().toString(),cb_universite.getSelectedItem().toString());
     	String nomRectDest = IHM_FaireUnVoeu.clientEtuGV.getRectoratUniversite(accredVoeu.libelleU);
-    
+    	Boolean trouve=false;
+    	int i=0;
+    	
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu, parent.utilisateur.formation ,accredVoeu, new Rectorat(idRectorat), new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
-    	clientEtuGV.faireVoeu(voeu);
-     	
-    	//On ne renvoi pas les voeux des autres académie là...
-    	parent.remplirTableVoeu();
-     	
-     	
-     	parent.repaint();
-     	SwingUtilities.updateComponentTreeUI(parent);
-     	
-     	JOptionPane.showMessageDialog(this, "Voeu bien Enregistré");
+    	//Avant de faire le voeu on va vérifier qu'il n'existe pas déja
+    	while(i<parent.listeVoeux.length || trouve==true)
+    	{
+    		if(parent.listeVoeux[i].acredFormation.libelleD.equals(voeu.acredFormation.libelleD) 
+    				&& parent.listeVoeux[i].acredFormation.libelleU.equals(voeu.acredFormation.libelleU)){
+    			trouve=true;
+    		}
+    		i++;
+    	}
+    	
+    	//Dans le cas ou le voeu n'existe pas le voeu va être enregistré
+    	if(trouve!=true){
+    		clientEtuGV.faireVoeu(voeu);
+         	
+        	//On ne renvoi pas les voeux des autres académie là...
+        	parent.remplirTableVoeu();
+         	
+         	
+         	parent.repaint();
+         	SwingUtilities.updateComponentTreeUI(parent);
+         	
+         	JOptionPane.showMessageDialog(this, "Voeu bien Enregistré");
+    	}else{
+    		JOptionPane.showMessageDialog(this, "Ce voeu existe deja, validation impossible");
+    	}
+    	 
     }                                          
 
     private void bt_AnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                           
