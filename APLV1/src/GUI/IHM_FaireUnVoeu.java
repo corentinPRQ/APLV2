@@ -266,7 +266,7 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     	
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu, parent.utilisateur.formation ,accredVoeu, new Rectorat(idRectorat), new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
     	//Avant de faire le voeu on va vérifier qu'il n'existe pas déja
-    	while(i<parent.listeVoeux.length || trouve==true)
+    	while(i<parent.listeVoeux.length && trouve!=true)
     	{
     		if(parent.listeVoeux[i].acredFormation.libelleD.equals(voeu.acredFormation.libelleD) 
     				&& parent.listeVoeux[i].acredFormation.libelleU.equals(voeu.acredFormation.libelleU)){
