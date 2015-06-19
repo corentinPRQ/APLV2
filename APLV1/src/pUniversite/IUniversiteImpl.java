@@ -461,7 +461,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			if (tabVoeuxDip.size()!=0){
 				listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
 			}
-			tabVoeuxDip.clear();
+			tabVoeuxDip = new ArrayList<Voeu>();
 		}
 		System.out.println("Sortie du remplirVoeuxDIP");
 	}
@@ -510,7 +510,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				moyPos += pos;
 				moyValid +=valid;
 			}
-			score = (moyPos+moyValid)/6;
+			score = (moyPos+moyValid);
 			scoreEtu.put(numEtuTmp, score);
 		}
 		System.out.println("Fin du etablir score");
@@ -604,9 +604,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
 			int i=0;
 			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
-				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
-				ajouterListePrincipale(listeVoeuxTmp.get(i));
+//				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
+				ajouterListePrincipale(listeVoeuxTmp.get(i));
 				i++;
 			}
 			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
@@ -614,24 +614,25 @@ public class IUniversiteImpl extends IUniversitePOA{
 				int cptV=quota;
 				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
 				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
-					listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
-					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
+					//listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
 					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
+					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
 					cptV++;
 				}
 				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
 				if(cptV<listeVoeuxTmp.size()){
 					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
-						listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
-						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
+						//listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
 						IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
+						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
+						
 					}
 				}
 			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
 				while(i<listeVoeuxTmp.size()){
-					listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
-					ajouterListeRejet(listeVoeuxTmp.get(i));
+					//listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
 					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
+					ajouterListeRejet(listeVoeuxTmp.get(i));
 					i++;
 				}
 			}

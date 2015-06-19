@@ -203,10 +203,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println("je suis dans le else");
 			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
-			 cgv.repondreVoeu(pDecision, v);
+			cgv.repondreVoeu(pDecision, v);
 			//setDecisionEtudiant(v, cgv.repondreVoeu(pDecision, v));
 
-			 // on veut changer l'état de la décision du voeu externe de l'étudiant
+			// on veut changer l'état de la décision du voeu externe de l'étudiant
 			for (int i=0; i<listeVoeuxExternes.get(v.noE).length; i++){
 				Voeu[] tabVTmp = listeVoeuxExternes.get(v.noE);
 				if(v.acredVoeu.libelleD.equals(tabVTmp[i].acredVoeu.libelleD) &&  v.acredVoeu.libelleU.equals(tabVTmp[i].acredVoeu.libelleU) ){
@@ -286,6 +286,33 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			break;
 
 		}
+
+		// si on est le rectorat de destination
+		if(v.idRDest.nomAcademie.equals(idRectorat)){
+			// on met à jour la liste de voeux interne
+			for(int i=0; i<listeVoeux.get(v.noE).length; i++){
+				if(listeVoeux.get(v.noE)[i].acredVoeu.libelleD.equals(v.acredVoeu.libelleD)
+						&& listeVoeux.get(v.noE)[i].acredVoeu.libelleU.equals(v.acredVoeu.libelleU)){
+					listeVoeux.get(v.noE)[i].etatVoeu = e;
+				}
+			}
+		}
+		//si on est la destination mais pas la source, on transmet à la source pour maj la liste de voeux externes
+		if(!v.idRDest.nomAcademie.equals(v.idRSource.nomAcademie) && v.idRDest.nomAcademie.equals(idRectorat)){
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRSource.nomAcademie+"_GestionVoeux");
+			cgv.setEtatVoeu(v, e);
+		}
+		// si je suis la source mais pas le destinataire, je maj ma liste externe
+		if(!v.idRSource.nomAcademie.equals(v.idRDest.nomAcademie) && v.idRSource.nomAcademie.equals(idRectorat)){
+			for(int i=0; i<listeVoeuxExternes.get(v.noE).length; i++){
+				if(listeVoeuxExternes.get(v.noE)[i].acredVoeu.libelleD.equals(v.acredVoeu.libelleD)
+						&& listeVoeuxExternes.get(v.noE)[i].acredVoeu.libelleU.equals(v.acredVoeu.libelleU)){
+					listeVoeuxExternes.get(v.noE)[i].etatVoeu = e;
+				}
+			}
+		}
+
+
 	}
 
 	/**
@@ -649,15 +676,15 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-//	public void afficherLesEtu(){
-//		Enumeration nb=listeEtudiant.elements();
-//		Object key;
-//		while(nb.hasMoreElements()) {
-//			key=nb.nextElement();
-//			Etudiant value=(Etudiant) key;
-//			System.out.println("cle = "+ key + "" + value.toString() );
-//		}
-//	}
+	//	public void afficherLesEtu(){
+	//		Enumeration nb=listeEtudiant.elements();
+	//		Object key;
+	//		while(nb.hasMoreElements()) {
+	//			key=nb.nextElement();
+	//			Etudiant value=(Etudiant) key;
+	//			System.out.println("cle = "+ key + "" + value.toString() );
+	//		}
+	//	}
 
 	@Override
 	public Etudiant getEtudiant(String numeroEtudiant)
