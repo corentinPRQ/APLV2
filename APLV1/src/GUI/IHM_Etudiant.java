@@ -11,7 +11,11 @@ import java.util.Hashtable;
 
 import javax.swing.SwingUtilities;
 
+import pRectorat.Accred;
+import pRectorat.DecisionEtudiant;
+import pRectorat.Etat;
 import pRectorat.Etudiant;
+import pRectorat.Rectorat;
 import pRectorat.Voeu;
 import Applications.ApplicationGestionEtudiant;
 import Applications.PeriodeApplication;
@@ -41,6 +45,18 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 	
 	public void setLb_nomUniv(String nomUniv){
 		this.jl_nomUniv.setText(nomUniv);
+	}
+	
+	public static void disableBtnRepondreVoeu(){
+		getBt_repondreVoeu().setEnabled(false);
+	}
+
+	public static javax.swing.JButton getBt_repondreVoeu() {
+		return bt_repondreVoeu;
+	}
+
+	public void setBt_repondreVoeu(javax.swing.JButton bt_repondreVoeu) {
+		this.bt_repondreVoeu = bt_repondreVoeu;
 	}
 
 	/**
@@ -92,6 +108,8 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 	public static ClientEtudiantGV getClientEtuGV() {
 		return clientEtuGV;
 	}
+	
+	
 
 	   /**
      * This method is called from within the constructor to initialize the form.
@@ -264,7 +282,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
 
     private void bt_repondreVoeuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_repondreVoeuActionPerformed
         if(IHM_Etudiant.clientEtuGV.getPeriodeEnCours().equals(PeriodeApplication.PERIODE_3.toString())){
-        	IHM_RepondreVoeu IHM_Rep = new IHM_RepondreVoeu(clientEtuGV, listeVoeux);
+        	IHM_RepondreVoeu IHM_Rep = new IHM_RepondreVoeu(clientEtuGV, listeVoeux, this);
             IHM_Rep.setVisible(true);
         }
     }
@@ -277,6 +295,10 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acredVoeu.libelleU,i, 1);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acredVoeu.libelleD,i, 2);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].decEtudiant,i, 3);
+    		/*On verifie que si un voeu est a OUI on grise le bouton de repondre voeu
+    		if(listeVoeux[i].decEtudiant.toString().equals("oui")){
+    			disableBtnRepondreVoeu();
+    		}*/
     	}
     	//refres
     	SwingUtilities.updateComponentTreeUI(this.tab_voeux);
@@ -325,7 +347,7 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     private javax.swing.JButton bt_ajouterVoeux;
     private javax.swing.JButton bt_modifAdress;
     private javax.swing.JButton bt_quitter;
-    private javax.swing.JButton bt_repondreVoeu;
+    private static javax.swing.JButton bt_repondreVoeu;
     private javax.swing.JLabel jl_nomUniv;
     private javax.swing.JLabel lb_connecteEnTantQue;
     private javax.swing.JLabel lb_nomEtud;

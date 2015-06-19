@@ -79,13 +79,15 @@ public class ClientEtudiantGV implements Runnable{
 	}
 	
 
-	public void repondreProposition(DecisionEtudiant pDecision, Voeu v){
+	public DecisionEtudiant repondreProposition(DecisionEtudiant pDecision, Voeu v){
+		DecisionEtudiant dc = v.decEtudiant;
 		try {
-			ClientEtudiantGV.monGestionVoeu.repondreVoeu(pDecision, v);
+			dc = ClientEtudiantGV.monGestionVoeu.repondreVoeu(pDecision, v);
 		} catch (VoeuNonTrouve e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return (dc);
 	}
 	
 	public String getRectoratUniversite(String univ){

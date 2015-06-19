@@ -78,9 +78,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 		// initialisation des fichiers
 		IUniversiteImpl.preRequis = new Hashtable<String, Diplome[]>();
 		this.nomUniversite = ApplicationUniversite.getIdentiteUniversite().nomUniv;
+		//initialiserPrerequis(""C:/Users/"+System.getProperty("user.name" )+"/git/APLV3/APLV1/src/prerequis"+nomUniversite.trim()+".csv");
 		initialiserPrerequis("src/prerequis"+nomUniversite.trim()+".csv");
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
+		//initialiserPrerequis("C:/Users/"+System.getProperty("user.name")+"/git/APLV3/APLV1/src/prerequis.csv");
 		initialiserNotesEtudiant("src/notes.csv");
 		
 		IUniversiteImpl.listeUniversitaires = listeU;
