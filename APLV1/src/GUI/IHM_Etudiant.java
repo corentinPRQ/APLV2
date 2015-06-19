@@ -295,10 +295,10 @@ public class IHM_Etudiant extends javax.swing.JFrame {
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acredVoeu.libelleU,i, 1);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].acredVoeu.libelleD,i, 2);
     		tab_VoeuxEtudiant.setValueAt(listeVoeux[i].decEtudiant,i, 3);
-    		/*On verifie que si un voeu est a OUI on grise le bouton de repondre voeu
+    		//On verifie que si un voeu est a OUI on grise le bouton de repondre voeu
     		if(listeVoeux[i].decEtudiant.toString().equals("oui")){
     			disableBtnRepondreVoeu();
-    		}*/
+    		}
     	}
     	//refres
     	SwingUtilities.updateComponentTreeUI(this.tab_voeux);
