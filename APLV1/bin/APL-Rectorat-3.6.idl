@@ -1,0 +1,141 @@
+/* 
+*IDL de l'application APL
+*/
+
+
+module pRectorat {
+	/*
+	* Enumeration des differents etats d'un voeu
+	*/
+	enum Etat{
+		cree, // Le voeu est cree et est en cours de validation
+		valide_encours, // Le voeu est valide (valide par le rectorat) et est en cours d'examen
+		non_valide, //Le voeu n'est pas valide (refuse par le rectorat)
+		liste_principale, //Le voeu est valide et la formation accepte le voeu de l'etudiant
+		liste_secondaire, // Le voeu est valide et la formation met en liste d'attente le voeu de l'etudiant
+		refus
+	};
+	
+	/*
+	* Decision prise par un etudiant
+	*/
+	enum DecisionEtudiant{
+		oui, //Acceptation du voeu et annulation de tous les autres
+		non, // Refus du voeu et annulation de tous les autres
+		oui_mais, // voeu reserve jusqu'a la seconde periode previlegiant eventuellement un autre voeu prefere
+		non_mais,  // Refus d'un voeu mais maintient les voeux en liste d'attente
+		cree //Le voeu vient d'etre crée l'étudiant ne peux encore répondre etat transitaire
+	};
+	
+	enum NiveauEtude{
+		licence,
+		master
+	};
+	
+	//Identifiant d un rectorat
+	struct Rectorat{
+		string nomAcademie;
+	};
+	
+	struct Universite{
+		string nomUniv;
+		Rectorat idR; 
+		string adresse;	
+	};
+		
+	struct Accred{
+		string noAccred;
+		string libelleD;
+		string libelleU;
+	};	
+	
+	//Un diplome a un numero, un nom et un niveau d'étude={Licence, Master}
+	struct Diplome{
+		string libelle;
+		NiveauEtude niveau;		
+	};
+	
+	//Identifiant d un Etudiant
+	struct Etudiant{
+		string noEtu;
+		string nom;
+		string mdp;
+		Accred formation;	
+	};
+	
+	struct Voeu{
+		string noE;
+		Accred acredFormation;
+		Accred acredVoeu;
+		Rectorat idRSource;
+		Rectorat idRDest;
+		DecisionEtudiant decEtudiant;
+		Etat etatVoeu;
+	};
+
+	typedef sequence<Voeu> TabVoeux;
+	typedef sequence<Accred> TabAccred;
+	typedef sequence<Universite> TabUniv;
+			
+	//Definition des exception du module Rectorat
+	exception VoeuNonTrouve{
+		string raison;
+	 	Voeu v;
+	};
+	
+	exception ErreurIdentification{
+		string raison;
+	};
+	
+	
+	exception EtudiantNonTrouve {
+		string raison;
+		Etudiant etu;
+	};
+
+	interface IGestionVoeux{
+		
+		// Opération permettant de recuperer la liste des accreditations
+		readonly attribute TabAccred getListeAccreditations;
+		
+		// Opération permettant de recuperer tous les voeux
+		readonly attribute TabVoeux getVoeux;
+		
+		//Opération permettant grace a  l'ID d'un etudiant consulter la liste de ses voeux
+		TabVoeux consulterListeVoeu(in Etudiant etu);
+		
+		//Opération permettant de changer l'etat d'un voeu
+		void setEtatVoeu(in Voeu v, in Etat e); 
+		
+		//Opération permettant a l'etudiant de faire un voeu
+		Etat faireVoeu(in Voeu v) raises (VoeuNonTrouve, EtudiantNonTrouve); 
+		
+		//Opération permettant a  letudiant de repondre a  un voeu en emettant sa decision "COMMENT ACCEDER AU VOEU PAR SON ID ? IOR ?"
+		DecisionEtudiant repondreVoeu(in DecisionEtudiant pDecision, in Voeu v) raises (VoeuNonTrouve);
+
+		//Opération permettant de se connecter
+		boolean identifier(in string login,in string mdp)raises (EtudiantNonTrouve);
+
+		//Opération permettant de récuperer l'objet étudiant en fonction de son identifiant
+		Etudiant getEtudiant(in string numeroEtudiant)raises(EtudiantNonTrouve);
+
+		//Opération permettant de récuperer lidentifiant du recorat
+		string getIdRectorat();
+		
+		//Opération permettant de connaître la période en cours
+		string getPeriodeEnCours();
+		
+		//Opération permettant d'enregistrer l'aresse d'une université chez le rectorat	
+		void enregistrerUniversite(in string ior, in string nom);
+		
+		//Opération permettant de mettre à disposition les accréditations aux autres rectorats
+		TabAccred getListeAccreditationExternes();
+		
+		//Opération permettant de mettre à disposition le rectorat d'une université donnée
+		string getRectoratUniversite(in string nomUniv);
+		
+		//Opération de changement de période
+		void changerPeriode();
+	};
+};
+
