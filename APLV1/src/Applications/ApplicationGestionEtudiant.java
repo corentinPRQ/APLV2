@@ -56,7 +56,7 @@ public class ApplicationGestionEtudiant {
         	Thread tcli = new Thread(ce);
 			
 			IHM_Etudiant ihmEtu = new IHM_Etudiant(ce);
-			ihmEtu.setVisible(true);
+			//ihmEtu.setVisible(true);
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
