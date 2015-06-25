@@ -68,7 +68,7 @@ public class ApplicationUniversite {
 //			tcli.start();
 
 			IHM_Universitaire ihmU = new IHM_Universitaire(cu);
-			ihmU.setVisible(true);
+			//ihmU.setVisible(true);
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
