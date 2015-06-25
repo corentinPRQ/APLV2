@@ -50,7 +50,7 @@ public static IGestionVoeux monGestionVoeu;
 			
 			// Récupération du nom de l'objet distant
 			ClientMinistereGV.monGestionVoeu = IGestionVoeuxHelper.narrow(distantObj);
-			
+			System.out.println("");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

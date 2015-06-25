@@ -350,9 +350,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			e.printStackTrace();
 		}
 		if (p != null) {
-			FileOutputStream fos;
-			try {
-				fos = new FileOutputStream("parametres.properties");
 				if (p.getProperty("periode").equals(
 						PeriodeApplication.PERIODE_3.toString())) {
 				
@@ -363,35 +360,30 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					while (lesUniv.hasMoreElements()) {
 						codeUniv = lesUniv.nextElement();
 
-						String iorTmp = mesUniversites.get(codeUniv.replace(
-								" ", ""));
-						org.omg.CORBA.Object distantObj = orb
-								.string_to_object(iorTmp);
-						IUniversite monUniv = IUniversiteHelper
-								.narrow(distantObj);
+						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+						IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 						monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 						System.out.println("Fin verif candidature");
 					}
-					String iorTmp = mesUniversites.get(codeUniv
-							.replace(" ", ""));
-					org.omg.CORBA.Object distantObj = orb
-							.string_to_object(iorTmp);
-					IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
-					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 
 				} else if (p.getProperty("periode").equals(
 						PeriodeApplication.PERIODE_4.toString())) {
-					//Appel d'Hugo
+					// on contacte chaque université pour maj listes
+					String codeUniv = "";
+					Enumeration<String> lesUniv = listeVoeuxUniv.keys();
+					while (lesUniv.hasMoreElements()) {
+						codeUniv = lesUniv.nextElement();
+
+						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+						IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
+						monUniv.majListes();
+						System.out.println("Fin maj liste");
+					}
 				}
-				// Enregistrement
-			} catch (FileNotFoundException e1) {
-				System.out.println("Echec écriture properties");
-				e1.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+			} 
+		
 		System.out.println("Fin de changerPEriode");
 	}
 

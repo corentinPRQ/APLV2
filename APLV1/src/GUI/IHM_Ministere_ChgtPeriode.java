@@ -6,6 +6,7 @@
 
 package GUI;
 
+import Applications.PeriodeApplication;
 import pMinistere.IMinistereImpl;
 import pRectorat.IGestionVoeuxImpl;
 
@@ -97,6 +98,7 @@ public class IHM_Ministere_ChgtPeriode extends javax.swing.JFrame {
      */
     private void btn_ChangePeriodePerformed(java.awt.event.ActionEvent evt) {                                               
         IMinistereImpl.changerPeriodeGlobal();
+        labelPeriode.setText(IMinistereImpl.periode_en_cours);
     }      
     
     /**

@@ -177,20 +177,23 @@ public class IMinistereImpl extends IMinisterePOA {
 						PeriodeApplication.PERIODE_1.toString())) {
 					p.setProperty("periode",
 							PeriodeApplication.PERIODE_2.toString());
+					periode_en_cours = PeriodeApplication.PERIODE_2.toString();
 				} else if (p.getProperty("periode").equals(
 						PeriodeApplication.PERIODE_2.toString())) {
 					p.setProperty("periode",
 							PeriodeApplication.PERIODE_3.toString());
-
+					periode_en_cours = PeriodeApplication.PERIODE_3.toString();
 
 
 				} else if (p.getProperty("periode").equals(
 						PeriodeApplication.PERIODE_3.toString())) {
 					p.setProperty("periode",
 							PeriodeApplication.PERIODE_4.toString());
+					periode_en_cours = PeriodeApplication.PERIODE_4.toString();
 				}
 				// Enregistrement
 				p.store(fos, null);
+				fos.close();
 			} catch (FileNotFoundException e1) {
 				System.out.println("Echec écriture properties");
 				e1.printStackTrace();
@@ -235,6 +238,7 @@ public class IMinistereImpl extends IMinisterePOA {
 			e.printStackTrace();
 		}
 		if (p != null) {
+			periode_en_cours = p.getProperty("periode");
 			return p.getProperty("periode");
 		} else {
 			return "Erreur lors de la récupération de la période.";

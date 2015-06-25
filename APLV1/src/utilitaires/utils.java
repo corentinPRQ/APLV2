@@ -6,23 +6,21 @@ import java.util.Properties;
 
 
 public class utils {
-	  public static Properties load(String filename) throws IOException, FileNotFoundException{
-	        Properties properties = new Properties();
+	public static Properties load(String filename) throws IOException, FileNotFoundException{
+		Properties properties = new Properties();
 
-	        FileInputStream input = new FileInputStream(filename); 
-	        try{
+		FileInputStream input = new FileInputStream(filename); 
+		try{
 
-	           properties.load(input);
-	           return properties;
+			properties.load(input);
+			input.close();
 
-	        }
+		}catch(Exception e){
+			System.out.println("Problème ouverture de fichier.");
+		}
+		return properties;
 
-	                finally{
-
-	           input.close();
-
-	        }
-
-	     }
+		
+	}
 
 }
