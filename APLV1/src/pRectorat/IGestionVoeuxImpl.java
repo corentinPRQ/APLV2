@@ -630,22 +630,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				}
 				listAccred.add(new Accred(noAccred,diplome,universite));
 
-				/*//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
-//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
-				if (!Diplome.equals(DipPrecedent)){
-					lesUniv = new String[list.size()];
-					for(int i=0;i<list.size();i++){
-						lesUniv[i]=list.get(i);
-					}
-					this.listeAccreditation.put(DipPrecedent,lesUniv);
-					list=new ArrayList<String>();
-				}
-
-				DipPrecedent = Diplome;
-
-				list.add(Universite);
-				 */
-
 			}
 			br.close();
 			/*lesUniv = new String[list.size()];
@@ -686,14 +670,28 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//	}
 
 	@Override
-	public Etudiant getEtudiant(String numeroEtudiant)
-			throws EtudiantNonTrouve {
+	public Etudiant getEtudiantVoeu(Voeu v){
 		System.out.println("Méthode GetEtudiant - Rectorat");
-		if (listeEtudiant.containsKey(numeroEtudiant)){
-			System.out.println(listeEtudiant.get(numeroEtudiant));
-			return(listeEtudiant.get(numeroEtudiant));
+		if (listeEtudiant.containsKey(v.noE)){
+			System.out.println(listeEtudiant.get(v.noE));
+			return(listeEtudiant.get(v.noE));
 		}
 		else {
+			//Si l'étudiant n'est pas dans le rectorat on contacte le bon
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRDest+"_GestionVoeux");
+			return(cgv.getEtudiant(v.noE));
+		}
+	}
+
+	
+	@Override
+	public Etudiant getEtudiant(String numEtu) throws EtudiantNonTrouve{
+		System.out.println("Méthode GetEtudiant - Rectorat");
+		if (listeEtudiant.containsKey(numEtu)){
+			System.out.println(listeEtudiant.get(numEtu));
+			return(listeEtudiant.get(numEtu));
+		}
+		else{
 			throw new EtudiantNonTrouve();
 		}
 	}

@@ -119,8 +119,11 @@ module pRectorat {
 		//Opération permettant de se connecter
 		boolean identifier(in string login,in string mdp)raises (EtudiantNonTrouve);
 
+		//Opération permettant de récuperer l'objet étudiant en fonction de son voeu
+		Etudiant getEtudiantVoeu(in Voeu v);
+		
 		//Opération permettant de récuperer l'objet étudiant en fonction de son identifiant
-		Etudiant getEtudiant(in string numeroEtudiant)raises(EtudiantNonTrouve);
+		Etudiant getEtudiant(in string numetu) raises (EtudiantNonTrouve);
 
 		//Opération permettant de récuperer lidentifiant du recorat
 		string getIdRectorat();

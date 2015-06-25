@@ -516,6 +516,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		try {
 			System.out.println("Vérification de la candidature - UNIVERSITE - Etablir les liste");
 			this.etablirListe();
+			System.out.println("Fin etablir liste");
 		} catch (voeuNonTrouve e) {
 			System.err.println("Le voeu ne peut pas être ajouté à une liste car il n'est pas dans la liste des candidatures");
 			e.printStackTrace();
@@ -536,7 +537,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			listeCandidatures.add(tabVoeux[i]);
 			try {
 				//on charge les notes de l'étudiants s'il n'est pas de cette univ
-				this.chargerNotesEtuExt(tabVoeux[i].noE);
+				this.chargerNotesEtuExt(tabVoeux[i]);
 			} catch (EtudiantNonTrouve e) {
 				System.err.println("Vérification des voeux : Etudiant non trouvé");
 			}
@@ -593,7 +594,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 */
 	private void etablirScore(){
 		System.out.println("Etablir score : ");
-		//ATTENTION boucle infinie!!! 
 		Enumeration <String> enumNotes= listeNotesEtudiants.keys();
 		while(enumNotes.hasMoreElements()){
 			String numEtuTmp = enumNotes.nextElement();
@@ -777,31 +777,30 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * Permet de charger
 	 * @throws EtudiantNonTrouve 
 	 */
-	private void chargerNotesEtuExt(String noEtu) throws EtudiantNonTrouve{
+	private void chargerNotesEtuExt(Voeu v) throws EtudiantNonTrouve{
 		System.out.println("Métode : Charger note Etu Ext - Universite");
 		ClientUniversiteUniv cuu = null;
 		//On récupère l'objet étudiant correspondant à son numéro
-		System.out.println("GET ETUDIANT DISTANT : " + cugv);
-		Etudiant etuTmp = cugv.getEtudiant(noEtu);
+		
+		Etudiant etuTmp = cugv.getEtudiantVoeu(v);
 
 		//On regarde si l'étudiant est de cette université ou d'une autre
 		System.out.println("On sort du getEtudiant avec Etu = " + etuTmp.nom);
-		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
+		//on passe pas dans ce if en fait!
+		if(!etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
 
 			//s'il n'est pas cette université, il faut demander ses notes à la sienne
 			//On regarde si on a déjà un client pour cette université sinon on en crée un
 			if(listeClientsUniv.containsKey(etuTmp.formation.libelleU)){
-
-				//Corentin : ici jsais pas pourquoi mais il manque le nom de l'universite "NomUniv_Gestion" dans cuu... 
 				//On se retrouve a faire un appel qui n'est donc pas bon!
-
 				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
 			}else{
-				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU.replace(" ","")+"_Gestion");
+				cuu = new ClientUniversiteUniv(orb, nameRoot, v.noE, etuTmp.formation.libelleU.replace(" ","")+"_Gestion");
 				listeClientsUniv.put(etuTmp.formation.libelleU, cuu);
 			}
-			listeNotesEtudiants.put(noEtu, cuu.getNotes(etuTmp));
+			listeNotesEtudiants.put(v.noE, cuu.getNotes(etuTmp));
 		}
+		
 	}
 
 
