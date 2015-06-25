@@ -69,6 +69,10 @@ public class ClientUniversiteGV implements Runnable{
 		return listeDeVoeux;
 	}
 	
+	public Voeu[] getVoeuxUniv(String nomUniv){
+		return ClientUniversiteGV.monGestionVoeu.getVoeuxUniv(nomUniv);
+	}
+	
 	public void enregistrerUniversite (String nom, String ior){
 		String nomUniv = nom.replace("Client_", "");
 		nomUniv = nomUniv.replace("_Gestion", "");

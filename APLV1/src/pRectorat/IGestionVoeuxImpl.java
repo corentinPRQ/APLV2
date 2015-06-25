@@ -142,14 +142,14 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 	/**
-	 * Renvoie tous les voeux le return est un tableau de voeux qui peut
-	 * contenir des valeurs null à la fin
+	 * Renvoie tous les voeux 
+	 * le return est un tableau de voeux qui peut contenir des valeurs null à la fin
 	 */
 	@Override
 	public Voeu[] getVoeux() {
 
 
-		Collection<Voeu[]> colV = this.listeVoeux.values();
+		Collection<Voeu[]> colV = listeVoeux.values();
 		int taille = colV.size();
 		// on crée un tableau de voeux en fonction de la taille max potentielle
 		Voeu[] tabV = new Voeu[5 * taille];
@@ -885,6 +885,15 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		return ("Pas Trouvé");
 
+	}
+
+	@Override
+	public Voeu[] getVoeuxUniv(String nomUniv) {
+		if(!listeVoeuxUniv.containsKey(nomUniv)){
+			return new Voeu[0];
+		}else{
+			return listeVoeuxUniv.get(nomUniv);
+		}
 	}
 
 }
