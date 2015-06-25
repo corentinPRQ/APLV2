@@ -83,7 +83,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		//initialiserPrerequis("C:/Users/"+System.getProperty("user.name")+"/git/APLV3/APLV1/src/prerequis.csv");
-		initialiserNotesEtudiant("src/notes.csv");
+		initialiserNotesEtudiant("src/notes"+nomUniversite.trim()+".csv");
 
 		IUniversiteImpl.listeUniversitaires = listeU;
 
@@ -387,14 +387,11 @@ public class IUniversiteImpl extends IUniversitePOA{
 					//recopie des éléments du tableaux de dimplomes dans le nouveau tableau (taille+1) 
 					for (int i=0; i<preRequis.get(nomDip).length; i++){
 						aInserer[i] = lesDiplomesDuMaster[i];
-						System.out.println("nombre de prerequis : " + i+1);
 						cpteur = i+1 ;
 					}
 
 					//Insertion du nouveau diplome prérequis dans le tableau de diplme
-					//						System.out.println("Insertion - Compteur : " + cpteur);
 					aInserer[cpteur]= d;
-					//System.out.println("Enregistrement du diplome prerequi\n\n");
 					//Ajout du nouveau tableau avec le nouveau diplome prerequis dans la hashtable + ajout du score et du quota
 					lesDiplomesDuMaster = aInserer;
 					preRequis.put(nomDip, lesDiplomesDuMaster);
@@ -407,13 +404,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 						seuilScoreDiplome.put(nomDip, seuilScore);
 					}
 
-					//						System.out.println("2 - Diplome inséré dans la hashtable - nombre des prerequis : " + preRequis.get(nomDip).length);
 					//raz des variables.
 					diplomes = new Diplome[1];
 					cpteur = 0;
 				}else {
-					//						System.out.println("Diplome pas encore trouvé dans la hashtable!");
-					//						System.out.println("Compteur du else : " + cpteur);
 					Diplome[] aInserer = new Diplome[cpteur+1];
 					if (nomDipPR.contains("L3")){
 						ne = NiveauEtude.licence;
@@ -423,7 +417,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 					}
 
 					Diplome d = new Diplome(nomDipPR, ne);
-					//						System.out.println("NOm dip PR = " + nomDipPR + " Nom ne = " + ne);
 					for (int i=0; i<diplomes.length; i++){
 						aInserer[i] = diplomes[i];
 						cpteur = i;
@@ -445,7 +438,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 					}
 				}
 			}
-			//			System.out.println("Enregistrement de " +cpteur+ " diplomes prerequis pour le diplome : " + nomDipPrecedent +"\n\n");
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -473,7 +465,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			lineRead = br.readLine();	
 			while ((lineRead = br.readLine()) != null) {
 				lineSplit = lineRead.split(";",20);
-				//				System.out.println("line split notes : "+ lineSplit[0] + " - " + lineSplit[1] + " - " + lineSplit[2] + " - " +lineSplit[3]);
 				nomUniv = lineSplit[0];
 				numE = lineSplit[1];
 				notes = new Note[6];
@@ -485,7 +476,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 					break;
 					case 1: position = Integer.parseInt(lineSplit[i]);
 					notes[cpt] = new Note("s"+cpt+1, moyenne, position, code);
-					//							System.out.println(cpt + " - Univ : "+ nomUniv + " - Etu : "+numE + " - Moyenne : " + moyenne + " -  Position : " + position + " - Etat de validation : " + code);
 					cpt++;
 					break;
 					case 2 : moyenne = Float.parseFloat(lineSplit[i]);
@@ -495,18 +485,12 @@ public class IUniversiteImpl extends IUniversitePOA{
 					}					
 					listeNotesEtudiants.put(numE, notes);
 				}
-				//				System.out.println("Taille de la hashtable : "+ listeNotesEtudiants.size());
 			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}		
 	}
 
-	//	public static void main (String [] args){
-	//		IUniversiteImpl i = new IUniversiteImpl(listeUniversitaires);
-	//		System.out.println(i.getListePrerequis("M1Miage"));
-	//			
-	//	}
 
 	/**
 	 * @return the preRequis
