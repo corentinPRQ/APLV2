@@ -678,7 +678,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		else {
 			//Si l'étudiant n'est pas dans le rectorat on contacte le bon
-			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRDest+"_GestionVoeux");
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRSource.nomAcademie+"_GestionVoeux");
 			return(cgv.getEtudiant(v.noE));
 		}
 	}

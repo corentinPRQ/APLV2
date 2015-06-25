@@ -271,14 +271,18 @@ public class IUniversiteImpl extends IUniversitePOA{
 				//tant que le voeu suivant est du même étudiant
 				while(vTmp2.noE.equals(vTmp.noE) && resteVoeux){
 					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp2)){
+					if(listePrincipale.get(i).acredVoeu.libelleD.equals(vTmp2.acredVoeu.libelleD) && 
+							listePrincipale.get(i).acredVoeu.libelleU.equals(vTmp2.acredVoeu.libelleU) &&
+							listePrincipale.get(i).noE.equals(vTmp2.noE)){
 						listePrincipale.remove(vTmp2);
-					}else if(listeComplementaire.contains(vTmp2)){
+					}else if(listeComplementaire.get(i).acredVoeu.libelleD.equals(vTmp2.acredVoeu.libelleD) && 
+							listeComplementaire.get(i).acredVoeu.libelleU.equals(vTmp2.acredVoeu.libelleU) && 
+							listeComplementaire.get(i).noE.equals(vTmp2.noE)){
 						listeComplementaire.remove(vTmp2);
 					}
 					listeCandidatures.remove(vTmp2);
 					i++;
-					if(i < listeCandidatures.size()){
+					if(i <= listeCandidatures.size()){
 						vTmp2 = listeCandidatures.get(i);
 					}else{
 						resteVoeux=false;
@@ -332,7 +336,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 
 	@Override
 	public Note[] getNotes(Etudiant idE) throws EtudiantNonTrouve{ // pour exam candidatures pour une autre univ
-		if (listeNotesEtudiants.contains(idE.noEtu)){
+		if (!listeNotesEtudiants.containsKey(idE.noEtu)){
 			throw new EtudiantNonTrouve();
 		}
 		else {
@@ -620,7 +624,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			//on tri ces voeux en fonction du score
 			tabVoeuxTmp = triBulle(tabVoeuxTmp);
 			//On remplace l'ancien tableau par le tableau trié
-			listeVoeuxDiplome.put(dip, tabVoeuxTmp);
+			listeVoeuxDiplome.replace(dip, tabVoeuxTmp);
 
 		}
 		System.out.println("Fin de ordonnerVoeuDip");
@@ -738,7 +742,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			//Tant qu'il y a de la place pour la promo ET que le score de l'étudiant est conforme au pré-requis,
 			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
 			int i=0;
-			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
+			while ( listePrincipale.size()<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>=seuilScoreDiplome.get(dipTmp)){
 				//				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
