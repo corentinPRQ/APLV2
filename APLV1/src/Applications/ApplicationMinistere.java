@@ -28,7 +28,9 @@ public class ApplicationMinistere {
 			// Enregistrement dans le service de nommage
 			//*******************************************
 			// Recuperation du naming service
-			NamingContext nameRoot=org.omg.CosNaming.NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
+//			NamingContext nameRoot=org.omg.CosNaming.NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
+			System.out.println("Lancement du naming service");
+			NamingContext nameRoot = org.omg.CosNaming.NamingContextHelper.narrow(orb.string_to_object("corbaloc:iiop:1.2@192.168.1.40:2001/NameService"));
 
 			// Construction du nom a enregistrer
 			org.omg.CosNaming.NameComponent[] nameToRegister = new org.omg.CosNaming.NameComponent[1];
