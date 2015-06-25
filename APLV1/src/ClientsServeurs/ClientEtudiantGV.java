@@ -133,8 +133,12 @@ public class ClientEtudiantGV implements Runnable{
 	
 	}
 	
-	public Etudiant getEtudiant (String numEtudiant) throws EtudiantNonTrouve{
-		return (ClientEtudiantGV.monGestionVoeu.getEtudiant(numEtudiant));
+	public Etudiant getEtudiantVoeu (Voeu v) throws EtudiantNonTrouve{
+		return (ClientEtudiantGV.monGestionVoeu.getEtudiantVoeu(v));
+	}
+	
+	public Etudiant getEtudiant (String numE) throws EtudiantNonTrouve{
+		return (ClientEtudiantGV.monGestionVoeu.getEtudiant(numE));
 	}
 	
 	public static void main(String args[]) {

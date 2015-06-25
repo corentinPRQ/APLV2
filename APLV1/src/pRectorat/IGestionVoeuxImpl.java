@@ -350,40 +350,40 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			e.printStackTrace();
 		}
 		if (p != null) {
-				if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_3.toString())) {
-				
-					// on contacte chaque université pour vérifier en fonction
-					// des pré-requis, les voeux qui lui sont destinés
-					String codeUniv = "";
-					Enumeration<String> lesUniv = listeVoeuxUniv.keys();
-					while (lesUniv.hasMoreElements()) {
-						codeUniv = lesUniv.nextElement();
+			if (p.getProperty("periode").equals(
+					PeriodeApplication.PERIODE_3.toString())) {
 
-						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
-						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
-						IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
-						monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
-						System.out.println("Fin verif candidature");
-					}
+				// on contacte chaque université pour vérifier en fonction
+				// des pré-requis, les voeux qui lui sont destinés
+				String codeUniv = "";
+				Enumeration<String> lesUniv = listeVoeuxUniv.keys();
+				while (lesUniv.hasMoreElements()) {
+					codeUniv = lesUniv.nextElement();
 
-				} else if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_4.toString())) {
-					// on contacte chaque université pour maj listes
-					String codeUniv = "";
-					Enumeration<String> lesUniv = listeVoeuxUniv.keys();
-					while (lesUniv.hasMoreElements()) {
-						codeUniv = lesUniv.nextElement();
-
-						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
-						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
-						IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
-						monUniv.majListes();
-						System.out.println("Fin maj liste");
-					}
+					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+					IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
+					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
+					System.out.println("Fin verif candidature");
 				}
-			} 
-		
+
+			} else if (p.getProperty("periode").equals(
+					PeriodeApplication.PERIODE_4.toString())) {
+				// on contacte chaque université pour maj listes
+				String codeUniv = "";
+				Enumeration<String> lesUniv = listeVoeuxUniv.keys();
+				while (lesUniv.hasMoreElements()) {
+					codeUniv = lesUniv.nextElement();
+
+					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+					IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
+					monUniv.majListes();
+					System.out.println("Fin maj liste");
+				}
+			}
+		} 
+
 		System.out.println("Fin de changerPEriode");
 	}
 
@@ -452,7 +452,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			enregistrerVoeuxExterne(v);
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
 			setEtatVoeu(v, cgv.faireVoeu(v));
-			
+
 		}
 
 		return (v.etatVoeu);
@@ -630,22 +630,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				}
 				listAccred.add(new Accred(noAccred,diplome,universite));
 
-				/*//si le numéro etudiant est différent du précédent c'est qu'on changé d'étudiant, donc on enregistre ses notes
-//				System.out.println("NumDIP : " + numDip + " - numDipPrecedent : " + numDipPrecedent);
-				if (!Diplome.equals(DipPrecedent)){
-					lesUniv = new String[list.size()];
-					for(int i=0;i<list.size();i++){
-						lesUniv[i]=list.get(i);
-					}
-					this.listeAccreditation.put(DipPrecedent,lesUniv);
-					list=new ArrayList<String>();
-				}
-
-				DipPrecedent = Diplome;
-
-				list.add(Universite);
-				 */
-
 			}
 			br.close();
 			/*lesUniv = new String[list.size()];
@@ -686,14 +670,28 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	//	}
 
 	@Override
-	public Etudiant getEtudiant(String numeroEtudiant)
-			throws EtudiantNonTrouve {
+	public Etudiant getEtudiantVoeu(Voeu v){
 		System.out.println("Méthode GetEtudiant - Rectorat");
-		if (listeEtudiant.containsKey(numeroEtudiant)){
-			System.out.println(listeEtudiant.get(numeroEtudiant));
-			return(listeEtudiant.get(numeroEtudiant));
+		if (listeEtudiant.containsKey(v.noE)){
+			System.out.println(listeEtudiant.get(v.noE));
+			return(listeEtudiant.get(v.noE));
 		}
 		else {
+			//Si l'étudiant n'est pas dans le rectorat on contacte le bon
+			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRDest+"_GestionVoeux");
+			return(cgv.getEtudiant(v.noE));
+		}
+	}
+
+	
+	@Override
+	public Etudiant getEtudiant(String numEtu) throws EtudiantNonTrouve{
+		System.out.println("Méthode GetEtudiant - Rectorat");
+		if (listeEtudiant.containsKey(numEtu)){
+			System.out.println(listeEtudiant.get(numEtu));
+			return(listeEtudiant.get(numEtu));
+		}
+		else{
 			throw new EtudiantNonTrouve();
 		}
 	}
@@ -875,11 +873,16 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 
 	@Override
 	public Voeu[] getVoeuxUniv(String nomUniv) {
-		if(!listeVoeuxUniv.containsKey(nomUniv)){
-			return new Voeu[0];
-		}else{
-			return listeVoeuxUniv.get(nomUniv);
+		String codeUniv = "";
+		Enumeration<String> lesUniv = listeVoeuxUniv.keys();
+		while (lesUniv.hasMoreElements()) {
+			codeUniv = lesUniv.nextElement();
+			String univ = codeUniv.replace(" ", "");
+			if(univ.equals(nomUniv)){
+				return listeVoeuxUniv.get(codeUniv);
+			}
 		}
+		return new Voeu[0];
 	}
 
 }

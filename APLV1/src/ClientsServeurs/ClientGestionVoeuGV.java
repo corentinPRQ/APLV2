@@ -10,6 +10,7 @@ import org.omg.CosNaming.NamingContext;
 import pRectorat.Accred;
 import pRectorat.DecisionEtudiant;
 import pRectorat.Etat;
+import pRectorat.Etudiant;
 import pRectorat.EtudiantNonTrouve;
 import pRectorat.IGestionVoeux;
 import pRectorat.IGestionVoeuxHelper;
@@ -86,6 +87,16 @@ public class ClientGestionVoeuGV implements Runnable{
 	
 	public Accred[] getListeAccreditation(){
 		return ClientGestionVoeuGV.monGV.getListeAccreditations();
+	}
+	
+	public Etudiant getEtudiant(String numEtu){
+		try {
+			return(ClientGestionVoeuGV.monGV.getEtudiant(numEtu));
+		} catch (EtudiantNonTrouve e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public DecisionEtudiant repondreVoeu (DecisionEtudiant d, Voeu v) {

@@ -15,9 +15,9 @@ import pRectorat.IGestionVoeuxHelper;
 import pRectorat.Voeu;
 
 public class ClientUniversiteGV implements Runnable{
-	
+
 	public static IGestionVoeux monGestionVoeu;
-	
+
 	private org.omg.CORBA.ORB orb;
 	private NamingContext nameRoot;
 	private String nomObj;
@@ -34,22 +34,22 @@ public class ClientUniversiteGV implements Runnable{
 		this.listeDeVoeux = new ArrayList<Voeu>();
 		travailler();
 	}
-	
+
 	public void travailler(){
 		try{
 			// Construction du nom a rechercher
 			org.omg.CosNaming.NameComponent[] nameToFind = new org.omg.CosNaming.NameComponent[1];
 			nameToFind[0] = new org.omg.CosNaming.NameComponent(this.idObj,"");
-	
+
 			// Recherche aupres du naming service
 			org.omg.CORBA.Object distantObj = nameRoot.resolve(nameToFind);
 			System.out.println("Objet '" + this.idObj + "' trouve aupres du service de noms. IOR de l'objet :");
 			System.out.println(orb.object_to_string(distantObj));
-	
+
 			// Construction du nom a enregistrer
-//			org.omg.CosNaming.NameComponent[] nameToRegister = new org.omg.CosNaming.NameComponent[1];
-//			nameToRegister[0] = new org.omg.CosNaming.NameComponent(this.nomObj,"");
-			
+			//			org.omg.CosNaming.NameComponent[] nameToRegister = new org.omg.CosNaming.NameComponent[1];
+			//			nameToRegister[0] = new org.omg.CosNaming.NameComponent(this.nomObj,"");
+
 			// Récupération du nom de l'objet distant
 			ClientUniversiteGV.monGestionVoeu = IGestionVoeuxHelper.narrow(distantObj);
 			System.out.println("fin travailler");
@@ -57,9 +57,9 @@ public class ClientUniversiteGV implements Runnable{
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public ArrayList<Voeu> getVoeux(){
 		Voeu[] lesVoeux = ClientUniversiteGV.monGestionVoeu.getVoeux();
 		//On stock les voeux (Voeu[]) dans une arraylist (plus simple à utiliser)
@@ -68,18 +68,18 @@ public class ClientUniversiteGV implements Runnable{
 		}
 		return listeDeVoeux;
 	}
-	
+
 	public Voeu[] getVoeuxUniv(String nomUniv){
 		return ClientUniversiteGV.monGestionVoeu.getVoeuxUniv(nomUniv);
 	}
-	
+
 	public void enregistrerUniversite (String nom, String ior){
 		String nomUniv = nom.replace("Client_", "");
 		nomUniv = nomUniv.replace("_Gestion", "");
 		nomUniv = nomUniv.replace("_", "");
 		ClientUniversiteGV.monGestionVoeu.enregistrerUniversite(ior, nomUniv);
 	}
-	
+
 	public static void main(String args[]) {
 		try {
 			// Intialisation de l'orb
@@ -96,7 +96,7 @@ public class ClientUniversiteGV implements Runnable{
 			String nomObj = "Midi-Pyrenees_GVC";
 			ClientUniversiteGV cu = new ClientUniversiteGV(orb, nameRoot, nomObj, idObj);
 			cu.travailler();
-			
+
 		} catch (InvalidName e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class ClientUniversiteGV implements Runnable{
 	public void run() {
 		travailler();
 	}
-	
+
 	/**
 	 * Renvoie les accréditations pour une université donnée
 	 * @param nomUniv
@@ -125,27 +125,38 @@ public class ClientUniversiteGV implements Runnable{
 		}
 		return (monUniversite);
 	}
-	
+
 	/**
 	 * Renvoi un objet etudiant via un numéro etudiant
 	 * @param numEtudiant
 	 * @return
 	 */
-	public Etudiant getEtudiant (String numEtudiant){
+	public Etudiant getEtudiant (String numEtu){
 		System.out.println("METHODE GetEtudiant - ClientUniversite --> monGV = " + monGestionVoeu);
+
+		Etudiant e;
 		try {
-			Etudiant e = ClientUniversiteGV.monGestionVoeu.getEtudiant(numEtudiant);
+			e = ClientUniversiteGV.monGestionVoeu.getEtudiant(numEtu);
 			return (e);
-		} catch (EtudiantNonTrouve e) {
+		} catch (EtudiantNonTrouve e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		return (null);
+		
+		return null;
 	}
-	
+
+	public Etudiant getEtudiantVoeu (Voeu v){
+		System.out.println("METHODE GetEtudiantVoeu - ClientUniversite --> monGV = " + monGestionVoeu);
+
+		Etudiant e = ClientUniversiteGV.monGestionVoeu.getEtudiantVoeu(v);
+		return (e);
+
+	}
+
 	public void setEtatVoeu(Voeu v, Etat e) {
 		ClientUniversiteGV.monGestionVoeu.setEtatVoeu(v, e);
 	}
-	
+
 
 }
