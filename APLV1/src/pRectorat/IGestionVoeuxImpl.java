@@ -334,7 +334,8 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	/**
 	 * CHangement de période de l'application
 	 */
-	public static void changerPeriode() {
+	@Override
+	public void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
 		System.out.println("\n\n\n **************** Changement de PERIODE - Rectorat **************** \n\n");
 		Properties p;
@@ -352,29 +353,35 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			FileOutputStream fos;
 			try {
 				fos = new FileOutputStream("parametres.properties");
-				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_1.toString())) {
-					p.setProperty("periode",PeriodeApplication.PERIODE_2.toString());
-				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_2.toString())) {
-					p.setProperty("periode",PeriodeApplication.PERIODE_3.toString());
-					//on contacte chaque université pour vérifier en fonction des pré-requis, les voeux qui lui sont destinés
-					String codeUniv="";
-					Enumeration <String> lesUniv = listeVoeuxUniv.keys();
-					while(lesUniv.hasMoreElements()){
-						codeUniv=lesUniv.nextElement();
+				if (p.getProperty("periode").equals(
+						PeriodeApplication.PERIODE_3.toString())) {
+				
+					// on contacte chaque université pour vérifier en fonction
+					// des pré-requis, les voeux qui lui sont destinés
+					String codeUniv = "";
+					Enumeration<String> lesUniv = listeVoeuxUniv.keys();
+					while (lesUniv.hasMoreElements()) {
+						codeUniv = lesUniv.nextElement();
 
-						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
-						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
-						IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
+						String iorTmp = mesUniversites.get(codeUniv.replace(
+								" ", ""));
+						org.omg.CORBA.Object distantObj = orb
+								.string_to_object(iorTmp);
+						IUniversite monUniv = IUniversiteHelper
+								.narrow(distantObj);
 						monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 						System.out.println("Fin verif candidature");
 					}
-					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
-					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
-					IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
+					String iorTmp = mesUniversites.get(codeUniv
+							.replace(" ", ""));
+					org.omg.CORBA.Object distantObj = orb
+							.string_to_object(iorTmp);
+					IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
 					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 
-				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
-					p.setProperty("periode",PeriodeApplication.PERIODE_4.toString());
+				} else if (p.getProperty("periode").equals(
+						PeriodeApplication.PERIODE_4.toString())) {
+					//Appel d'Hugo
 				}
 				// Enregistrement
 				p.store(fos, null);
@@ -713,22 +720,9 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @return la période en cours
 	 */
 	public String getPeriodeEnCours() {
-		Properties p;
-		p = null;
-		try {
-			p = utils.load("parametres.properties");
-		} catch (FileNotFoundException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Echec ouverture properties");
-			e.printStackTrace();
-		}
-		if (p != null) {
-			return p.getProperty("periode");
-		}else{
-			return "Erreur lors de la récupération de la période.";
-		}
+		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb,
+				nameRoot, nomObj, "Ministere");
+		return (cgm.getPeriodeEnCours());
 	}
 
 
