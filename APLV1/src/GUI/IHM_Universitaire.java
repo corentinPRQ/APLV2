@@ -43,7 +43,6 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         lb_nomUniversitaire = new javax.swing.JLabel();
         lb_titre_Periode = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        bt_ExaminerCandidature = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tab_Voeux = new javax.swing.JTable();
         bt_etablirPreRequis = new javax.swing.JButton();
@@ -53,55 +52,8 @@ public class IHM_Universitaire extends javax.swing.JFrame {
 
         lb_titreInterface.setText("Interface universitaire");
 
-        lb_connecteEnTantQue.setText("Connecté en tant que :");
+       
 
-        lb_nomUniversitaire.setText("Nom de l'universitaire");
-
-        lb_titre_Periode.setText("Période :");
-
-        jLabel4.setText("titrePeriode");
-
-        bt_ExaminerCandidature.setText("Examiner la candidature");
-        bt_ExaminerCandidature.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_ExaminerCandidatureActionPerformed(evt);
-            }
-        });
-
-        tab_Voeux.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Nom de l'etudiant", "Voeu", "Etat", "Decision Etudiant"
-            }
-        ));
-        jScrollPane2.setViewportView(tab_Voeux);
 
         bt_etablirPreRequis.setText("Etablir pré-requis");
         bt_etablirPreRequis.addActionListener(new java.awt.event.ActionListener() {
@@ -146,11 +98,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(bt_Quitter)
                 .addGap(481, 481, 481))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(bt_ExaminerCandidature, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(88, 88, 88)
-              )
+          
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,9 +115,7 @@ public class IHM_Universitaire extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_ExaminerCandidature)
-                   )
+               
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(bt_Quitter)
                 .addGap(39, 39, 39))
@@ -183,13 +129,9 @@ public class IHM_Universitaire extends javax.swing.JFrame {
         ihmFPR.setVisible(true);
     }//GEN-LAST:event_bt_etablirPreRequisActionPerformed
 
-    private void bt_ExaminerCandidatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ExaminerCandidatureActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bt_ExaminerCandidatureActionPerformed
-
 
     private void bt_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_QuitterActionPerformed
-        // TODO add your handling code here:
+    	this.dispose();
     }//GEN-LAST:event_bt_QuitterActionPerformed
 
     /**
@@ -228,7 +170,6 @@ public class IHM_Universitaire extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bt_ExaminerCandidature;
     private javax.swing.JButton bt_Quitter;
     private javax.swing.JButton bt_etablirPreRequis;
     private javax.swing.JLabel jLabel4;

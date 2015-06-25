@@ -115,11 +115,11 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 						.addContainerGap())
 				);
 
-		jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jcb_Master.setModel(new javax.swing.DefaultComboBoxModel(new String[] {  }));
 
 		jl_MAster.setText("Diplome Presente : ");
 
-		jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jcb_Licence.setModel(new javax.swing.DefaultComboBoxModel(new String[] {  }));
 		jcb_Licence.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jcb_LicenceActionPerformed(evt);
@@ -137,6 +137,31 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 
 		jt_Prerequis.setModel(new javax.swing.table.DefaultTableModel(
 				new Object [][] {
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
+						{null, null, null, null, null},
 						{null, null, null, null, null},
 						{null, null, null, null, null},
 						{null, null, null, null, null},
@@ -457,20 +482,20 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		lesDiplomes.addAll(preRequis.keySet());
 		System.out.println("taille DIplomes : " + lesDiplomes.size());
 		int compteurDeLicences = 0;
+		Diplome dip;
 		for (int i=0; i<lesDiplomes.size();i++){
-
-			for (Diplome dip : preRequis.get(lesDiplomes.get(i))) {
-
-				if(dip !=null){
-
-					jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, compteurDeLicences, 0);
-					jt_Prerequis.setValueAt(lesDiplomes.get(i), compteurDeLicences, 1);
-					jt_Prerequis.setValueAt(dip.libelle, compteurDeLicences, 2);
-					jt_Prerequis.setValueAt(quota.get(lesDiplomes.get(i)), compteurDeLicences, 3);
-					jt_Prerequis.setValueAt(score.get(lesDiplomes.get(i)), compteurDeLicences, 4);
-					compteurDeLicences++;
-				}
+				for (int j=0; j<preRequis.get(lesDiplomes.get(i)).length && compteurDeLicences<jt_Prerequis.getRowCount();j++){
+					dip = preRequis.get(lesDiplomes.get(i))[j];
+					if(dip !=null){
+						jt_Prerequis.setValueAt(ApplicationUniversite.getIdentiteUniversite().nomUniv, compteurDeLicences, 0);
+						jt_Prerequis.setValueAt(lesDiplomes.get(i), compteurDeLicences, 1);
+						jt_Prerequis.setValueAt(dip.libelle, compteurDeLicences, 2);
+						jt_Prerequis.setValueAt(quota.get(lesDiplomes.get(i)), compteurDeLicences, 3);
+						jt_Prerequis.setValueAt(score.get(lesDiplomes.get(i)), compteurDeLicences, 4);
+						compteurDeLicences++;
+					}
 			}
+			
 		}
 		this.repaint();
 	}
@@ -482,12 +507,9 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 		int compteMaster = jcb_Master.getItemCount();
 		int compteLicence = jcb_Licence.getItemCount();
 		//On vide les listes pour les recharger
-		for(int i=0;i<compteMaster;i++){
-			jcb_Master.removeItemAt(0);
-		}
-		for(int i=0;i<compteLicence;i++){
-			jcb_Licence.removeItemAt(0);
-		}
+		jcb_Licence.removeAll();
+		jcb_Master.removeAll();
+
 		//AJout du premier elt
 		for (int i = 0; i < lesAccreds.length; i++) {
 			if(lesAccreds[i]!=null){
@@ -543,8 +565,8 @@ public class IHM_FairePrerequis extends javax.swing.JFrame {
 	private javax.swing.JButton jb_Ajouter;
 	private javax.swing.JButton jb_Enregistrer;
 	private javax.swing.JButton jb_Supprimer;
-	private javax.swing.JComboBox jcb_Licence;
-	private javax.swing.JComboBox jcb_Master;
+	private javax.swing.JComboBox<String> jcb_Licence;
+	private javax.swing.JComboBox<String> jcb_Master;
 	private javax.swing.JLabel jl_Licence;
 	private javax.swing.JLabel jl_MAster;
 	private javax.swing.JLabel jl_Titre;
