@@ -457,10 +457,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}else{
 			//trouver le bon rectorat pour y créer le voeu
 			System.out.println("je suis dans le else");
-			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
+			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux";
+			enregistrerVoeuxExterne(v);
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
 			setEtatVoeu(v, cgv.faireVoeu(v));
-			enregistrerVoeuxExterne(v);
+			
 		}
 
 		return (v.etatVoeu);
