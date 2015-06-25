@@ -546,7 +546,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 		System.out.println("Création de la hashTable Univ-Voeu[]");
 		for (int i=0; i<listeAccred.length; i++){
 			// on parcours les voeux pour ajouter les voeux par diplome
-
 			for(int j=0; j<listeCandidatures.size(); j++){
 				if(listeAccred[i]!=null){
 					System.out.println(listeCandidatures.get(j).acredVoeu.libelleD);
