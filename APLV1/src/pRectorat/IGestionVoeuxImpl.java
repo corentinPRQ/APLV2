@@ -384,7 +384,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 					//Appel d'Hugo
 				}
 				// Enregistrement
-				p.store(fos, null);
 			} catch (FileNotFoundException e1) {
 				System.out.println("Echec écriture properties");
 				e1.printStackTrace();
