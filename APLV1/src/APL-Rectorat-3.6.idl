@@ -101,6 +101,9 @@ module pRectorat {
 		// Opération permettant de recuperer tous les voeux
 		readonly attribute TabVoeux getVoeux;
 		
+		// Opération permettant de recuperer les voeux pour une université
+		TabVoeux getVoeuxUniv(in string nomUniv);
+		
 		//Opération permettant grace a  l'ID d'un etudiant consulter la liste de ses voeux
 		TabVoeux consulterListeVoeu(in Etudiant etu);
 		

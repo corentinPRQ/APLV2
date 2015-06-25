@@ -53,6 +53,9 @@ module pUniversite{
 		
 		// Permet de mettre à disposition les notes des étudiants inscrits dans l'université
 		listeNotes getNotes(in ::pRectorat::Etudiant idE) raises (::pRectorat::EtudiantNonTrouve);
+		
+		// Permet de mettre à jour les listes en fonction des décisions des étudiants (déclenchée au changement de période)
+		void majListes();
 	
 	};
 };
