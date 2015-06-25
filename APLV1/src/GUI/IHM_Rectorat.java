@@ -16,8 +16,16 @@ import ClientsServeurs.ClientGestionVoeuxMinistere;
  */
 public class IHM_Rectorat extends javax.swing.JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Client vers le ministère
+	 */
 	public static ClientGestionVoeuxMinistere clientGVM;
-
+	
+	
     /**
      * Creates new form IHM_Rectorat
      */
@@ -34,21 +42,13 @@ public class IHM_Rectorat extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
-        jButton1 = new javax.swing.JButton();
-        bt_changerPeriode = new javax.swing.JButton();
+    	
         bt_recupAccred = new javax.swing.JButton();
 
-        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        bt_changerPeriode.setText("Changer période");
-        bt_changerPeriode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_changerPeriodeActionPerformed(evt);
-            }
-        });
+       
 
         bt_recupAccred.setText("Recuperer Accreditation Externes");
         bt_recupAccred.addActionListener(new java.awt.event.ActionListener() {
@@ -64,16 +64,13 @@ public class IHM_Rectorat extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bt_recupAccred, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                    .addComponent(bt_changerPeriode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bt_recupAccred, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
-                .addComponent(bt_changerPeriode, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(bt_recupAccred, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
@@ -81,10 +78,7 @@ public class IHM_Rectorat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void bt_changerPeriodeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-    	//Mettre le code de changement de période au sein d'un rectorat.
-    	IGestionVoeuxImpl.changerPeriode();
-    }                                                 
+                                           
 
     private void bt_recupAccredActionPerformed(java.awt.event.ActionEvent evt) {                                               
         IGestionVoeuxImpl.mesRectorats = IHM_Rectorat.clientGVM.recupererRectorat();
@@ -129,8 +123,6 @@ public class IHM_Rectorat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton bt_changerPeriode;
     private javax.swing.JButton bt_recupAccred;
-    private javax.swing.JButton jButton1;
     // End of variables declaration                   
 }
