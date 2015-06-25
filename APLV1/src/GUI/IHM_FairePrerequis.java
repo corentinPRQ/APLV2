@@ -22,7 +22,6 @@ import Applications.ApplicationUniversite;
 import ClientsServeurs.ClientUniversiteGV;
 
 /**
- *
  * @author Corentin
  */
 public class IHM_FairePrerequis extends javax.swing.JFrame {
