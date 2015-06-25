@@ -83,13 +83,6 @@ public class ClientGestionVoeuxMinistere implements Runnable{
 		return (lesRectorats);
 	}
 	
-	/**
-	 * Renvoie la période en cours
-	 */
-	public String getPeriodeEnCours(){
-		return monM.getPeriodeEnCours();
-	}
-	
 	
 	public static void main(String args[]) {
 		try {

@@ -12,7 +12,5 @@ module pMinistere{
 		readonly attribute Referenciel getReferenciel;	
 		readonly attribute TabRectorat getRectorats;
 		
-		//Opération permettant de connaître la période en cours
-		string getPeriodeEnCours();
 	};
 };

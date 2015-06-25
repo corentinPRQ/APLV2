@@ -266,17 +266,34 @@ public class IHM_FaireUnVoeu extends javax.swing.JFrame {
     	
     	Voeu voeu = new Voeu(parent.utilisateur.noEtu, parent.utilisateur.formation ,accredVoeu, new Rectorat(idRectorat), new Rectorat(nomRectDest),DecisionEtudiant.cree,Etat.cree);
     	//Avant de faire le voeu on va vérifier qu'il n'existe pas déja
+<<<<<<< master
+
+    	while(i<IHM_Etudiant.listeVoeux.length && trouve!=true)
+    	{    		if(IHM_Etudiant.listeVoeux[i].acredVoeu.libelleD.equals(voeu.acredVoeu.libelleD) 
+    				&& IHM_Etudiant.listeVoeux[i].acredVoeu.libelleU.equals(voeu.acredVoeu.libelleU)){
+
     	while(i<parent.listeVoeux.length && !trouve)
     	{
     		if(parent.listeVoeux[i].acredFormation.libelleD.equals(voeu.acredFormation.libelleD) 
+    				&& parent.listeVoeux[i].acredFormation.libelleU.equals(voeu.acredFormation.libelleU)){S
+=======
+    	while(i<parent.listeVoeux.length && trouve!=true)
+    	{
+    		if(parent.listeVoeux[i].acredFormation.libelleD.equals(voeu.acredFormation.libelleD) 
     				&& parent.listeVoeux[i].acredFormation.libelleU.equals(voeu.acredFormation.libelleU)){
+>>>>>>> 13df435 probleme verif du voeu corrigÃ©
     			trouve=true;
     		}
     		i++;
     	}
     	
     	//Dans le cas ou le voeu n'existe pas le voeu va être enregistré
+<<<<<<< master
+
     	if(!trouve){
+=======
+    	if(trouve!=true){
+>>>>>>> 13df435 probleme verif du voeu corrigÃ©
     		clientEtuGV.faireVoeu(voeu);
          	
         	//On ne renvoi pas les voeux des autres académies là...

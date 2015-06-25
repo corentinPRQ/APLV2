@@ -84,7 +84,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		this.listeNotesEtudiants = new Hashtable<String, Note[]>();
 		//initialiserPrerequis("C:/Users/"+System.getProperty("user.name")+"/git/APLV3/APLV1/src/prerequis.csv");
 		initialiserNotesEtudiant("src/notes.csv");
-
+		
 		IUniversiteImpl.listeUniversitaires = listeU;
 
 		this.orb = orb;
@@ -131,43 +131,13 @@ public class IUniversiteImpl extends IUniversitePOA{
 		}
 	}
 
-	/**
-	 * Permet de mettre à jour les listes en fonction des décisions des étudiants
-	 */
-	@Override
 	public void majListes() { 
-		//TODO appeler la méthode au changement de période. P4
-		
-		// on recharge les voeux et on regarde les décisions des étudiants
-		Voeu[] tabVoeux = cugv.getVoeuxUniv(nomUniversite);
-		for (int i=0;i<tabVoeux.length; i++){
-			listeCandidatures.add(tabVoeux[i]);
-		}
-		
-		//supprime les candidatures en fonction des choix des voeux des étudiants
-		majListesSupprVoeux();
-		
-		//mise à jour des listes (remonter les candidatures)
-		try {
-			etablirListe();
-		} catch (voeuNonTrouve e) {
-			System.err.println("Problème pour établie les listes après la mise à jour");
-			e.printStackTrace();
-		}
-		
-		
-	}
-	
-	/**
-	 * Supprime les candidatures en fonction des choix des voeux des étudiants
-	 */
-	public void majListesSupprVoeux(){
+		//changement de période. P4
+		//TODO on recharge les voeux et on regarde les décisions de l'étudiant
 		for(int i=0; i<listeCandidatures.size(); i++){
 			Voeu vTmp = listeCandidatures.get(i);
 			if(vTmp.decEtudiant == DecisionEtudiant.oui){
-				//on suppr les autres candidatures de l'étudiant. après mais aussi avant !
-				int cptAvant = i; // compteur pour remonter les candidatures avant celle la dans le cas où l'étudiant met oui à un voeu après le premier
-				//suppr des candidatures après
+				//on suppr les autres candidatures de l'étudiant
 				i++;
 				Voeu vTmp2 = listeCandidatures.get(i);
 				//tant que le voeu suivant est du même étudiant
@@ -178,107 +148,24 @@ public class IUniversiteImpl extends IUniversitePOA{
 					}else if(listeComplementaire.contains(vTmp2)){
 						listeComplementaire.remove(vTmp2);
 					}
-					listeCandidatures.remove(vTmp2);
 					i++;
 					vTmp2 = listeCandidatures.get(i);
 				}
 				//on sort quand le voeu est d'un autre étudiant
 				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
 				i--;
-				
-				//suppr des candidatures avant ce voeu
-				cptAvant--;
-				Voeu vTmp3 = listeCandidatures.get(cptAvant);
-				//tant que le voeu précédent est du même étudiant
-				while(vTmp3.noE.equals(vTmp.noE)){
-					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp3)){
-						listePrincipale.remove(vTmp3);
-					}else if(listeComplementaire.contains(vTmp3)){
-						listeComplementaire.remove(vTmp3);
-					}
-					listeCandidatures.remove(vTmp3);
-					cptAvant--;
-					vTmp3 = listeCandidatures.get(cptAvant--);
-				}
-				
-				
+
 			}else if(vTmp.decEtudiant == DecisionEtudiant.oui_mais){
-				// on supprime les voeux suivant mais on garde celui la et les précédents
-				i++;
-				Voeu vTmp2 = listeCandidatures.get(i);
-				//tant que le voeu suivant est du même étudiant
-				while(vTmp2.noE.equals(vTmp.noE)){
-					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp2)){
-						listePrincipale.remove(vTmp2);
-					}else if(listeComplementaire.contains(vTmp2)){
-						listeComplementaire.remove(vTmp2);
-					}
-					listeCandidatures.remove(vTmp2);
-					i++;
-					vTmp2 = listeCandidatures.get(i);
-				}
-				//on sort quand le voeu est d'un autre étudiant
-				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
-				i--;
+				//TODO
 			}else if(vTmp.decEtudiant == DecisionEtudiant.non_mais){
-				// on supprime le voeu en question et les suivants mais on garde les précédents
-				Voeu vTmp2 = listeCandidatures.get(i);
-				//tant que le voeu suivant est du même étudiant
-				while(vTmp2.noE.equals(vTmp.noE)){
-					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp2)){
-						listePrincipale.remove(vTmp2);
-					}else if(listeComplementaire.contains(vTmp2)){
-						listeComplementaire.remove(vTmp2);
-					}
-					listeCandidatures.remove(vTmp2);
-					i++;
-					vTmp2 = listeCandidatures.get(i);
-				}
-				//on sort quand le voeu est d'un autre étudiant
-				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
-				i--;
-				
-				
+				//TODO
 			}else if(vTmp.decEtudiant == DecisionEtudiant.non){
-				// si l'étudiant a mis non, on supprime tout ses voeux
-				int cptAvant = i; // compteur pour remonter les candidatures avant celle la dans le cas où l'étudiant met oui à un voeu après le premier
-				//on supprime aussi le voeu courant
-				Voeu vTmp2 = listeCandidatures.get(i);
-				//tant que le voeu suivant est du même étudiant
-				while(vTmp2.noE.equals(vTmp.noE)){
-					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp2)){
-						listePrincipale.remove(vTmp2);
-					}else if(listeComplementaire.contains(vTmp2)){
-						listeComplementaire.remove(vTmp2);
-					}
-					listeCandidatures.remove(vTmp2);
-					i++;
-					vTmp2 = listeCandidatures.get(i);
+				// si l'étudiant a refusé le voeu, on le supprime des listes
+				if(listePrincipale.contains(vTmp)){
+					listePrincipale.remove(vTmp);
+				}else if(listeComplementaire.contains(vTmp)){
+					listeComplementaire.remove(vTmp);
 				}
-				//on sort quand le voeu est d'un autre étudiant
-				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
-				i--;
-				
-				//suppr des candidatures avant ce voeu
-				cptAvant--;
-				Voeu vTmp3 = listeCandidatures.get(cptAvant);
-				//tant que le voeu précédent est du même étudiant
-				while(vTmp3.noE.equals(vTmp.noE)){
-					//on supprime le voeu suivant des listes
-					if(listePrincipale.contains(vTmp3)){
-						listePrincipale.remove(vTmp3);
-					}else if(listeComplementaire.contains(vTmp3)){
-						listeComplementaire.remove(vTmp3);
-					}
-					listeCandidatures.remove(vTmp2);
-					cptAvant--;
-					vTmp3 = listeCandidatures.get(cptAvant--);
-				}
-				
 			}
 		}
 	}
@@ -561,7 +448,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 		System.out.println("Création de la hashTable Univ-Voeu[]");
 		for (int i=0; i<listeAccred.length; i++){
 			// on parcours les voeux pour ajouter les voeux par diplome
-
+			
 			for(int j=0; j<listeCandidatures.size(); j++){
 				if(listeAccred[i]!=null){
 					System.out.println(listeCandidatures.get(j).acredVoeu.libelleD);
@@ -574,7 +461,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			if (tabVoeuxDip.size()!=0){
 				listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
 			}
-			tabVoeuxDip = new ArrayList<Voeu>();
+			tabVoeuxDip.clear();
 		}
 		System.out.println("Sortie du remplirVoeuxDIP");
 	}
@@ -585,7 +472,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	private void ordonnerVoeuxDip(){
 		System.out.println("EtablirScore");
 		this.etablirScore();
-
+		
 		//classe les voeux par diplome et par score dans listeVoeuxDiplome
 		//On parcourt les diplomes dans la hashT de diplome/liste voeux
 		Enumeration <String> enumVoeu= listeVoeuxDiplome.keys();
@@ -623,7 +510,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 				moyPos += pos;
 				moyValid +=valid;
 			}
-			score = (moyPos+moyValid);
+			score = (moyPos+moyValid)/6;
 			scoreEtu.put(numEtuTmp, score);
 		}
 		System.out.println("Fin du etablir score");
@@ -701,7 +588,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	}
 
 	/**
-	 * Permet d'établir les listes en fonction des quotas et score
+	 * Permet d'établir les premières listes en fonction des quotas et score
 	 * @throws voeuNonTrouve 
 	 */
 	private void etablirListe() throws voeuNonTrouve{
@@ -717,9 +604,9 @@ public class IUniversiteImpl extends IUniversitePOA{
 			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
 			int i=0;
 			while ( i<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>seuilScoreDiplome.get(dipTmp)){
-				//				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
-				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
+				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
+				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
 				i++;
 			}
 			//S'il y a plus de places disponible ou que les scores ne respectent pas les pré-requis, on met en liste secondaire ou refus
@@ -727,25 +614,24 @@ public class IUniversiteImpl extends IUniversitePOA{
 				int cptV=quota;
 				//tant qu'il reste des voeux donc le score de l'étudiant est suppérieur au score pré-requis pour le diplome
 				while (cptV<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(cptV).noE)>seuilScoreDiplome.get(dipTmp)){
-					//listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
-					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
+					listeVoeuxTmp.get(cptV).etatVoeu = Etat.liste_secondaire;
 					ajouterListeComplementaire(listeVoeuxTmp.get(cptV));
+					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptV), Etat.liste_secondaire);
 					cptV++;
 				}
 				//s'il reste encore des voeux, c'est qu'ils n'ont pas le bon score donc on les refuse
 				if(cptV<listeVoeuxTmp.size()){
 					for(int cptRefus=cptV;cptRefus<listeVoeuxTmp.size(); cptRefus++){
-						//listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
-						IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
+						listeVoeuxTmp.get(cptRefus).etatVoeu = Etat.refus;
 						ajouterListeRejet(listeVoeuxTmp.get(cptRefus));
-
+						IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(cptRefus), Etat.refus);
 					}
 				}
 			}else{ //le quota n'est pas remplis mais les étudiants suivants ont un score qui ne respecte pas les pré-requis
 				while(i<listeVoeuxTmp.size()){
-					//listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
-					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
+					listeVoeuxTmp.get(i).etatVoeu = Etat.refus;
 					ajouterListeRejet(listeVoeuxTmp.get(i));
+					IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.refus);
 					i++;
 				}
 			}
@@ -803,14 +689,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 		//On regarde si l'étudiant est de cette université ou d'une autre
 		System.out.println("On sort du getEtudiant avec Etu = " + etuTmp.nom);
 		if(etuTmp.formation.libelleU.replace(" ", "").toLowerCase().equals(nomUniversite.replace(" ", "").toLowerCase())){
-
+			
 			//s'il n'est pas cette université, il faut demander ses notes à la sienne
 			//On regarde si on a déjà un client pour cette université sinon on en crée un
 			if(listeClientsUniv.containsKey(etuTmp.formation.libelleU)){
-
+			
 				//Corentin : ici jsais pas pourquoi mais il manque le nom de l'universite "NomUniv_Gestion" dans cuu... 
 				//On se retrouve a faire un appel qui n'est donc pas bon!
-
+				
 				cuu = listeClientsUniv.get(etuTmp.formation.libelleU);
 			}else{
 				cuu = new ClientUniversiteUniv(orb, nameRoot, noEtu, etuTmp.formation.libelleU.replace(" ","")+"_Gestion");
@@ -819,8 +705,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 			listeNotesEtudiants.put(noEtu, cuu.getNotes(etuTmp));
 		}
 	}
-
-
 
 
 }

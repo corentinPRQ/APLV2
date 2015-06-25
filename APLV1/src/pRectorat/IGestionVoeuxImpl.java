@@ -142,14 +142,14 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	}
 
 	/**
-	 * Renvoie tous les voeux 
-	 * le return est un tableau de voeux qui peut contenir des valeurs null à la fin
+	 * Renvoie tous les voeux le return est un tableau de voeux qui peut
+	 * contenir des valeurs null à la fin
 	 */
 	@Override
 	public Voeu[] getVoeux() {
 
 
-		Collection<Voeu[]> colV = listeVoeux.values();
+		Collection<Voeu[]> colV = this.listeVoeux.values();
 		int taille = colV.size();
 		// on crée un tableau de voeux en fonction de la taille max potentielle
 		Voeu[] tabV = new Voeu[5 * taille];
@@ -203,10 +203,10 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			System.out.println("je suis dans le else");
 			String nomRect = v.idRDest.nomAcademie+"_GestionVoeux"; 
 			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, nomRect);
-			cgv.repondreVoeu(pDecision, v);
+			 cgv.repondreVoeu(pDecision, v);
 			//setDecisionEtudiant(v, cgv.repondreVoeu(pDecision, v));
 
-			// on veut changer l'état de la décision du voeu externe de l'étudiant
+			 // on veut changer l'état de la décision du voeu externe de l'étudiant
 			for (int i=0; i<listeVoeuxExternes.get(v.noE).length; i++){
 				Voeu[] tabVTmp = listeVoeuxExternes.get(v.noE);
 				if(v.acredVoeu.libelleD.equals(tabVTmp[i].acredVoeu.libelleD) &&  v.acredVoeu.libelleU.equals(tabVTmp[i].acredVoeu.libelleU) ){
@@ -286,33 +286,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			break;
 
 		}
-
-		// si on est le rectorat de destination
-		if(v.idRDest.nomAcademie.equals(idRectorat)){
-			// on met à jour la liste de voeux interne
-			for(int i=0; i<listeVoeux.get(v.noE).length; i++){
-				if(listeVoeux.get(v.noE)[i].acredVoeu.libelleD.equals(v.acredVoeu.libelleD)
-						&& listeVoeux.get(v.noE)[i].acredVoeu.libelleU.equals(v.acredVoeu.libelleU)){
-					listeVoeux.get(v.noE)[i].etatVoeu = e;
-				}
-			}
-		}
-		//si on est la destination mais pas la source, on transmet à la source pour maj la liste de voeux externes
-		if(!v.idRDest.nomAcademie.equals(v.idRSource.nomAcademie) && v.idRDest.nomAcademie.equals(idRectorat)){
-			ClientGestionVoeuGV cgv = new ClientGestionVoeuGV(orb, nameRoot, nomObj, v.idRSource.nomAcademie+"_GestionVoeux");
-			cgv.setEtatVoeu(v, e);
-		}
-		// si je suis la source mais pas le destinataire, je maj ma liste externe
-		if(!v.idRSource.nomAcademie.equals(v.idRDest.nomAcademie) && v.idRSource.nomAcademie.equals(idRectorat)){
-			for(int i=0; i<listeVoeuxExternes.get(v.noE).length; i++){
-				if(listeVoeuxExternes.get(v.noE)[i].acredVoeu.libelleD.equals(v.acredVoeu.libelleD)
-						&& listeVoeuxExternes.get(v.noE)[i].acredVoeu.libelleU.equals(v.acredVoeu.libelleU)){
-					listeVoeuxExternes.get(v.noE)[i].etatVoeu = e;
-				}
-			}
-		}
-
-
 	}
 
 	/**
@@ -334,8 +307,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	/**
 	 * CHangement de période de l'application
 	 */
-	@Override
-	public void changerPeriode() {
+	public static void changerPeriode() {
 		// La méthode consiste en une MAJ du properties
 		System.out.println("\n\n\n **************** Changement de PERIODE - Rectorat **************** \n\n");
 		Properties p;
@@ -353,35 +325,29 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			FileOutputStream fos;
 			try {
 				fos = new FileOutputStream("parametres.properties");
-				if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_3.toString())) {
-				
-					// on contacte chaque université pour vérifier en fonction
-					// des pré-requis, les voeux qui lui sont destinés
-					String codeUniv = "";
-					Enumeration<String> lesUniv = listeVoeuxUniv.keys();
-					while (lesUniv.hasMoreElements()) {
-						codeUniv = lesUniv.nextElement();
+				if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_1.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_2.toString());
+				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_2.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_3.toString());
+					//on contacte chaque université pour vérifier en fonction des pré-requis, les voeux qui lui sont destinés
+					String codeUniv="";
+					Enumeration <String> lesUniv = listeVoeuxUniv.keys();
+					while(lesUniv.hasMoreElements()){
+						codeUniv=lesUniv.nextElement();
 
-						String iorTmp = mesUniversites.get(codeUniv.replace(
-								" ", ""));
-						org.omg.CORBA.Object distantObj = orb
-								.string_to_object(iorTmp);
-						IUniversite monUniv = IUniversiteHelper
-								.narrow(distantObj);
+						String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+						org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+						IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
 						monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 						System.out.println("Fin verif candidature");
 					}
-					String iorTmp = mesUniversites.get(codeUniv
-							.replace(" ", ""));
-					org.omg.CORBA.Object distantObj = orb
-							.string_to_object(iorTmp);
-					IUniversite monUniv = IUniversiteHelper.narrow(distantObj);
+					String iorTmp = mesUniversites.get(codeUniv.replace(" ", ""));
+					org.omg.CORBA.Object distantObj = orb.string_to_object(iorTmp);
+					IUniversite monUniv = IUniversiteHelper.narrow(distantObj); 
 					monUniv.verifCandidature(listeVoeuxUniv.get(codeUniv));
 
-				} else if (p.getProperty("periode").equals(
-						PeriodeApplication.PERIODE_4.toString())) {
-					//Appel d'Hugo
+				} else if (p.getProperty("periode").equals(PeriodeApplication.PERIODE_3.toString())) {
+					p.setProperty("periode",PeriodeApplication.PERIODE_4.toString());
 				}
 				// Enregistrement
 				p.store(fos, null);
@@ -683,15 +649,15 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 	}
 
-	//	public void afficherLesEtu(){
-	//		Enumeration nb=listeEtudiant.elements();
-	//		Object key;
-	//		while(nb.hasMoreElements()) {
-	//			key=nb.nextElement();
-	//			Etudiant value=(Etudiant) key;
-	//			System.out.println("cle = "+ key + "" + value.toString() );
-	//		}
-	//	}
+//	public void afficherLesEtu(){
+//		Enumeration nb=listeEtudiant.elements();
+//		Object key;
+//		while(nb.hasMoreElements()) {
+//			key=nb.nextElement();
+//			Etudiant value=(Etudiant) key;
+//			System.out.println("cle = "+ key + "" + value.toString() );
+//		}
+//	}
 
 	@Override
 	public Etudiant getEtudiant(String numeroEtudiant)
@@ -720,9 +686,22 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 	 * @return la période en cours
 	 */
 	public String getPeriodeEnCours() {
-		ClientGestionVoeuxMinistere cgm = new ClientGestionVoeuxMinistere(orb,
-				nameRoot, nomObj, "Ministere");
-		return (cgm.getPeriodeEnCours());
+		Properties p;
+		p = null;
+		try {
+			p = utils.load("parametres.properties");
+		} catch (FileNotFoundException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Echec ouverture properties");
+			e.printStackTrace();
+		}
+		if (p != null) {
+			return p.getProperty("periode");
+		}else{
+			return "Erreur lors de la récupération de la période.";
+		}
 	}
 
 
@@ -879,15 +858,6 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 		}
 		return ("Pas Trouvé");
 
-	}
-
-	@Override
-	public Voeu[] getVoeuxUniv(String nomUniv) {
-		if(!listeVoeuxUniv.containsKey(nomUniv)){
-			return new Voeu[0];
-		}else{
-			return listeVoeuxUniv.get(nomUniv);
-		}
 	}
 
 }
