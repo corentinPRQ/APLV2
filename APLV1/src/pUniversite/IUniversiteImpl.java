@@ -143,13 +143,31 @@ public class IUniversiteImpl extends IUniversitePOA{
 		for (int i=0;i<tabVoeux.length; i++){
 			listeCandidatures.add(tabVoeux[i]);
 		}
-		System.out.println();
 		//supprime les candidatures en fonction des choix des voeux des étudiants
 		majListesSupprVoeux();
 		
 		//mise à jour des listes (remonter les candidatures)
 		try {
+			ArrayList<Voeu> tabVoeuxDip= new ArrayList<Voeu>() ;
+			for (int i=0; i<listeAccred.length; i++){
+				// on parcours les voeux pour ajouter les voeux par diplome
+
+				for(int j=0; j<listeCandidatures.size(); j++){
+					if(listeAccred[i]!=null){
+						System.out.println(listeCandidatures.get(j).acredVoeu.libelleD);
+						System.out.println(listeAccred[i].libelleD);
+						if(listeCandidatures.get(j).acredVoeu.libelleD.equals(listeAccred[i].libelleD)){
+							tabVoeuxDip.add(listeCandidatures.get(j));
+						}
+					}
+				}
+				if (tabVoeuxDip.size()!=0){
+					listeVoeuxDiplome.put(listeAccred[i].libelleD, tabVoeuxDip);
+				}
+				tabVoeuxDip = new ArrayList<Voeu>();
+			}
 			etablirListe();
+			
 		} catch (voeuNonTrouve e) {
 			System.err.println("Problème pour établie les listes après la mise à jour");
 			e.printStackTrace();
@@ -179,7 +197,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 						listeComplementaire.remove(vTmp2);
 					}
 					listeCandidatures.remove(vTmp2);
-					i++;
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp2, Etat.clos);
 					vTmp2 = listeCandidatures.get(i);
 				}
 				//on sort quand le voeu est d'un autre étudiant
@@ -207,6 +225,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 						listeComplementaire.remove(vTmp3);
 					}
 					listeCandidatures.remove(vTmp3);
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp3, Etat.clos);
 					cptAvant--;
 					if(cptAvant >= 0){
 						vTmp3 = listeCandidatures.get(cptAvant);
@@ -230,7 +249,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 						listeComplementaire.remove(vTmp2);
 					}
 					listeCandidatures.remove(vTmp2);
-					i++;
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp2, Etat.clos);
 					vTmp2 = listeCandidatures.get(i);
 				}
 				//on sort quand le voeu est d'un autre étudiant
@@ -249,7 +268,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 						listeComplementaire.remove(vTmp2);
 					}
 					listeCandidatures.remove(vTmp2);
-					i++;
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp2, Etat.clos);
 					if(i < listeCandidatures.size()){
 						vTmp2 = listeCandidatures.get(i);
 					}else{
@@ -274,14 +293,14 @@ public class IUniversiteImpl extends IUniversitePOA{
 					if(listePrincipale.get(i).acredVoeu.libelleD.equals(vTmp2.acredVoeu.libelleD) && 
 							listePrincipale.get(i).acredVoeu.libelleU.equals(vTmp2.acredVoeu.libelleU) &&
 							listePrincipale.get(i).noE.equals(vTmp2.noE)){
-						listePrincipale.remove(vTmp2);
+						listePrincipale.remove(i);
 					}else if(listeComplementaire.get(i).acredVoeu.libelleD.equals(vTmp2.acredVoeu.libelleD) && 
 							listeComplementaire.get(i).acredVoeu.libelleU.equals(vTmp2.acredVoeu.libelleU) && 
 							listeComplementaire.get(i).noE.equals(vTmp2.noE)){
-						listeComplementaire.remove(vTmp2);
+						listeComplementaire.remove(i);
 					}
 					listeCandidatures.remove(vTmp2);
-					i++;
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp2, Etat.clos);
 					if(i <= listeCandidatures.size()){
 						vTmp2 = listeCandidatures.get(i);
 					}else{
@@ -290,7 +309,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 				}
 				//on sort quand le voeu est d'un autre étudiant
 				//Pour que le voeu soit analyser dans la prochaine itération du for, on fait un i--
-				i--;
 				
 				//suppr des candidatures avant ce voeu
 				resteVoeux = true;
@@ -303,7 +321,6 @@ public class IUniversiteImpl extends IUniversitePOA{
 					resteVoeux=false;
 				}
 				
-				vTmp3 = listeCandidatures.get(cptAvant);
 				//tant que le voeu précédent est du même étudiant
 				while(resteVoeux && vTmp3.noE.equals(vTmp.noE)){
 					//on supprime le voeu suivant des listes
@@ -313,6 +330,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 						listeComplementaire.remove(vTmp3);
 					}
 					listeCandidatures.remove(vTmp2);
+					IUniversiteImpl.cugv.setEtatVoeu(vTmp2, Etat.clos);
 					cptAvant--;
 					if(cptAvant >= 0){
 						vTmp3 = listeCandidatures.get(cptAvant);
@@ -571,6 +589,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 	 * @param tabVoeux
 	 */
 	private void remplirVoeuxDip(Voeu[] tabVoeux){
+		listeVoeuxDiplome.clear();
 
 		System.out.println("METHODE REMPLIR VOEUX DIP - Universite");
 		ArrayList<Voeu> tabVoeuxDip = new ArrayList<Voeu>();
@@ -711,7 +730,7 @@ public class IUniversiteImpl extends IUniversitePOA{
 			{
 				// Teste si 2 éléments successifs sont dans le bon ordre ou non
 				// En fonction du score de l'étudiant qui a fait le voeu
-				if (scoreEtu.get(tabV.get(i).noE)  > scoreEtu.get(tabV.get(i+1).noE))
+				if (scoreEtu.get(tabV.get(i).noE)  < scoreEtu.get(tabV.get(i+1).noE))
 				{
 					// s'ils ne le sont pas on échange leurs positions
 					Voeu voeuPermut = tabV.get(i);
@@ -742,7 +761,10 @@ public class IUniversiteImpl extends IUniversitePOA{
 			//Tant qu'il y a de la place pour la promo ET que le score de l'étudiant est conforme au pré-requis,
 			// on rempli la liste principale, sachant que le voeux sont déjà triés par ordre de pertinance
 			int i=0;
-			while ( listePrincipale.size()<quota && i<listeVoeuxTmp.size() && scoreEtu.get(listeVoeuxTmp.get(i).noE)>=seuilScoreDiplome.get(dipTmp)){
+			while ( listePrincipale.size()<quota && 
+					i<listeVoeuxTmp.size() && 
+					scoreEtu.get(listeVoeuxTmp.get(i).noE)>=seuilScoreDiplome.get(dipTmp) && 
+					!listeVoeuxTmp.get(i).decEtudiant.equals(DecisionEtudiant.non)){
 				//				listeVoeuxTmp.get(i).etatVoeu = Etat.liste_principale;
 				IUniversiteImpl.cugv.setEtatVoeu(listeVoeuxTmp.get(i), Etat.liste_principale);
 				ajouterListePrincipale(listeVoeuxTmp.get(i));
