@@ -276,7 +276,11 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 			break;
 			// Le voeu est en liste secondaire il peut passer en refus
 		case Etat._liste_secondaire:
-			if (e == Etat.refus)
+			if (e == Etat.refus || e == Etat.clos)
+				v.etatVoeu = e;
+			break;
+		case Etat._liste_principale:
+			if (e == Etat.refus || e == Etat.clos)
 				v.etatVoeu = e;
 			break;
 		default:
@@ -402,6 +406,7 @@ public class IGestionVoeuxImpl extends IGestionVoeuxPOA {
 				//Bouchon pour ne pas renvoyer NULL et satisfaire CORBA.
 				Voeu v = new Voeu( "0", new Accred("1", "d1", "PS"), new Accred("2", "d2", "PS"), new Rectorat("Midi-Pyrenees"),new Rectorat("Midi-Pyrenees"), DecisionEtudiant.non,
 						Etat.cree);
+				
 				Voeu[] lesV = new Voeu[1];
 				lesV[0] = v;
 				System.out.println("return liste Vide");

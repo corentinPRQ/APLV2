@@ -21,58 +21,61 @@ public class ApplicationUniversite {
 	}
 
 	public static void main(String[] args) {
-		try {
-			 
-			ApplicationUniversite.identiteUniversite = new Universite(args[0], new Rectorat(args[1]), args[2]);
-			// TODO Auto-generated method stub
-			// Intialisation de l'ORB
-			//************************
-			//Il faut le faire qu'une fois!!!!!!
-			System.out.println("init de l'orb");
-			org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(args,null);
+		ApplicationUniversite.identiteUniversite = new Universite(args[0], new Rectorat(args[1]), args[2]);
+		// TODO Auto-generated method stub
+		// Intialisation de l'ORB
+		//************************
+		//Il faut le faire qu'une fois!!!!!!
+		System.out.println("init de l'orb");
+		org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(args,null);
 
-			// Enregistrement dans le service de nommage
-			//*******************************************
-			// Recuperation du naming service
-			System.out.println("Recuperation du naming service");
-			NamingContext nameRoot=org.omg.CosNaming.NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
+		// Enregistrement dans le service de nommage
+		//*******************************************
+		// Recuperation du naming service
+		System.out.println("Recuperation du naming service");
+		NamingContext nameRoot;
+		try {
+			nameRoot = org.omg.CosNaming.NamingContextHelper.narrow(orb.resolve_initial_references("NameService"));
+
+//		NamingContext nameRoot = org.omg.CosNaming.NamingContextHelper.narrow(orb.string_to_object("corbaloc:iiop:1.2@172.20.10.8:2001/NameService"));
 
 //			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba Serveur ?");
-			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			String nomObj=args[0]+"_Gestion";
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String nomObj=args[0]+"_Gestion";
 
-			//nomObj = in.readLine();
+		//nomObj = in.readLine();
 
-			ServeurUniversite serv = new ServeurUniversite(orb, nameRoot, nomObj);
-			Thread tserv = new Thread(serv);
-			tserv.start();
+		ServeurUniversite serv = new ServeurUniversite(orb, nameRoot, nomObj);
+		
+		Thread tserv = new Thread(serv);
+		
+		tserv.start();
 
-			// Saisie du nom de l'objet
-			//Cas d'une connexion avec un GestionVoeux : 
-			String idObj = args[1]+"_GestionVoeux";
-			// Construction du Client spécifique à l'action à faire
+		// Saisie du nom de l'objet
+		//Cas d'une connexion avec un GestionVoeux : 
+		String idObj = args[1]+"_GestionVoeux";
+		// Construction du Client spécifique à l'action à faire
 //			System.out.println("Sous quel nom voulez-vous enregistrer l'objet Corba Client ?");
-			String nomOb = "Client_PaulSabatier_Gestion";
-			System.out.println("\n\n\ninitialisation du client GV depuis l'Appli université \n");
-			ClientUniversiteGV cu = new ClientUniversiteGV (orb, nameRoot, nomOb, idObj);
-			//sleep de synchro
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			cu.enregistrerUniversite(nomObj, ServeurUniversite.getIOR());
-			IUniversiteImpl.initialiserAccred();
-//			Thread tcli = new Thread(cu);
-//			tcli.start();
-
-			IHM_Universitaire ihmU = new IHM_Universitaire(cu);
-			//ihmU.setVisible(true);
-		} catch (InvalidName e) {
+		String nomOb = "Client_PaulSabatier_Gestion";
+		System.out.println("\n\n\ninitialisation du client GV depuis l'Appli université \n");
+		ClientUniversiteGV cu = new ClientUniversiteGV (orb, nameRoot, nomOb, idObj);
+		//sleep de synchro
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		cu.enregistrerUniversite(nomObj, ServeurUniversite.getIOR());
+		IUniversiteImpl.initialiserAccred();
+//			Thread tcli = new Thread(cu);
+//			tcli.start();
 
+		IHM_Universitaire ihmU = new IHM_Universitaire(cu);
+		//ihmU.setVisible(true);
+		} catch (InvalidName e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }

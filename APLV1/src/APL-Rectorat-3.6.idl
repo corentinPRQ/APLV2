@@ -13,7 +13,8 @@ module pRectorat {
 		non_valide, //Le voeu n'est pas valide (refuse par le rectorat)
 		liste_principale, //Le voeu est valide et la formation accepte le voeu de l'etudiant
 		liste_secondaire, // Le voeu est valide et la formation met en liste d'attente le voeu de l'etudiant
-		refus
+		refus,
+		clos
 	};
 	
 	/*
